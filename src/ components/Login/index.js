@@ -6,16 +6,17 @@ import ErrorModal from '../common/ErrorModal';
 import * as yup from 'yup';
 import axios from 'axios';
 
-const LOCALBACKEND = 'http://47.100.26.104:8080/login';
+const LOCALBACKEND = 'http://localhost:8080/login';
 
 
 const Login = ({
   setIsLoggedIn,
+  setUserInfo,
 }) => {
   const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
   const validationSchema = yup.object({
     username: yup
-      .string('请输入密码')
+      .string('请输入用户名')
       .required('请输入用户名'),
     password: yup
       .string('请输入密码')
@@ -37,50 +38,64 @@ const Login = ({
         const data = res?.data;
         if (data.status === 'success') {
           setIsLoggedIn(true);
+          setUserInfo(data?.data);
         } else {
           setIsErrorModalOpen(true);
         }
       })
   }
   return (
-    <div>
-      <Grid container spacing={2}>
-        <Grid item xs={12}>
+      <Grid
+        container
+        spacing={2}
+        direction="column"
+        justifyContent="center"
+        alignItems="center"
+      >
+        <Grid item xs={8}>
           <CssTextField
             required
             label="用户名"
             size="small"
             type="text"
             name="username"
+            style={{width: '100%'}}
             value={formik.values.username}
             onChange={formik.handleChange}
             error={formik.touched.username && Boolean(formik.errors.username)}
             helperText={formik.touched.username && formik.errors.username}
           />
         </Grid>
-        <Grid item xs={12}>
+        <Grid item xs={8}>
           <CssTextField
             required
             label="密码"
             size="small"
             type="password"
             name="password"
+            style={{width: '100%'}}
             value={formik.values.password}
             onChange={formik.handleChange}
             error={formik.touched.password && Boolean(formik.errors.password)}
             helperText={formik.touched.password && formik.errors.password}
           />
         </Grid>
-        <Grid item xs={12}>
-          <Button variant="contained" onClick={formik.handleSubmit} style={{width: '200px'}}>登录</Button>
+        <Grid item xs={8}>
+          <Button
+            variant="outlined"
+            onClick={formik.handleSubmit}
+            style={{width: '100%', backgroundColor: 'rgb(78 70 212)', color: 'white'}}
+          >
+            登录
+          </Button>
         </Grid>
+
+        <ErrorModal
+          errorMessage="请输入正确的用户名密码"
+          isErrorModalOpen={isErrorModalOpen}
+          onClose={() => {setIsErrorModalOpen(false);}}
+        />
       </Grid>
-      <ErrorModal
-        errorMessage="请输入正确的用户名密码"
-        isErrorModalOpen={isErrorModalOpen}
-        onClose={() => {setIsErrorModalOpen(false);}}
-      />
-    </div>
   );
 };
 

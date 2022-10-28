@@ -3,10 +3,20 @@ import {
 } from '@mui/x-data-grid';
 import {Button} from '@mui/material';
 
-const TableToolBar = () => {
+const TableToolBar = ({
+  setModalOpen,
+  text,
+}) => {
+  const handleAddClick = () => {
+    setModalOpen(true);
+  }
   return (
     <GridToolbarContainer>
-      <Button>+添加分组</Button>
+      <Button
+        variant="outlined"
+        style={{backgroundColor: 'rgb(78 70 212)', color: 'white'}}
+        onClick={handleAddClick}
+      >{text}</Button>
     </GridToolbarContainer>
   );
 }

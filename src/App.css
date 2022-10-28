@@ -1,5 +1,5 @@
 .App {
-  text-align: center;
+  /* text-align: center; */
   background-color: #282c34;
   min-height: 100vh;
   display: flex;
@@ -10,14 +10,10 @@
   color: white;
 }
 
-.css-1jbbcbn-MuiDataGrid-columnHeaderTitle {
-  color: white
+
+.css-rtrcn9-MuiTablePagination-root {
+  color: white;
 }
 
-.css-1e2bxag-MuiDataGrid-root .MuiDataGrid-cellContent {
-  color: white
-}
 
-.css-levciy-MuiTablePagination-displayedRows {
-  color: white
-}
+/* #66B2FF */

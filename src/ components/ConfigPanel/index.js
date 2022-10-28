@@ -1,8 +1,9 @@
-import ConfigTable from "./ConfigTable";
+import GroupTable from "./GroupTable";
+
 const ConfigPanel = () => {
   return (
     <>
-      <ConfigTable />
+      <GroupTable />
     </>
   );
 };
