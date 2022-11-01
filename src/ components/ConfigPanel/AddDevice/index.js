@@ -7,7 +7,7 @@ import ErrorModal from '../../common/ErrorModal';
 import * as yup from 'yup';
 import axios from 'axios';
 
-const REQUESTURL = 'http://localhost:8080/device/add';
+const REQUESTURL = 'http://47.99.92.183:8080/device/add';
 const style = {
   position: 'absolute',
   top: '50%',

@@ -11,9 +11,9 @@ import DeviceTable from '../DeviceTable';
 import ConfigDialog from '../ConfigDialog';
 
 // constants declaration
-const REQUESTURL = 'http://localhost:8080/group/get';
-const UPDATEURL = 'http://localhost:8080/group/update';
-const DELETEURL = 'http://localhost:8080/group/delete';
+const REQUESTURL = 'http://47.99.92.183:8080/group/get';
+const UPDATEURL = 'http://47.99.92.183:8080/group/update';
+const DELETEURL = 'http://47.99.92.183:8080/group/delete';
 const styleProperty = {
   "& .MuiDataGrid-cell": {
     color: "white"

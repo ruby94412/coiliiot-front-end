@@ -8,9 +8,9 @@ import axios from 'axios';
 import AddDevice from "../AddDevice";
 
 // constants declaration
-const REQUESTURL = 'http://localhost:8080/device/get';
-const UPDATEURL = 'http://localhost:8080/device/update';
-const DELETEURL = 'http://localhost:8080/device/delete'
+const REQUESTURL = 'http://47.99.92.183:8080/device/get';
+const UPDATEURL = 'http://47.99.92.183:8080/device/update';
+const DELETEURL = 'http://47.99.92.183:8080/device/delete'
 const tableStyle = {
   "& .MuiDataGrid-cell": {
     color: "white"
