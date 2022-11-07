@@ -8,7 +8,7 @@ import axios from 'axios';
 import AddDevice from "../AddDevice";
 
 // constants declaration
-const REQUESTURL = 'http://47.99.92.183:8080/device/get';
+const REQUESTURL = 'http://47.99.92.183:8080/device/getDeviceList';
 const UPDATEURL = 'http://47.99.92.183:8080/device/update';
 const DELETEURL = 'http://47.99.92.183:8080/device/delete'
 const tableStyle = {
