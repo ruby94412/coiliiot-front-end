@@ -4,14 +4,14 @@ import {useFormik} from 'formik';
 import CssTextField from '../common/CssTextField';
 import ErrorModal from '../common/ErrorModal';
 import * as yup from 'yup';
-import axios from 'axios';
-
-const LOCALBACKEND = 'http://47.99.92.183:8080/login';
+import {connect} from 'react-redux';
+import {login as loginRequest} from '../../slice/login';
 
 
 const Login = ({
   setIsLoggedIn,
   setUserInfo,
+  loginRequest,
 }) => {
   const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
   const validationSchema = yup.object({
@@ -33,16 +33,27 @@ const Login = ({
     }
   })
   const handleSubmit = values => {
-    axios.post(LOCALBACKEND, values)
+    loginRequest(values)
       .then(res => {
-        const data = res?.data;
-        if (data.status === 'success') {
-          setIsLoggedIn(true);
-          setUserInfo(data?.data);
-        } else {
-          setIsErrorModalOpen(true);
-        }
-      })
+          console.log(res);
+          const data = res?.payload;
+          if (data.status === 'success') {
+            setIsLoggedIn(true);
+            setUserInfo(data?.data);
+          } else {
+            setIsErrorModalOpen(true);
+          }
+        })
+    // axios.post(LOCALBACKEND, values)
+    //   .then(res => {
+    //     const data = res?.data;
+    //     if (data.status === 'success') {
+    //       setIsLoggedIn(true);
+    //       setUserInfo(data?.data);
+    //     } else {
+    //       setIsErrorModalOpen(true);
+    //     }
+    //   })
   }
   return (
       <Grid
@@ -99,4 +110,9 @@ const Login = ({
   );
 };
 
-export default Login;
+
+const mapStateToProps = state => {
+  console.log(state);
+  return {};
+};
+export default connect(mapStateToProps, {loginRequest})(Login);
