@@ -1,19 +1,15 @@
 import {DataGrid} from '@mui/x-data-grid';
-import {useContext, useEffect, useState, useMemo, useCallback} from 'react';
-import {UserContext} from '../../../App';
+import {useEffect, useState, useMemo, useCallback} from 'react';
 import {Snackbar, Alert} from '@mui/material';
+import {connect} from 'react-redux';
+import {getGroupList, deleteGroup, updateGroup} from '../../../slice/group';
 import ConfirmDialog from '../../common/ConfirmDialog';
 import TableToolBar from '../TableToolBar';
 import getColumns from './columns';
-import axios from 'axios';
 import AddGroup from "../AddGroup";
 import DeviceTable from '../DeviceTable';
 import ConfigDialog from '../ConfigDialog';
 
-// constants declaration
-const REQUESTURL = 'http://47.99.92.183:8080/group/get';
-const UPDATEURL = 'http://47.99.92.183:8080/group/update';
-const DELETEURL = 'http://47.99.92.183:8080/group/delete';
 const styleProperty = {
   "& .MuiDataGrid-cell": {
     color: "white"
@@ -35,7 +31,12 @@ const styleProperty = {
   }
 };
 
-const GroupTable = () => {
+const GroupTable = ({
+  getGroupList,
+  updateGroup,
+  deleteGroup,
+  userInfo,
+}) => {
   const [rows, setRows] = useState([]);
   const [addGroupOpen, setAddGroupOpen] = useState(false);
   const [editParams, setEditParams] = useState(null);
@@ -43,15 +44,13 @@ const GroupTable = () => {
   const [deviceTableParams, setDeviceTableParams] = useState(null);
   const [configParams, setConfigParams] = useState(null);
   const [snackbar, setSnackbar] = useState(null);
-  const user = useContext(UserContext);
 
   // table data operations
   // eslint-disable-next-line
   const reloadTable = () => {
-    axios.post(REQUESTURL, {username: user.username})
-      .then(res => {
-        setRows(res.data?.data || []);
-      });
+    getGroupList({username: userInfo.username}).then(res => {
+      setRows(res.payload?.data || []);
+    });
   }
 
   useEffect(() => {
@@ -74,11 +73,11 @@ const GroupTable = () => {
   },[]);
 
   const updateRow = async newRow => {
-    return axios.post(UPDATEURL, {...newRow, username: user.username});
+    return updateGroup({...newRow, username: userInfo.username});
   }
 
   const deleteRow = async params => {
-    return axios.delete(DELETEURL, {data: {groupId: params.id}});
+    return deleteGroup({data: {groupId: params.id}});
   }
 
   const handleEditConfirm = async () => {
@@ -174,4 +173,12 @@ const GroupTable = () => {
   );
 }
 
-export default GroupTable;
+const mapStateToProps = state => {
+  const {userInfo} = state;
+  return {userInfo};
+}
+export default connect(mapStateToProps, {
+  getGroupList,
+  deleteGroup,
+  updateGroup,
+})(GroupTable);

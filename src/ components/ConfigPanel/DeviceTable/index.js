@@ -1,16 +1,13 @@
 import {DataGrid} from '@mui/x-data-grid';
 import {useEffect, useState, useMemo, useCallback} from 'react';
 import {Snackbar, Alert, Modal, Box} from '@mui/material';
+import {connect} from 'react-redux';
+import {getDeviceList, deleteDevice, updateDevice} from '../../../slice/device';
 import ConfirmDialog from '../../common/ConfirmDialog';
 import TableToolBar from '../TableToolBar';
 import getColumns from './columns';
-import axios from 'axios';
 import AddDevice from "../AddDevice";
 
-// constants declaration
-const REQUESTURL = 'http://47.99.92.183:8080/device/getDeviceList';
-const UPDATEURL = 'http://47.99.92.183:8080/device/update';
-const DELETEURL = 'http://47.99.92.183:8080/device/delete'
 const tableStyle = {
   "& .MuiDataGrid-cell": {
     color: "white"
@@ -47,6 +44,9 @@ const boxStyle = {
 const DeviceTable = ({
   groupRow,
   onClose,
+  getDeviceList,
+  deleteDevice,
+  updateDevice,
 }) => {
   const [rows, setRows] = useState([]);
   const [addDeviceOpen, setAddDeviceOpen] = useState(false);
@@ -57,9 +57,9 @@ const DeviceTable = ({
   // table data operations
   // eslint-disable-next-line
   const reloadTable = () => {
-    axios.post(REQUESTURL, {groupId: groupRow?.id})
+    getDeviceList({groupId: groupRow?.id})
       .then(res => {
-        setRows(res.data?.data || []);
+        setRows(res.payload?.data || []);
       });
   }
 
@@ -83,11 +83,11 @@ const DeviceTable = ({
   },[]);
 
   const updateRow = async newRow => {
-    return axios.post(UPDATEURL, {...newRow, groupId: groupRow.id});
+    return updateDevice({...newRow, groupId: groupRow.id});
   }
 
   const deleteRow = async params => {
-    return axios.delete(DELETEURL, {data: {deviceId: params.id}});
+    return deleteDevice({data: {deviceId: params.id}});
   }
 
   const handleEditConfirm = async () => {
@@ -174,4 +174,12 @@ const DeviceTable = ({
   );
 }
 
-export default DeviceTable;
+const mapStateToProps = state => {
+  const {userInfo} = state;
+  return {userInfo};
+}
+export default connect(mapStateToProps, {
+  getDeviceList,
+  deleteDevice,
+  updateDevice,
+})(DeviceTable);

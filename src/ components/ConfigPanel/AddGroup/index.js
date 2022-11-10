@@ -1,13 +1,12 @@
 import {Box, Typography, Modal, Button, Grid} from '@mui/material';
-import {useState, useContext} from 'react';
-import {UserContext} from '../../../App';
+import {useState} from 'react';
 import {useFormik} from 'formik';
+import {connect} from 'react-redux';
+import {addGroup} from '../../../slice/group';
 import CssTextField from '../../common/CssTextField';
 import ErrorModal from '../../common/ErrorModal';
 import * as yup from 'yup';
-import axios from 'axios';
 
-const REQUESTURL = 'http://47.99.92.183:8080/group/add';
 const style = {
   position: 'absolute',
   top: '50%',
@@ -23,11 +22,12 @@ const style = {
 const AddGroup = ({
   addGroupOpen,
   setAddGroupOpen,
+  addGroup,
+  userInfo,
 }) => {
   const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
   const handleClose = () => setAddGroupOpen(false);
 
-  const user = useContext(UserContext);
   const validationSchema = yup.object({
     groupName: yup
       .string('请输入分组名称')
@@ -46,10 +46,10 @@ const AddGroup = ({
   })
 
   const handleSubmit = values => {
-    axios.post(REQUESTURL, {groupName: values.groupName, username: user.username})
+    addGroup({groupName: values.groupName, username: userInfo.username})
       .then(() => {
         setAddGroupOpen(false);
-      })
+      });
   }
   return (
     <Modal
@@ -104,4 +104,11 @@ const AddGroup = ({
   );
 }
 
-export default AddGroup;
+const mapStateToProps = state => {
+  const {userInfo} = state;
+  return {userInfo};
+}
+
+export default connect(mapStateToProps, {
+  addGroup,
+})(AddGroup);

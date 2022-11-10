@@ -1,8 +1,10 @@
 import {configureStore} from '@reduxjs/toolkit';
 import loginReducer from './slice/login';
+import groupReducer from './slice/group';
 
 const reducer = {
-  login: loginReducer,
+  userInfo: loginReducer,
+  groupInfo: groupReducer,
 }
 export default configureStore({
   reducer,

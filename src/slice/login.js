@@ -1,24 +1,23 @@
 import {createSlice, createAsyncThunk} from '@reduxjs/toolkit';
-import loginService from '../services/loginServices';
+import loginServices from '../services/loginServices';
 
 const initialState = [];
 
 export const login = createAsyncThunk(
   'login',
   async loginData => {
-    const res = await loginService.login(loginData);
+    const res = await loginServices.login(loginData);
     return res.data;
   }
 );
 
 const loginSlice = createSlice({
-  name: 'login',
+  name: 'loginInfo',
   initialState,
   extraReducers: builder => {
     builder
       .addCase(login.fulfilled, (state, action) => {
-        console.log(state, action)
-        return [];
+        return {...action.payload.data};
       })
   }
 

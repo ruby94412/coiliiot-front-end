@@ -1,16 +1,15 @@
 import {Grid, Button} from '@mui/material';
 import {useState} from 'react';
 import {useFormik} from 'formik';
+import {connect} from 'react-redux';
+import {login as loginRequest} from '../../slice/login';
 import CssTextField from '../common/CssTextField';
 import ErrorModal from '../common/ErrorModal';
 import * as yup from 'yup';
-import {connect} from 'react-redux';
-import {login as loginRequest} from '../../slice/login';
 
 
 const Login = ({
   setIsLoggedIn,
-  setUserInfo,
   loginRequest,
 }) => {
   const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
@@ -35,25 +34,13 @@ const Login = ({
   const handleSubmit = values => {
     loginRequest(values)
       .then(res => {
-          console.log(res);
           const data = res?.payload;
           if (data.status === 'success') {
             setIsLoggedIn(true);
-            setUserInfo(data?.data);
           } else {
             setIsErrorModalOpen(true);
           }
-        })
-    // axios.post(LOCALBACKEND, values)
-    //   .then(res => {
-    //     const data = res?.data;
-    //     if (data.status === 'success') {
-    //       setIsLoggedIn(true);
-    //       setUserInfo(data?.data);
-    //     } else {
-    //       setIsErrorModalOpen(true);
-    //     }
-    //   })
+        });
   }
   return (
       <Grid
@@ -112,7 +99,6 @@ const Login = ({
 
 
 const mapStateToProps = state => {
-  console.log(state);
   return {};
 };
 export default connect(mapStateToProps, {loginRequest})(Login);
