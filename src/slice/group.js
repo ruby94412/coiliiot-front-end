@@ -41,7 +41,7 @@ const groupSlice = createSlice({
   extraReducers: builder => {
     builder
       .addCase(getGroupList.fulfilled, (state, action) => {
-        return [...action.payload.data];
+        return {...action.payload.data || []};
       })
       .addCase(addGroup.fulfilled, (state, action) => {
         return {...action.payload.data};

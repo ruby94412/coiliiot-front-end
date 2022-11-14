@@ -4,6 +4,9 @@ import './index.css';
 import App from './App';
 import store from './store';
 import {Provider} from 'react-redux';
+import setupInterceptors from './services/setupInterceptors'
+
+
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -13,3 +16,5 @@ root.render(
     </Provider>
   </React.StrictMode>
 );
+
+setupInterceptors(store);

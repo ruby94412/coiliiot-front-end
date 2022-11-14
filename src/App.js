@@ -1,7 +1,7 @@
-import {useState} from 'react';
-import Login from './ components/Login';
+import {connect} from 'react-redux';
 // import ControlPanel from './ components/ControlPanel';
 import ConfigPanel from './ components/ConfigPanel';
+import Login from './ components/Login';
 import {
   BrowserRouter,
   Routes,
@@ -9,25 +9,24 @@ import {
 } from "react-router-dom";
 import './App.css';
 
-function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+function App({
+  userInfo,
+}) {
   return (
     <div className="App">
-        {
-          !isLoggedIn
-            && <Login setIsLoggedIn={setIsLoggedIn} />}
-        {
-          isLoggedIn
-            && (
-              <BrowserRouter>
-                <Routes>
-                  <Route path="/" element={<ConfigPanel />} />
-                </Routes>
-              </BrowserRouter>
-          )
-        }
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Login />} />
+          <Route path="/login" element={<Login />} />
+          {userInfo?.isLoggedIn && <Route path="/mainPanel" element={<ConfigPanel />} />}
+        </Routes>
+      </BrowserRouter>
     </div>
   );
 }
 
-export default App;
+const mapStateToProps = state => {
+  const {userInfo} = state;
+  return {userInfo};
+};
+export default connect(mapStateToProps, {})(App);

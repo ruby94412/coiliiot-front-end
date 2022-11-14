@@ -3,16 +3,18 @@ import {useState} from 'react';
 import {useFormik} from 'formik';
 import {connect} from 'react-redux';
 import {login as loginRequest} from '../../slice/login';
+import {useNavigate} from 'react-router-dom';
 import CssTextField from '../common/CssTextField';
 import ErrorModal from '../common/ErrorModal';
 import * as yup from 'yup';
 
 
 const Login = ({
-  setIsLoggedIn,
   loginRequest,
 }) => {
+  const navigate = useNavigate();
   const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
+  const [errMsg, setErrMsg] = useState('');
   const validationSchema = yup.object({
     username: yup
       .string('请输入用户名')
@@ -32,15 +34,15 @@ const Login = ({
     }
   })
   const handleSubmit = values => {
-    loginRequest(values)
-      .then(res => {
-          const data = res?.payload;
-          if (data.status === 'success') {
-            setIsLoggedIn(true);
-          } else {
-            setIsErrorModalOpen(true);
-          }
-        });
+    loginRequest(values).then(res => {
+      const data = res.payload;
+      if (!data.isLoggedIn) {
+        setIsErrorModalOpen(true);
+        setErrMsg(data.message);
+      } else {
+        navigate('/mainPanel');
+      }
+    });
   }
   return (
       <Grid
@@ -89,7 +91,7 @@ const Login = ({
         </Grid>
 
         <ErrorModal
-          errorMessage="请输入正确的用户名密码"
+          errorMessage={errMsg}
           isErrorModalOpen={isErrorModalOpen}
           onClose={() => {setIsErrorModalOpen(false);}}
         />
