@@ -36,7 +36,7 @@ const AddDevice = ({
     deviceType: yup
     .string('请输入选择设备类型')
     .required('请输入选择设备类型'),
-  })
+  });
 
   const formik = useFormik({
     initialValues: {
@@ -49,14 +49,15 @@ const AddDevice = ({
       handleSubmit(values);
       resetForm();
     },
-  })
+  });
 
   const handleSubmit = values => {
     addDevice({groupId, ...values})
       .then(() => {
         setAddDeviceOpen(false);
       })
-  }
+  };
+
   return (
     <Modal
       open={addDeviceOpen}
@@ -122,7 +123,7 @@ const AddDevice = ({
             <Button
               variant="outlined"
               onClick={formik.handleSubmit}
-              style={{width: '100%', backgroundColor: 'rgb(78 70 212)', color: 'white'}}
+              style={{width: '100%'}}
             >
               确认
             </Button>

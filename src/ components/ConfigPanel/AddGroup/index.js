@@ -86,9 +86,9 @@ const AddGroup = ({
           </Grid>
           <Grid item xs={8}>
             <Button
-              variant="outlined"
+              variant="contained"
               onClick={formik.handleSubmit}
-              style={{width: '100%', backgroundColor: 'rgb(78 70 212)', color: 'white'}}
+              style={{width: '100%'}}
             >
               确认
             </Button>

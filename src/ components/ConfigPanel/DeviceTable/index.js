@@ -8,26 +8,6 @@ import TableToolBar from '../TableToolBar';
 import getColumns from './columns';
 import AddDevice from "../AddDevice";
 
-const tableStyle = {
-  "& .MuiDataGrid-cell": {
-    color: "white"
-  },
-  "& .MuiDataGrid-columnHeadersInner": {
-    color: "white"
-  },
-  "& .MuiDataGrid-footerCell": {
-    color: "white"
-  },
-  "& .MuiDataGrid-menuIconButton": {
-    color: "white"
-  },
-  "& .MuiDataGrid-sortIcon": {
-    color: "white"
-  },
-  "& .MuiTablePagination-root": {
-    color: "white !important"
-  }
-};
 const boxStyle = {
   position: 'absolute',
   top: '50%',
@@ -145,7 +125,6 @@ const DeviceTable = ({
           pageSize={20}
           rowsPerPageOptions={[20]}
           hideFooterSelectedRowCount
-          sx={tableStyle}
         />
         <AddDevice
           addDeviceOpen={addDeviceOpen}

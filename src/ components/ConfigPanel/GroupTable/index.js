@@ -10,27 +10,6 @@ import AddGroup from "../AddGroup";
 import DeviceTable from '../DeviceTable';
 import ConfigDialog from '../ConfigDialog';
 
-const styleProperty = {
-  "& .MuiDataGrid-cell": {
-    color: "white"
-  },
-  "& .MuiDataGrid-columnHeadersInner": {
-    color: "white"
-  },
-  "& .MuiDataGrid-footerCell": {
-    color: "white"
-  },
-  "& .MuiDataGrid-menuIconButton": {
-    color: "white"
-  },
-  "& .MuiDataGrid-sortIcon": {
-    color: "white"
-  },
-  "& .MuiTablePagination-root": {
-    color: "white !important"
-  }
-};
-
 const GroupTable = ({
   getGroupList,
   updateGroup,
@@ -140,7 +119,6 @@ const GroupTable = ({
         pageSize={20}
         rowsPerPageOptions={[20]}
         hideFooterSelectedRowCount
-        sx={styleProperty}
       />
       <AddGroup addGroupOpen={addGroupOpen} setAddGroupOpen={setAddGroupOpen}/>
       <ConfirmDialog

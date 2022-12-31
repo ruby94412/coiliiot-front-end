@@ -1,12 +1,12 @@
-import {Grid, Button} from '@mui/material';
+import {Grid, Button, TextField} from '@mui/material';
 import {useState} from 'react';
 import {useFormik} from 'formik';
 import {connect} from 'react-redux';
 import {login as loginRequest} from '../../slice/login';
 import {useNavigate} from 'react-router-dom';
-import CssTextField from '../common/CssTextField';
 import ErrorModal from '../common/ErrorModal';
 import * as yup from 'yup';
+import './Login.css'
 
 
 const Login = ({
@@ -45,6 +45,7 @@ const Login = ({
     });
   }
   return (
+    <div className="Login">
       <Grid
         container
         spacing={2}
@@ -52,8 +53,8 @@ const Login = ({
         justifyContent="center"
         alignItems="center"
       >
-        <Grid item xs={8}>
-          <CssTextField
+        <Grid item xl={12}>
+          <TextField
             required
             label="用户名"
             size="small"
@@ -66,8 +67,8 @@ const Login = ({
             helperText={formik.touched.username && formik.errors.username}
           />
         </Grid>
-        <Grid item xs={8}>
-          <CssTextField
+        <Grid item xl={12}>
+          <TextField
             required
             label="密码"
             size="small"
@@ -80,11 +81,10 @@ const Login = ({
             helperText={formik.touched.password && formik.errors.password}
           />
         </Grid>
-        <Grid item xs={8}>
+        <Grid item xl={12}>
           <Button
-            variant="outlined"
+            variant="contained"
             onClick={formik.handleSubmit}
-            style={{width: '100%', backgroundColor: 'rgb(78 70 212)', color: 'white'}}
           >
             登录
           </Button>
@@ -96,6 +96,8 @@ const Login = ({
           onClose={() => {setIsErrorModalOpen(false);}}
         />
       </Grid>
+    </div>
+      
   );
 };
 

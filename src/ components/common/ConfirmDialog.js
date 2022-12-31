@@ -32,10 +32,10 @@ const ConfirmDialog = ({
         {content}
       </DialogContent>
       <DialogActions>
-        <Button onClick={onClose}>
+        <Button onClick={onClose} variant="contained">
           取消
         </Button>
-        <Button onClick={handleConfirm}>确定</Button>
+        <Button onClick={handleConfirm} variant="contained">确定</Button>
       </DialogActions>
     </Dialog>
   );

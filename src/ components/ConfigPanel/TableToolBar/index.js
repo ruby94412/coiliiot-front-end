@@ -13,8 +13,7 @@ const TableToolBar = ({
   return (
     <GridToolbarContainer>
       <Button
-        variant="outlined"
-        style={{backgroundColor: 'rgb(78 70 212)', color: 'white'}}
+        variant="contained"
         onClick={handleAddClick}
       >{text}</Button>
     </GridToolbarContainer>
