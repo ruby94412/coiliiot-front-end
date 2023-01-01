@@ -5,7 +5,7 @@ export const networkOptions = [{label: 'TCP', value: 0}, {label: '阿里云', va
 export const tcpFields = [
   {label: '注册包', propertyName: 'registerMessage', dataType: 'text'},
   {label: '心跳包', propertyName: 'pulseMessage', dataType: 'text'},
-  {label: '心跳包间隔', propertyName: 'pulseMessageFrequency', dataType: 'number'},
+  {label: '心跳包间隔', propertyName: 'pulseFrequency', dataType: 'number'},
   {label: '服务器地址', propertyName: 'host', dataType: 'text'},
   {label: '端口号', propertyName: 'port', dataType: 'number'},
 ];
@@ -29,7 +29,7 @@ export const mqttFields = [
   {label: '发布主题', propertyName: 'publishTopic', dataType: 'text'},
 ];
 
-export const initialValues = () => {
+export const initialValues = originalConfig => {
   const rst = {serialConfigs: [], networkConfigs: []};
     for(let i=0; i<3; i++) {
       rst.serialConfigs.push({
@@ -42,7 +42,7 @@ export const initialValues = () => {
         enabled: false,
         type: 0,
         tcp: {
-          registerMessage: '', pulseMessage: '', pulseMessageFrequency: 30, host: '', port: 8080,
+          registerMessage: '', pulseMessage: '', pulseFrequency: 30, host: '', port: 8080,
         },
         aliyun: {
           regionId: 'cn-shanghai', productKey: '', deviceSecret: '',
@@ -55,5 +55,19 @@ export const initialValues = () => {
         serialId: 0,
       });
     }
+    originalConfig?.serialConfigs?.forEach(origin => {
+      const index = origin.serialId;
+      const defaultConfig = rst.serialConfigs[index];
+      rst.serialConfigs[index] = {...defaultConfig, ...origin};
+    });
+    originalConfig?.networkConfigs?.forEach(origin => {
+      const index = origin.networkId;
+      const defaultConfig = rst.networkConfigs[index];
+      const {networkId, type, serialId, ...other} = origin;
+      rst.networkConfigs[index] = {...defaultConfig, networkId, type, serialId, enabled: true};
+      const typeArr = ['tcp', 'aliyun', 'mqtt'];
+      rst.networkConfigs[index][typeArr[type]] = other;
+      console.log(rst.networkConfigs[index]);
+    });
     return rst; 
 };
