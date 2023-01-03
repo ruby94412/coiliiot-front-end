@@ -18,6 +18,7 @@ const GroupTable = ({
 }) => {
   const [rows, setRows] = useState([]);
   const [addGroupOpen, setAddGroupOpen] = useState(false);
+  const [isConfigClosing, setIsConfigClosing] = useState(false);
   const [editParams, setEditParams] = useState(null);
   const [deleteParams, setDeleteParams] = useState(null);
   const [deviceTableParams, setDeviceTableParams] = useState(null);
@@ -96,8 +97,12 @@ const GroupTable = ({
     setDeviceTableParams(null);
   }
 
-  const configModalOnClose = () => {
-    setConfigParams(null);
+  const configModalOnClose = dirty => {
+    if (dirty) {
+      setIsConfigClosing(true);
+    } else {
+      setConfigParams(null);
+    }
   }
 
   const columnsProps = {setDeviceTableParams, setDeleteParams, setConfigParams}
@@ -132,6 +137,15 @@ const GroupTable = ({
         onClose={() => {setDeleteParams(null);}}
         handleConfirmCb={handleDeleteConfirm}
         content="确认删除该条记录吗?"
+      />
+      <ConfirmDialog
+        isOpen={isConfigClosing}
+        onClose={() => {setIsConfigClosing(false);}}
+        handleConfirmCb={() => {
+          setIsConfigClosing(false);
+          setConfigParams(null);
+        }}
+        content="有未保存的设置,确认关闭此窗口吗?"
       />
       {!!snackbar && (
         <Snackbar open onClose={handleCloseSnackbar} autoHideDuration={6000}>

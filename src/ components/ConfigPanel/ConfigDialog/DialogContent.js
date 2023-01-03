@@ -10,13 +10,12 @@ import {
   Box,
 } from '@mui/material';
 import {LoadingButton} from '@mui/lab';
-import {useState} from 'react';
+import {useState, forwardRef, useImperativeHandle} from 'react';
 import {useFormik} from 'formik';
 import SwipeableViews from 'react-swipeable-views';
 import TabPanel from '../../common/TabPanel';
 import Platform from './Platform';
 import Serial from './Serial';
-import {initialValues} from './constants';
 
 const a11yProps = index => {
   return {
@@ -25,11 +24,12 @@ const a11yProps = index => {
   };
 }
 
-const Content = ({
+const Content = forwardRef(({
   groupRow,
   onClose,
   updateConfig,
-}) => {
+  initialValues,
+}, ref) => {
   const [saveLoading, setSaveLoading] = useState(false);
   const [snackbar, setSnackbar] = useState(null);
   const [tabIndex, setTabIndex] = useState(0);
@@ -37,10 +37,8 @@ const Content = ({
     setTabIndex(newValue);
   };
 
-  const formik = useFormik({
-    initialValues: initialValues(groupRow?.config),
-    onSubmit: (values, {resetForm}) => {
-      const config = {serialConfigs:[], networkConfigs: [], networkSummary: {tcp: [], aliyun: [], mqtt:[]}};
+  const handleDataConvert = values => {
+    const config = {serialConfigs:[], networkConfigs: [], networkSummary: {tcp: [], aliyun: [], mqtt:[]}};
       values.serialConfigs.forEach(ele => {
         if (ele.enabled) {
           config.serialConfigs.push(ele);
@@ -49,29 +47,27 @@ const Content = ({
       values.networkConfigs.forEach(ele => {
         if (ele.enabled) {
           const {enabled, serialId, type, networkId} = ele;
-          let detail;
-          switch (type) {
-            default:
-            case 0:
-              detail = ele.tcp;
-              config.networkSummary.tcp.push(networkId);
-              break;
-            case 1:
-              detail = ele.aliyun;
-              config.networkSummary.aliyun.push(networkId);
-              break;
-            case 2:
-              detail = ele.mqtt;
-              config.networkSummary.mqtt.push(networkId);
-              break;
-          }
+          const typeArr = ['tcp', 'aliyun', 'mqtt'];
+          const detail = ele[typeArr[type]];
+          config.networkSummary[typeArr[type]].push(networkId);
           config.networkConfigs.push({enabled, serialId, type, networkId, ...detail});
         }
       });
       config.config_version = new Date().toString();
+      return config;
+  };
+
+  const formik = useFormik({
+    initialValues: initialValues,
+    onSubmit: (values, {resetForm}) => {
+      const config = handleDataConvert(values);
       handleSubmit(config, resetForm);
     },
   });
+
+  useImperativeHandle(ref, () => ({
+    dirty: formik.dirty,
+  }));
 
   const handleSubmit = async (config, resetForm) => {
     setSaveLoading(true);
@@ -89,7 +85,7 @@ const Content = ({
   };
 
   const handleCloseSnackbar = () => {
-    onClose();
+    onClose(false);
     setSnackbar(null);
   };
   return (
@@ -115,13 +111,14 @@ const Content = ({
             <Platform formik={formik} />
           </TabPanel>
         </SwipeableViews>
+        
       </DialogContent>
       <DialogActions>
-        <Button onClick={onClose} variant="contained">
+        <Button onClick={() => {onClose(formik.dirty);}} variant="contained">
           取消
         </Button>
         <LoadingButton onClick={formik.handleSubmit} loading={saveLoading} variant="contained">
-          保存配置
+          提交配置
         </LoadingButton>
       </DialogActions>
       {!!snackbar && (
@@ -131,6 +128,6 @@ const Content = ({
       )}
     </>
   );
-}
+})
 
 export default Content;

@@ -29,7 +29,7 @@ export const mqttFields = [
   {label: '发布主题', propertyName: 'publishTopic', dataType: 'text'},
 ];
 
-export const initialValues = originalConfig => {
+export const getInitialValues = originalConfig => {
   const rst = {serialConfigs: [], networkConfigs: []};
     for(let i=0; i<3; i++) {
       rst.serialConfigs.push({
@@ -67,7 +67,6 @@ export const initialValues = originalConfig => {
       rst.networkConfigs[index] = {...defaultConfig, networkId, type, serialId, enabled: true};
       const typeArr = ['tcp', 'aliyun', 'mqtt'];
       rst.networkConfigs[index][typeArr[type]] = other;
-      console.log(rst.networkConfigs[index]);
     });
     return rst; 
 };
