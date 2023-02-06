@@ -12,7 +12,7 @@ import {
 } from '@mui/material';
 import TabPanel from '../../common/TabPanel';
 import SwipeableViews from 'react-swipeable-views';
-import {networkIds, networkOptions, tcpFields, aliyunFields, mqttFields} from './constants';
+import {networkIds, networkOptions, aliyunFields, mqttFields, socketFields} from './constants';
 
 const Platform = ({
   formik,
@@ -49,8 +49,8 @@ const Platform = ({
     switch (type) {
       default:
       case 0:
-        fields = tcpFields;
-        typeName = 'tcp';
+        fields = socketFields;
+        typeName = 'socket';
         break;
       case 1:
         fields = aliyunFields;

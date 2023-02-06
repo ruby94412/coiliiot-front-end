@@ -1,7 +1,7 @@
 import {connect} from 'react-redux';
 // import ControlPanel from './ components/ControlPanel';
-import ConfigPanel from './ components/ConfigPanel';
-import Login from './ components/Login';
+import ConfigPanel from './components/ConfigPanel';
+import Login from './components/Login';
 import {createTheme, ThemeProvider} from '@mui/material/styles';
 import {
   BrowserRouter,

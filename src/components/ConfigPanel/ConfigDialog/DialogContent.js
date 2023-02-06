@@ -38,7 +38,7 @@ const Content = forwardRef(({
   };
 
   const handleDataConvert = values => {
-    const config = {serialConfigs:[], networkConfigs: [], networkSummary: {tcp: [], aliyun: [], mqtt:[]}};
+    const config = {serialConfigs:[], networkConfigs: [], networkSummary: {socket: [], aliyun: [], mqtt:[]}};
       values.serialConfigs.forEach(ele => {
         if (ele.enabled) {
           config.serialConfigs.push(ele);
@@ -47,7 +47,7 @@ const Content = forwardRef(({
       values.networkConfigs.forEach(ele => {
         if (ele.enabled) {
           const {enabled, serialId, type, networkId} = ele;
-          const typeArr = ['tcp', 'aliyun', 'mqtt'];
+          const typeArr = ['socket', 'aliyun', 'mqtt'];
           const detail = ele[typeArr[type]];
           config.networkSummary[typeArr[type]].push(networkId);
           config.networkConfigs.push({enabled, serialId, type, networkId, ...detail});
@@ -81,12 +81,12 @@ const Content = forwardRef(({
       setSnackbar({children: "更新失败", severity: 'error'});
     }
     setSaveLoading(false);
-    resetForm();
   };
 
   const handleCloseSnackbar = () => {
-    onClose(false);
     setSnackbar(null);
+    onClose(false);
+    formik.resetForm();
   };
   return (
     <>

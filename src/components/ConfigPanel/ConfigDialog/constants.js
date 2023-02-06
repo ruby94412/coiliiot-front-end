@@ -1,8 +1,9 @@
 export const networkIds = [0, 1, 2, 3, 4, 5, 6, 7];
 
-export const networkOptions = [{label: 'TCP', value: 0}, {label: '阿里云', value: 1}, {label: 'MQTT', value: 2}];
+export const networkOptions = [{label: 'Socket', value: 0}, {label: '阿里云', value: 1}, {label: 'MQTT', value: 2}];
 
-export const tcpFields = [
+export const socketFields = [
+  {label: '类型', propertyName: 'socketType', dataType: 'number'},
   {label: '注册包', propertyName: 'registerMessage', dataType: 'text'},
   {label: '心跳包', propertyName: 'pulseMessage', dataType: 'text'},
   {label: '心跳包间隔', propertyName: 'pulseFrequency', dataType: 'number'},
@@ -41,8 +42,8 @@ export const getInitialValues = originalConfig => {
         networkId: i,
         enabled: false,
         type: 0,
-        tcp: {
-          registerMessage: '', pulseMessage: '', pulseFrequency: 30, host: '', port: 8080,
+        socket: {
+          registerMessage: '', pulseMessage: '', pulseFrequency: 30, host: '', port: 8080, socketType: 0,
         },
         aliyun: {
           regionId: 'cn-shanghai', productKey: '', deviceSecret: '',
@@ -65,7 +66,7 @@ export const getInitialValues = originalConfig => {
       const defaultConfig = rst.networkConfigs[index];
       const {networkId, type, serialId, ...other} = origin;
       rst.networkConfigs[index] = {...defaultConfig, networkId, type, serialId, enabled: true};
-      const typeArr = ['tcp', 'aliyun', 'mqtt'];
+      const typeArr = ['socket', 'aliyun', 'mqtt'];
       rst.networkConfigs[index][typeArr[type]] = other;
     });
     return rst; 
