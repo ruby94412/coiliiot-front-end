@@ -8,10 +8,10 @@ import {
   FormLabel,
   Select,
   MenuItem,
-  TextField,
 } from '@mui/material';
 import TabPanel from '../../common/TabPanel';
 import SwipeableViews from 'react-swipeable-views';
+import {renderFields} from './utils';
 import {networkIds, networkOptions, aliyunFields, mqttFields, socketFields} from './constants';
 
 const Platform = ({
@@ -25,23 +25,6 @@ const Platform = ({
   const handleEnabledChange = e => {
     formik.setFieldValue(`networkConfigs[${networkId}].enabled`, e.target.value === 'true');
   };
-
-  const renderTextField = ({label, propertyName, dataType, platformType, ...other}) => (
-    <Grid item xs={12} md={4}>
-      <FormControl sx={{display: 'flex'}}>
-        <FormLabel>{label}</FormLabel>
-        <TextField
-          size="small"
-          style={{width: '80%'}}
-          value={formik.values.networkConfigs[networkId][platformType][propertyName]}
-          name={`networkConfigs[${networkId}].${platformType}.${propertyName}`}
-          onChange={formik.handleChange}
-          type={dataType}
-          {...other}
-        />
-      </FormControl>
-    </Grid>
-  );
 
   const renderNetwork = () => {
     const type = formik.values.networkConfigs[networkId].type;
@@ -64,8 +47,23 @@ const Platform = ({
     return (
       <>
         {fields.map(field => (
-          <Fragment key={field.propertyName}>{renderTextField({...field, platformType: typeName})}</Fragment>
+          <Fragment key={field.propertyName}>
+            {renderFields({
+              value: formik.values.networkConfigs[networkId][typeName][field.propertyName],
+              name: `networkConfigs[${networkId}].${typeName}.${field.propertyName}`,
+              handleChange: formik.handleChange,
+              ...field,
+            })}
+          </Fragment>
         ))}
+        {renderFields({
+          label: '串口ID',
+          value: Number(formik.values.networkConfigs[networkId].serialId),
+          name: `networkConfigs[${networkId}].serialId`,
+          handleChange: formik.handleChange,
+          fieldType: 'radioGroup',
+          radioOptions: [{label: '1', value: 0}, {label: '2', value: 1}, {label: '3', value: 2}],
+        })}
       </>
     );
   };
@@ -103,20 +101,16 @@ const Platform = ({
                 spacing={2}
                 direction="row"
               >
-                <Grid item xs={12} md={4}>
-                  <FormControl sx={{display: 'flex'}}>
-                    <FormLabel>启用状态</FormLabel>
-                    <RadioGroup
-                      row
-                      value={formik.values.networkConfigs[networkId].enabled}
-                      onChange={handleEnabledChange}
-                      name={`networkConfigs[${index}].enabled`}
-                    >
-                      <FormControlLabel value={true} control={<Radio />} label="启用" />
-                      <FormControlLabel value={false} control={<Radio />} label="不启用" />
-                    </RadioGroup>
-                  </FormControl>     
-                </Grid>
+                {
+                  renderFields({
+                    label: '启用状态',
+                    value: formik.values.networkConfigs[networkId].enabled,
+                    name: `networkConfigs[${index}].enabled`,
+                    handleChange: handleEnabledChange,
+                    fieldType: 'radioGroup',
+                    radioOptions: [{label: '启用', value: true}, {label: '不启用', value: false}],
+                  })
+                }
                 {
                   formik.values.networkConfigs[index].enabled && (
                     <>
@@ -153,21 +147,6 @@ const Platform = ({
                     style={{marginTop: '10px'}}
                   >
                     {renderNetwork()}
-                    <Grid item xs={12} md={4}>
-                      <FormControl sx={{display: 'flex'}}>
-                        <FormLabel>串口ID</FormLabel>
-                        <RadioGroup
-                          row
-                          value={formik.values.networkConfigs[networkId].serialId}
-                          onChange={formik.handleChange}
-                          name={`networkConfigs[${index}].serialId`}
-                        >
-                          <FormControlLabel value={0} control={<Radio />} label="1" />
-                          <FormControlLabel value={1} control={<Radio />} label="2" />
-                          <FormControlLabel value={2} control={<Radio />} label="3" />
-                        </RadioGroup>
-                      </FormControl>     
-                    </Grid>
                   </Grid>
                 )
               }
