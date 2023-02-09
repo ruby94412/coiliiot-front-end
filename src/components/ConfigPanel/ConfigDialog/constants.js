@@ -31,45 +31,19 @@ export const mqttFields = [
   {label: '发布主题', propertyName: 'publishTopic', datatype: 'text'},
 ];
 
-export const getInitialValues = originalConfig => {
-  const rst = {serialConfigs: [], networkConfigs: []};
-    for(let i=0; i<3; i++) {
-      rst.serialConfigs.push({
-        serialId: i, enabled: false, baudrate: 9600, dataBit: 8,
-        stopBit: 1, parityMode: 2, autoPollEnabled: false, autoPollConfig: {delay: 1000, commands: []},
-      });
-    }
-    for(let i=0; i<8; i++) {
-      rst.networkConfigs.push({
-        networkId: i,
-        enabled: false,
-        type: 0,
-        socket: {
-          registerMessage: '', pulseMessage: '', pulseFrequency: 30, host: '', port: 8080, socketType: 0,
-        },
-        aliyun: {
-          regionId: 'cn-shanghai', productKey: '', deviceSecret: '',
-          deviceName: '', subscribeTopic: '', publishTopic: '',
-        },
-        mqtt: {
-          host: '', port: 8080, username: '', password: '', clientId: '',
-          subscribeTopic: '', publishTopic: '',
-        },
-        serialId: 0,
-      });
-    }
-    originalConfig?.serialConfigs?.forEach(origin => {
-      const index = origin.serialId;
-      const defaultConfig = rst.serialConfigs[index];
-      rst.serialConfigs[index] = {...defaultConfig, ...origin};
-    });
-    originalConfig?.networkConfigs?.forEach(origin => {
-      const index = origin.networkId;
-      const defaultConfig = rst.networkConfigs[index];
-      const {networkId, type, serialId, ...other} = origin;
-      rst.networkConfigs[index] = {...defaultConfig, networkId, type, serialId, enabled: true};
-      const typeArr = ['socket', 'aliyun', 'mqtt'];
-      rst.networkConfigs[index][typeArr[type]] = other;
-    });
-    return rst; 
-};
+export const serialFields = [
+  {label: '波特率', propertyName: 'baudrate', fieldType: 'select',
+    selectOptions: [1200, 2400, 4800, 9600, 14400,
+    19200, 28800, 57600, 115200, 230400, 460800, 921600],
+  },
+  {label: '数据位', propertyName: 'dataBit', fieldType: 'radioGroup',
+    radioOptions: [7, 8],
+  },
+  {label: '校验位', propertyName: 'parityMode', fieldType: 'radioGroup', layout: {xs: 12, md: 8},
+    radioOptions: [{label: 'UART.PAR_EVEN', value: 0}, {label: 'UART.PAR_ODD', value: 1},
+    {label: 'UART.PAR_NONE', value: 2}],
+  },
+  {label: '停止位', propertyName: 'stopBit', fieldType: 'radioGroup',
+    radioOptions: [1, 2],
+  },
+];

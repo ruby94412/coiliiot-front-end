@@ -41,7 +41,12 @@ const Content = forwardRef(({
     const config = {serialConfigs:[], networkConfigs: [], networkSummary: {socket: [], aliyun: [], mqtt:[]}};
       values.serialConfigs.forEach(ele => {
         if (ele.enabled) {
-          config.serialConfigs.push(ele);
+          const {autoPollEnabled, autoPollConfig, ...other} = ele;
+          if (autoPollEnabled) {
+            config.serialConfigs.push(ele);
+          } else {
+            config.serialConfigs.push({autoPollEnabled, ...other});
+          }
         }
       });
       values.networkConfigs.forEach(ele => {
@@ -70,6 +75,7 @@ const Content = forwardRef(({
   }));
 
   const handleSubmit = async (config, resetForm) => {
+    // console.log(config);
     setSaveLoading(true);
     try {
       await updateConfig({

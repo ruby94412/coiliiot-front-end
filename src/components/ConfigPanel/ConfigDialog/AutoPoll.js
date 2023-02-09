@@ -77,10 +77,7 @@ const AutoPoll = ({
                   )
                 )
               }
-              <Grid
-                item
-                xs={12}
-              >
+              <Grid item xs={12}>
                 <Button variant="contained" onClick={handleCommandAdd}>添加命令</Button>
               </Grid>
             </>

@@ -1,4 +1,4 @@
-import {useState} from 'react';
+import {useState, Fragment} from 'react';
 import {
   Grid,
   RadioGroup,
@@ -6,20 +6,17 @@ import {
   FormControl,
   FormControlLabel,
   FormLabel,
-  Select,
-  MenuItem,
 } from '@mui/material';
 import TabPanel from '../../common/TabPanel';
-import SwipeableViews from 'react-swipeable-views';
-import {renderFields} from './utils';
 import AutoPoll from './AutoPoll';
- 
+import SwipeableViews from 'react-swipeable-views';
+import {serialFields} from './constants';
+import {renderFields} from './utils';
+
 const Serial = ({
   formik,
 }) => {
   const [serialId, setSerialId] = useState(0);
-  const baudRateOptions = [1200, 2400, 4800, 9600, 14400,
-    19200, 28800, 57600, 115200, 230400, 460800, 921600];
   const handleSerialIdChange = event => {
     setSerialId(Number(event.target.value));
   };
@@ -78,83 +75,16 @@ const Serial = ({
                 {
                   formik.values.serialConfigs[index].enabled
                     && <>
-                      <Grid
-                        item
-                        xs={12}
-                        md={4}
-                      >
-                        <FormControl fullWidth>
-                          <FormLabel>波特率</FormLabel>
-                          <Select
-                            size="small"
-                            style={{width: '80%'}}
-                            value={formik.values.serialConfigs[serialId].baudrate}
-                            name={`serialConfigs[${index}].baudrate`}
-                            onChange={formik.handleChange}
-                          >
-                            {
-                              baudRateOptions.map(baudrate => (
-                                <MenuItem key={baudrate} value={baudrate}>{`${baudrate}bps`}</MenuItem>
-                              ))
-                            }
-                          </Select>
-                        </FormControl>     
-                      </Grid>
-                      <Grid
-                        item
-                        xs={12}
-                        md={4}
-                      >
-                        <FormControl sx={{display: 'flex'}}>
-                          <FormLabel>数据位</FormLabel>
-                          <RadioGroup
-                            row
-                            value={formik.values.serialConfigs[serialId].dataBit}
-                            onChange={formik.handleChange}
-                            name={`serialConfigs[${index}].dataBit`}
-                          >
-                            <FormControlLabel value={7} control={<Radio />} label="7" />
-                            <FormControlLabel value={8} control={<Radio />} label="8" />
-                          </RadioGroup>
-                        </FormControl>
-                      </Grid>
-                      <Grid
-                        item
-                        xs={12}
-                        md={8}
-                      >
-                        <FormControl sx={{display: 'flex'}}>
-                          <FormLabel>校验位</FormLabel>
-                          <RadioGroup
-                            row
-                            value={formik.values.serialConfigs[serialId].parityMode}
-                            onChange={formik.handleChange}
-                            name={`serialConfigs[${index}].parityMode`}
-                          >
-                            <FormControlLabel value={0} control={<Radio />} label="UART.PAR_EVEN" />
-                            <FormControlLabel value={1} control={<Radio />} label="UART.PAR_ODD" />
-                            <FormControlLabel value={2} control={<Radio />} label="UART.PAR_NONE" />
-                          </RadioGroup>
-                        </FormControl>     
-                      </Grid>
-                      <Grid
-                        item
-                        xs={12}
-                        md={4}
-                      >
-                        <FormControl sx={{display: 'flex'}}>
-                          <FormLabel>停止位</FormLabel>
-                          <RadioGroup
-                            row
-                            value={formik.values.serialConfigs[serialId].stopBit}
-                            onChange={formik.handleChange}
-                            name={`serialConfigs[${index}].stopBit`}
-                          >
-                            <FormControlLabel value={1} control={<Radio />} label="1" />
-                            <FormControlLabel value={2} control={<Radio />} label="2" />
-                          </RadioGroup>
-                        </FormControl>     
-                      </Grid>
+                      {serialFields.map(field => (
+                        <Fragment key={field.propertyName}>
+                          {renderFields({
+                            value: formik.values.serialConfigs[serialId][field.propertyName],
+                            name: `serialConfigs[${index}].${field.propertyName}`,
+                            handleChange: formik.handleChange,
+                            ...field,
+                          })}
+                        </Fragment>
+                      ))}
                       <AutoPoll formik={formik} index={index} serialId={serialId}/>
                     </>
                 }
