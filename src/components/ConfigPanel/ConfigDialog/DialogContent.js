@@ -49,9 +49,11 @@ const Content = forwardRef(({
           }
         }
       });
+      let autoTaskCount = 0;
       values.networkConfigs.forEach(ele => {
         if (ele.enabled) {
           const {enabled, serialId, type, networkId} = ele;
+          if (config.serialConfigs[serialId].autoPollEnabled) autoTaskCount++;
           const typeArr = ['socket', 'aliyun', 'mqtt'];
           const detail = ele[typeArr[type]];
           config.networkSummary[typeArr[type]].push(networkId);
@@ -59,6 +61,7 @@ const Content = forwardRef(({
         }
       });
       config.config_version = new Date().toString();
+      config.autoTaskCount = autoTaskCount;
       return config;
   };
 

@@ -108,7 +108,8 @@ export const getInitialValues = originalConfig => {
         enabled: false,
         type: 0,
         socket: {
-          registerMessage: '', pulseMessage: '', pulseFrequency: 30, host: '', port: 8080, socketType: 0,
+          registerMessage: '', pulseMessage: '', pulseFrequency: 30,
+          host: '', port: 8080, socketType: 0, autoPollInterval: 1000,
         },
         aliyun: {
           regionId: 'cn-shanghai', productKey: '', deviceSecret: '',

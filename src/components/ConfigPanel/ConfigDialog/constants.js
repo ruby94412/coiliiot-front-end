@@ -10,6 +10,7 @@ export const socketFields = [
   {label: '心跳包间隔', propertyName: 'pulseFrequency', datatype: 'number'},
   {label: '服务器地址', propertyName: 'host', datatype: 'text'},
   {label: '端口号', propertyName: 'port', datatype: 'number'},
+  {label: '主动轮训间隔时间', propertyName: 'autoPollInterval', datatype: 'number'},
 ];
 
 export const aliyunFields = [

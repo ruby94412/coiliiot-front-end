@@ -16,13 +16,13 @@ const AutoPoll = ({
   };
 
   const handleCommandDelete = (cmdIdx) => {
-    const commandArr = formik.values.serialConfigs[serialId].autoPollConfig.commands;
+    const commandArr = Array.from(formik.values.serialConfigs[serialId].autoPollConfig.commands);
     commandArr.splice(cmdIdx, 1);
     formik.setFieldValue(`serialConfigs[${index}].autoPollConfig.commands`, commandArr);
   }
   
   const handleCommandAdd = () => {
-    const commandArr = formik.values.serialConfigs[serialId].autoPollConfig.commands;
+    const commandArr = Array.from(formik.values.serialConfigs[serialId].autoPollConfig.commands);
     commandArr.push('');
     formik.setFieldValue(`serialConfigs[${index}].autoPollConfig.commands`, commandArr);
   }
