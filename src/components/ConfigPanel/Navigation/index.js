@@ -56,7 +56,7 @@ const Navigation = ({
   }];
   return (
     <>
-      <AppBar position="static">
+      <AppBar position="static" color="darker">
         <Container maxWidth="xl">
           <Toolbar disableGutters>
             <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />

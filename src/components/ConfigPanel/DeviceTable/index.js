@@ -1,6 +1,6 @@
 import {DataGrid} from '@mui/x-data-grid';
 import {useEffect, useState, useMemo, useCallback} from 'react';
-import {Snackbar, Alert, Modal, Box} from '@mui/material';
+import {Snackbar, Alert, Dialog, DialogContent} from '@mui/material';
 import {connect} from 'react-redux';
 import {getDeviceList, deleteDevice, updateDevice} from '../../../slice/device';
 import ConfirmDialog from '../../common/ConfirmDialog';
@@ -8,19 +8,11 @@ import TableToolBar from '../TableToolBar';
 import getColumns from './columns';
 import AddDevice from "../AddDevice";
 
-const boxStyle = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: '70%',
-  bgcolor: '#555555',
-  border: '2px solid #000',
-  boxShadow: 24,
-  p: 4,
-  color: 'white',
-  height: '400px',
-};
+const dialogStyle = {
+  minWidth: '70%',
+  height: '50%',
+}
+
 const DeviceTable = ({
   groupRow,
   onClose,
@@ -44,6 +36,7 @@ const DeviceTable = ({
   }
 
   useEffect(() => {
+    console.log(groupRow)
     if (!!groupRow || !addDeviceOpen) {
       reloadTable();
     }
@@ -111,12 +104,19 @@ const DeviceTable = ({
   );
 
   return (
-    <Modal
+    <Dialog
+      maxWidth="xs"
       open={!!groupRow}
       onClose={onClose}
+      PaperProps={{style: dialogStyle}}
     >
-      <Box sx={boxStyle}>
+      <DialogContent>
         <DataGrid
+          sx={{
+            boxShadow: 2,
+            border: 2,
+            borderColor: 'primary.dark',
+          }}
           rows={rows}
           columns={columns}
           components={{Toolbar: renderToolBar}}
@@ -148,8 +148,8 @@ const DeviceTable = ({
             <Alert {...snackbar} onClose={handleCloseSnackbar} />
           </Snackbar>
         )}
-      </Box>
-    </Modal>
+      </DialogContent>
+    </Dialog>
   );
 }
 

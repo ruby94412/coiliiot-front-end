@@ -38,7 +38,7 @@ const getColumns = ({
       <GridActionsCellItem
         icon={
           <Tooltip title="管理分组设备">
-            <DevicesIcon style={{color: 'white'}}/>
+            <DevicesIcon />
           </Tooltip>
         }
         label="Devices"
@@ -47,7 +47,7 @@ const getColumns = ({
       <GridActionsCellItem
         icon={
           <Tooltip title="配置分组">
-            <SettingsIcon style={{color: 'white'}}/>
+            <SettingsIcon />
           </Tooltip>
         }
         label="Settings"
@@ -56,7 +56,7 @@ const getColumns = ({
       <GridActionsCellItem
         icon={
           <Tooltip title="删除分组">
-            <DeleteIcon style={{color: 'white'}}/>
+            <DeleteIcon />
           </Tooltip>
         }
         label="Delete"

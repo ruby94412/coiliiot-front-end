@@ -25,7 +25,6 @@ const Serial = ({
     formik.setFieldValue(`serialConfigs[${serialId}].enabled`, e.target.value === 'true');
   };
 
-
   return (
     <>
       <Grid
@@ -88,11 +87,7 @@ const Serial = ({
                       <AutoPoll formik={formik} index={index} serialId={serialId}/>
                     </>
                 }
-
-                  
-
-              </Grid>
-              
+              </Grid>             
             </TabPanel>
           ))
         }

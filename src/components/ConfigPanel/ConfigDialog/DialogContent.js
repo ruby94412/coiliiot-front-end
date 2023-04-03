@@ -16,11 +16,13 @@ import SwipeableViews from 'react-swipeable-views';
 import TabPanel from '../../common/TabPanel';
 import Platform from './Platform';
 import Serial from './Serial';
+import Basic from './Basic';
 
 const a11yProps = index => {
   return {
     id: `simple-tab-${index}`,
     'aria-controls': `simple-tabpanel-${index}`,
+    color: 'red',
   };
 }
 
@@ -38,31 +40,37 @@ const Content = forwardRef(({
   };
 
   const handleDataConvert = values => {
-    const config = {serialConfigs:[], networkConfigs: [], networkSummary: {socket: [], aliyun: [], mqtt:[]}};
-      values.serialConfigs.forEach(ele => {
-        if (ele.enabled) {
-          const {autoPollEnabled, autoPollConfig, ...other} = ele;
-          if (autoPollEnabled) {
-            config.serialConfigs.push(ele);
-          } else {
-            config.serialConfigs.push({autoPollEnabled, ...other});
-          }
+    const config = {
+      basicConfigs: {},
+      serialConfigs:[],
+      networkConfigs: [],
+      networkSummary: {socket: [], aliyun: [], mqtt:[]},
+    };
+    config.basicConfigs = values.basicConfigs;
+    values.serialConfigs.forEach(ele => {
+      if (ele.enabled) {
+        const {autoPollEnabled, autoPollConfig, ...other} = ele;
+        if (autoPollEnabled) {
+          config.serialConfigs.push(ele);
+        } else {
+          config.serialConfigs.push({autoPollEnabled, ...other});
         }
-      });
-      let autoTaskCount = 0;
-      values.networkConfigs.forEach(ele => {
-        if (ele.enabled) {
-          const {enabled, serialId, type, networkId} = ele;
-          if (config.serialConfigs[serialId].autoPollEnabled) autoTaskCount++;
-          const typeArr = ['socket', 'aliyun', 'mqtt'];
-          const detail = ele[typeArr[type]];
-          config.networkSummary[typeArr[type]].push(networkId);
-          config.networkConfigs.push({enabled, serialId, type, networkId, ...detail});
-        }
-      });
-      config.config_version = new Date().toString();
-      config.autoTaskCount = autoTaskCount;
-      return config;
+      }
+    });
+    let autoTaskCount = 0;
+    values.networkConfigs.forEach(ele => {
+      if (ele.enabled) {
+        const {enabled, serialId, type, networkId} = ele;
+        if (config.serialConfigs[serialId].autoPollEnabled) autoTaskCount++;
+        const typeArr = ['socket', 'aliyun', 'mqtt'];
+        const detail = ele[typeArr[type]];
+        config.networkSummary[typeArr[type]].push(networkId);
+        config.networkConfigs.push({enabled, serialId, type, networkId, ...detail});
+      }
+    });
+    config.config_version = new Date().toString();
+    config.autoTaskCount = autoTaskCount;
+    return config;
   };
 
   const formik = useFormik({
@@ -100,8 +108,13 @@ const Content = forwardRef(({
   return (
     <>
       <DialogTitle>
-        <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-          <Tabs value={tabIndex} onChange={handleTabChange} aria-label="basic tabs example">
+        <Box sx={{borderBottom: 1, borderColor: 'divider'}}>
+          <Tabs
+            sx={{fontSize: '1rem'}}
+            value={tabIndex}
+            onChange={handleTabChange}
+            aria-label="basic tabs"
+          >
             <Tab label="基本参数" {...a11yProps(0)} />
             <Tab label="串口配置" {...a11yProps(1)} />
             <Tab label="网络配置" {...a11yProps(2)} />
@@ -111,7 +124,7 @@ const Content = forwardRef(({
       <DialogContent>
         <SwipeableViews index={tabIndex}>
           <TabPanel value={tabIndex} index={0}>
-              to do
+            <Basic formik={formik} />
           </TabPanel>
           <TabPanel value={tabIndex} index={1}>
             <Serial formik={formik} />

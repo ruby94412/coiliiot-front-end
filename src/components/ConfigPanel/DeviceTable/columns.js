@@ -29,7 +29,7 @@ const getColumns = ({
       <GridActionsCellItem
         icon={
           <Tooltip title="连接设备">
-            <SyncIcon style={{color: 'white'}}/>
+            <SyncIcon />
           </Tooltip>
         }
         label="Sync"
@@ -37,7 +37,7 @@ const getColumns = ({
       <GridActionsCellItem
         icon={
           <Tooltip title="删除设备">
-            <DeleteIcon style={{color: 'white'}}/>
+            <DeleteIcon />
           </Tooltip>
         }
         label="Delete"

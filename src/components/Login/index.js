@@ -60,6 +60,7 @@ const Login = ({
             size="small"
             type="text"
             name="username"
+            color="primary"
             style={{width: '100%'}}
             value={formik.values.username}
             onChange={formik.handleChange}
@@ -74,6 +75,7 @@ const Login = ({
             size="small"
             type="password"
             name="password"
+            color="primary"
             style={{width: '100%'}}
             value={formik.values.password}
             onChange={formik.handleChange}
@@ -84,7 +86,9 @@ const Login = ({
         <Grid item xl={12}>
           <Button
             variant="contained"
+            color="primary"
             onClick={formik.handleSubmit}
+            style={{width: '100%'}}
           >
             登录
           </Button>

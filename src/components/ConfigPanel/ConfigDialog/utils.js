@@ -95,45 +95,54 @@ export const renderFields = ({
 };
 
 export const getInitialValues = originalConfig => {
-  const rst = {serialConfigs: [], networkConfigs: []};
-    for(let i=0; i<3; i++) {
-      rst.serialConfigs.push({
-        serialId: i, enabled: false, baudrate: 9600, dataBit: 8,
-        stopBit: 1, parityMode: 2, autoPollEnabled: false, autoPollConfig: {delay: 1000, commands: [], serialId: i},
-      });
-    }
-    for(let i=0; i<8; i++) {
-      rst.networkConfigs.push({
-        networkId: i,
-        enabled: false,
-        type: 0,
-        socket: {
-          registerMessage: '', pulseMessage: '', pulseFrequency: 30,
-          host: '', port: 8080, socketType: 0, autoPollInterval: 1000,
-        },
-        aliyun: {
-          regionId: 'cn-shanghai', productKey: '', deviceSecret: '',
-          deviceName: '', subscribeTopic: '', publishTopic: '',
-        },
-        mqtt: {
-          host: '', port: 8080, username: '', password: '', clientId: '',
-          subscribeTopic: '', publishTopic: '',
-        },
-        serialId: 0,
-      });
-    }
-    originalConfig?.serialConfigs?.forEach(origin => {
-      const index = origin.serialId;
-      const defaultConfig = rst.serialConfigs[index];
-      rst.serialConfigs[index] = {...defaultConfig, ...origin};
+  const rst = {basicConfigs:{}, serialConfigs: [], networkConfigs: []};
+  rst.basicConfigs = {
+    config_version: 0, autoUpdateEnabled: true,
+    restartWhenInternetDisconnected: true, restartSchedule: 3,
+  };
+  for(let i=0; i<3; i++) {
+    rst.serialConfigs.push({
+      serialId: i, enabled: false, baudrate: 9600, dataBit: 8,
+      stopBit: 1, parityMode: 2, autoPollEnabled: false, autoPollConfig: {delay: 1000, commands: [], serialId: i},
     });
-    originalConfig?.networkConfigs?.forEach(origin => {
-      const index = origin.networkId;
-      const defaultConfig = rst.networkConfigs[index];
-      const {networkId, type, serialId, ...other} = origin;
-      rst.networkConfigs[index] = {...defaultConfig, networkId, type, serialId, enabled: true};
-      const typeArr = ['socket', 'aliyun', 'mqtt'];
-      rst.networkConfigs[index][typeArr[type]] = other;
+  }
+  for(let i=0; i<8; i++) {
+    rst.networkConfigs.push({
+      networkId: i,
+      enabled: false,
+      type: 0,
+      socket: {
+        registerMessage: '', pulseMessage: '', pulseFrequency: 30,
+        host: '', port: 8080, socketType: 0, autoPollInterval: 1000,
+      },
+      aliyun: {
+        regionId: 'cn-shanghai', productKey: '', deviceSecret: '',
+        deviceName: '', subscribeTopic: '', publishTopic: '',
+      },
+      mqtt: {
+        host: '', port: 8080, username: '', password: '', clientId: '',
+        subscribeTopic: '', publishTopic: '',
+      },
+      serialId: 0,
     });
-    return rst; 
+  }
+  if (originalConfig?.basicConfigs) {
+    const origin = originalConfig.basicConfigs;
+    const defaultConfig = rst.basicConfigs;
+    rst.basicConfigs = {...defaultConfig, ...origin};
+  }
+  originalConfig?.serialConfigs?.forEach(origin => {
+    const index = origin.serialId;
+    const defaultConfig = rst.serialConfigs[index];
+    rst.serialConfigs[index] = {...defaultConfig, ...origin};
+  });
+  originalConfig?.networkConfigs?.forEach(origin => {
+    const index = origin.networkId;
+    const defaultConfig = rst.networkConfigs[index];
+    const {networkId, type, serialId, ...other} = origin;
+    rst.networkConfigs[index] = {...defaultConfig, networkId, type, serialId, enabled: true};
+    const typeArr = ['socket', 'aliyun', 'mqtt'];
+    rst.networkConfigs[index][typeArr[type]] = other;
+  });
+  return rst; 
 };
