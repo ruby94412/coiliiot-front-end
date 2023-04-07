@@ -15,6 +15,7 @@ const TableToolBar = ({
       <Button
         variant="contained"
         onClick={handleAddClick}
+        color="primary"
       >{text}</Button>
     </GridToolbarContainer>
   );

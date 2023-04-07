@@ -1,24 +1,22 @@
-import {Box, Typography, Modal, Button, Grid, MenuItem} from '@mui/material';
+import {
+  Dialog,
+  Typography,
+  Button,
+  Grid,
+  MenuItem,
+  TextField,
+  Select,
+  FormLabel,
+  FormControl,
+} from '@mui/material';
 import {useState} from 'react';
 import {useFormik} from 'formik';
 import {connect} from 'react-redux';
 import {addDevice} from '../../../slice/device';
-import CssTextField from '../../common/CssTextField';
-import CssSelectField from '../../common/CssSelectField';
+// import CssTextField from '../../common/CssTextField';
+// import CssSelectField from '../../common/CssSelectField';
 import ErrorModal from '../../common/ErrorModal';
 import * as yup from 'yup';
-
-const style = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: 400,
-  bgcolor: '#555555',
-  border: '2px solid #000',
-  boxShadow: 24,
-  p: 4,
-};
 
 const AddDevice = ({
   addDeviceOpen,
@@ -59,28 +57,33 @@ const AddDevice = ({
   };
 
   return (
-    <Modal
+    <Dialog
       open={addDeviceOpen}
       onClose={handleClose}
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
+      PaperProps={{style: {
+        height: '350px',
+        width: '30%',
+        padding: '20px',
+      }}}
     >
-      <Box sx={style}>
-        <Typography variant="h6" component="h2" style={{color: 'white', textAlign:'center'}}>
-          添加设备
-        </Typography>
-        <Grid
-          container
-          spacing={2}
-          direction="row"
-          justifyContent="center"
-          alignItems="center"
-          style={{height: '100%', paddingTop: '20px'}}
-        >
-          <Grid item xs={8}>
-            <CssTextField
+      <Typography variant="h6" component="h2" style={{textAlign:'center'}}>
+        添加设备
+      </Typography>
+      <Grid
+        container
+        spacing={2}
+        direction="row"
+        justifyContent="center"
+        alignItems="center"
+        style={{height: '100%', paddingTop: '20px'}}
+      >
+        <Grid item xs={8}>
+          <FormControl sx={{display: 'flex'}}>
+            <FormLabel>设备序列号</FormLabel>
+            <TextField
               required
-              label="设备序列号"
               size="small"
               type="text"
               name="deviceId"
@@ -90,12 +93,12 @@ const AddDevice = ({
               error={formik.touched.deviceId && Boolean(formik.errors.deviceId)}
               helperText={formik.touched.deviceId && formik.errors.deviceId}
             />
-          </Grid>
-          <Grid item xs={8}>
-            <CssSelectField
-              required
-              label="设备备注"
-              name="deviceType"
+          </FormControl>
+        </Grid>
+        <Grid item xs={8}>
+          <FormControl sx={{display: 'flex'}}>
+            <FormLabel>设备类型</FormLabel>
+            <Select
               size="small"
               style={{width: '100%'}}
               value={formik.values.deviceType}
@@ -104,11 +107,13 @@ const AddDevice = ({
             >
               <MenuItem value={'wifi'}>WIFI</MenuItem>
               <MenuItem value={'4G'}>4G</MenuItem>
-            </CssSelectField>
-          </Grid>
-          <Grid item xs={8}>
-            <CssTextField
-              label="设备备注"
+            </Select>
+          </FormControl>
+        </Grid>
+        <Grid item xs={8}>
+          <FormControl sx={{display: 'flex'}}>
+            <FormLabel>设备备注</FormLabel>
+            <TextField
               size="small"
               type="text"
               name="deviceComment"
@@ -118,24 +123,24 @@ const AddDevice = ({
               error={formik.touched.deviceComment && Boolean(formik.errors.deviceComment)}
               helperText={formik.touched.deviceComment && formik.errors.deviceComment}
             />
-          </Grid>
-          <Grid item xs={8}>
-            <Button
-              variant="outlined"
-              onClick={formik.handleSubmit}
-              style={{width: '100%'}}
-            >
-              确认
-            </Button>
-          </Grid>
+          </FormControl>
         </Grid>
-        <ErrorModal
-          errorMessage="添加设备失败"
-          isErrorModalOpen={isErrorModalOpen}
-          onClose={() => {setIsErrorModalOpen(false);}}
-        />
-      </Box>
-    </Modal>
+        <Grid item xs={8}>
+          <Button
+            variant="contained"
+            onClick={formik.handleSubmit}
+            style={{width: '100%'}}
+          >
+            确认
+          </Button>
+        </Grid>
+      </Grid>
+      <ErrorModal
+        errorMessage="添加设备失败"
+        isErrorModalOpen={isErrorModalOpen}
+        onClose={() => {setIsErrorModalOpen(false);}}
+      />
+    </Dialog>
   );
 }
 

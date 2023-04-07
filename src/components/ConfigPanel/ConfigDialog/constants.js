@@ -2,6 +2,15 @@ export const networkIds = [0, 1, 2, 3, 4, 5, 6, 7];
 
 export const networkOptions = [{label: 'Socket', value: 0}, {label: '阿里云', value: 1}, {label: 'MQTT', value: 2}];
 
+export const basicFields = [
+  {label: '参数版本', propertyName: 'config_version', datatype: 'number', layout: {xs: 12, md: 6}},
+  {label: '自动更新固件', propertyName: 'autoUpdateEnabled', datatype: 'boolean', fieldType: 'radioGroup',
+    radioOptions: [{label: '启用', value: true}, {label: '不启用', value: false}], layout: {xs: 12, md: 6}},
+  {label: '定时重启', propertyName: 'restartSchedule', datatype: 'number', layout: {xs: 12, md: 6}},  
+  {label: '断网重启', propertyName: 'restartWhenInternetDisconnected', datatype: 'boolean', fieldType: 'radioGroup',
+    radioOptions: [{label: '启用', value: true}, {label: '不启用', value: false}], layout: {xs: 12, md: 6}},
+];
+
 export const socketFields = [
   {label: '类型', propertyName: 'socketType', fieldType: 'radioGroup',
     radioOptions: [{label: 'TCP', value: 0}, {label: 'UDP', value: 1}]},

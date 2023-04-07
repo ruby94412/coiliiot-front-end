@@ -1,6 +1,7 @@
 import {connect} from 'react-redux';
 import ConfigPanel from './components/ConfigPanel';
 import Login from './components/Login';
+import Navigation from './components/Navigation';
 import {createTheme, ThemeProvider} from '@mui/material/styles';
 import {
   BrowserRouter,
@@ -8,10 +9,19 @@ import {
   Route,
 } from "react-router-dom";
 import './App.css';
+
 const theme = createTheme({
   palette: {
-    mode: 'dark',
-  }
+    primary: {
+      main: '#1d4998',
+    },
+    secondary: {
+      main: '#ececeb',
+    },
+    darker: {
+      main: '#222a3a',
+    }
+  },
 });
 const App = ({
   userInfo,
@@ -20,6 +30,7 @@ const App = ({
     <ThemeProvider theme={theme}>
       <div className="App">
         <BrowserRouter>
+        <Navigation />
           <Routes>
             <Route path="/" element={<Login />} />
             <Route path="/login" element={<Login />} />

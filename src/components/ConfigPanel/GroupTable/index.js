@@ -114,7 +114,7 @@ const GroupTable = ({
   );
 
   return (
-    <div style={{ height: 400, width: '90%', paddingTop: '20px'}}>
+    <div style={{height: '500px', width: '95%', paddingTop: '20px'}}>
       <DataGrid
         rows={rows}
         columns={columns}
@@ -124,6 +124,11 @@ const GroupTable = ({
         pageSize={20}
         rowsPerPageOptions={[20]}
         hideFooterSelectedRowCount
+        sx={{
+          boxShadow: 2,
+          border: 2,
+          borderColor: 'primary.dark',
+        }}
       />
       <AddGroup addGroupOpen={addGroupOpen} setAddGroupOpen={setAddGroupOpen}/>
       <ConfirmDialog

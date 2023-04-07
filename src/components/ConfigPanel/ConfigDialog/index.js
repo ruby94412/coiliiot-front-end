@@ -3,8 +3,7 @@ import {useState, useEffect, useRef} from 'react';
 import DialogContent from './DialogContent';
 import {getInitialValues} from './utils';
 const dialogStyle = {
-  backgroundColor: '#424141',
-  color: 'white',
+  backgroundColor: 'secondary.main',
   minWidth: '70%',
 }
 
