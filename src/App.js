@@ -2,43 +2,34 @@ import {connect} from 'react-redux';
 import ConfigPanel from './components/ConfigPanel';
 import Login from './components/Login';
 import Navigation from './components/Navigation';
-import {createTheme, ThemeProvider} from '@mui/material/styles';
+import {FormattedMessage} from 'react-intl';
+import messages from './components/hocs/Locale/messages';
 import {
   BrowserRouter,
   Routes,
   Route,
 } from "react-router-dom";
 import './App.css';
-
-const theme = createTheme({
-  palette: {
-    primary: {
-      main: '#1d4998',
-    },
-    secondary: {
-      main: '#ececeb',
-    },
-    darker: {
-      main: '#222a3a',
-    }
-  },
-});
+import withTheme from './components/hocs/Theme';
+import withLocale from './components/hocs/Locale';
 const App = ({
   userInfo,
+  setThemeMode,
+  theme,
+  setLocale,
 }) => {
   return (
-    <ThemeProvider theme={theme}>
-      <div className="App">
-        <BrowserRouter>
-        <Navigation />
-          <Routes>
-            <Route path="/" element={<Login />} />
-            <Route path="/login" element={<Login />} />
-            {userInfo?.isLoggedIn && <Route path="/mainPanel" element={<ConfigPanel />} />}
-          </Routes>
-        </BrowserRouter>
-      </div>
-    </ThemeProvider>
+    <div className="App" style={{backgroundColor: theme.palette.darker.main}}>
+      <FormattedMessage {...messages.projectHeader} />
+      <BrowserRouter>
+        <Navigation setThemeMode={setThemeMode} setLocale={setLocale} />
+        <Routes>
+          <Route path="/" element={<Login />} />
+          <Route path="/login" element={<Login />} />
+          {userInfo?.isLoggedIn && <Route path="/mainPanel" element={<ConfigPanel />} />}
+        </Routes>
+      </BrowserRouter>
+    </div>
   );
 }
 
@@ -46,4 +37,10 @@ const mapStateToProps = state => {
   const {userInfo} = state;
   return {userInfo};
 };
-export default connect(mapStateToProps, {})(App);
+
+export default connect(
+  mapStateToProps,
+  {}
+)(
+  withLocale(withTheme(App))
+);

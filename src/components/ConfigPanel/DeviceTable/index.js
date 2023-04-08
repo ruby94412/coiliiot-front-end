@@ -36,7 +36,6 @@ const DeviceTable = ({
   }
 
   useEffect(() => {
-    console.log(groupRow)
     if (!!groupRow || !addDeviceOpen) {
       reloadTable();
     }

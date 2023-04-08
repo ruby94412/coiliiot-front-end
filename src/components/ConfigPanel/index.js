@@ -3,7 +3,7 @@ import Navigation from "./Navigation";
 const ConfigPanel = () => {
   return (
     <>
-      <Navigation />
+      {/* <Navigation /> */}
       <GroupTable />
     </>
   );
