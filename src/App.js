@@ -2,8 +2,6 @@ import {connect} from 'react-redux';
 import ConfigPanel from './components/ConfigPanel';
 import Login from './components/Login';
 import Navigation from './components/Navigation';
-import {FormattedMessage} from 'react-intl';
-import messages from './components/hocs/Locale/messages';
 import {
   BrowserRouter,
   Routes,
@@ -17,12 +15,13 @@ const App = ({
   setThemeMode,
   theme,
   setLocale,
+  themeMode,
+  locale,
 }) => {
   return (
     <div className="App" style={{backgroundColor: theme.palette.darker.main}}>
-      <FormattedMessage {...messages.projectHeader} />
       <BrowserRouter>
-        <Navigation setThemeMode={setThemeMode} setLocale={setLocale} />
+        <Navigation setThemeMode={setThemeMode} setLocale={setLocale} locale={locale} themeMode={themeMode} />
         <Routes>
           <Route path="/" element={<Login />} />
           <Route path="/login" element={<Login />} />

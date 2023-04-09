@@ -6,7 +6,7 @@ const withLocale = Child => props => {
   const [locale, setLocale] = useState(localStorage.getItem('locale') || 'en');
   return (
     <IntlProvider locale={locale} messages={translatedMessages[locale]}>
-      <Child {...props} setLocale={setLocale} />
+      <Child {...props} setLocale={setLocale} locale={locale} />
     </IntlProvider>
   );
 };

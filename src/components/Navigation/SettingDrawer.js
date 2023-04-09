@@ -12,11 +12,16 @@ import {
   LightMode,
   DarkMode,
 } from '@mui/icons-material';
+import {FormattedMessage} from 'react-intl';
+import messages from '../hocs/Locale/Messages/Navigation/SettingDrawer';
+
 const SettingDrawer = ({
   toggleDrawer,
   isDrawerOpen,
   setThemeMode,
   setLocale,
+  locale,
+  themeMode,
 }) => {
   const handleModeChange = mode => e => {
     setThemeMode(mode);
@@ -34,7 +39,7 @@ const SettingDrawer = ({
     >
       <Box sx={{width: 300}}>
         <Box sx={{p: 2, display: 'flex', alignItems: 'center'}}>
-          <Typography variant="h6">页面设置</Typography>
+          <Typography variant="h6"><FormattedMessage {...messages.settingTitle} /></Typography>
           <Box sx={{ flexGrow: 1 }} />
           <IconButton
               size="large"
@@ -46,25 +51,35 @@ const SettingDrawer = ({
         </Box>
         <Divider />
         <Box sx={{p: 2}}>
-          <Typography variant="h8">模式</Typography>
-          <ButtonGroup variant="outlined" style={{width: '100%', marginTop: '10px'}}>
+          <Typography variant="h8"><FormattedMessage {...messages.modeTitle} /></Typography>
+          <ButtonGroup style={{width: '100%', marginTop: '10px'}}>
             <Button
               startIcon={<LightMode />}
               style={{width: '100%'}}
               onClick={handleModeChange('light')}
-            >亮屏</Button>
+              variant={themeMode === 'light' ? 'contained' : 'outlined'}
+            ><FormattedMessage {...messages.modeLight} /></Button>
             <Button
               startIcon={<DarkMode />}
               style={{width: '100%'}}
               onClick={handleModeChange('dark')}
-            >暗屏</Button>
+              variant={themeMode === 'dark' ? 'contained' : 'outlined'}
+            ><FormattedMessage {...messages.modeDark} /></Button>
           </ButtonGroup>
         </Box>
         <Box sx={{p: 2}}>
-        <Typography variant="h8">语言</Typography>
-        <ButtonGroup variant="outlined" style={{width: '100%', marginTop: '10px'}}>
-          <Button style={{width: '100%'}} onClick={handleLocaleChange('zh')}>🇨🇳 中文</Button>
-          <Button style={{width: '100%'}}  onClick={handleLocaleChange('en')}>🇺🇸 English</Button>
+        <Typography variant="h8"><FormattedMessage {...messages.languageTitle} /></Typography>
+        <ButtonGroup style={{width: '100%', marginTop: '10px'}}>
+          <Button
+            style={{width: '100%'}}
+            onClick={handleLocaleChange('zh')}
+            variant={locale === 'zh' ? 'contained' : 'outlined'}
+          >🇨🇳 中文</Button>
+          <Button
+            style={{width: '100%'}}
+            onClick={handleLocaleChange('en')}
+            variant={locale === 'en' ? 'contained' : 'outlined'}
+          >🇺🇸 English</Button>
         </ButtonGroup>
         </Box>
       </Box>

@@ -26,7 +26,7 @@ const withTheme = Child => props => {
 
   return (
     <ThemeProvider theme={theme}>
-      <Child {...props} setThemeMode={setThemeMode} theme={theme} />
+      <Child {...props} setThemeMode={setThemeMode} theme={theme} themeMode={themeMode} />
     </ThemeProvider>
   );
 };

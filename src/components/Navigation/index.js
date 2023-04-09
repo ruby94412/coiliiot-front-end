@@ -26,10 +26,14 @@ import MenuIcon from '@mui/icons-material/Menu';
 import AdbIcon from '@mui/icons-material/Adb';
 import SettingDrawer from './SettingDrawer';
 
+import {FormattedMessage} from 'react-intl';
+import messages from '../hocs/Locale/Messages/Navigation';
 const Navigation = ({
   logout,
   setThemeMode,
   setLocale,
+  locale,
+  themeMode,
 }) => {
   
   const navigate = useNavigate();
@@ -69,7 +73,7 @@ const Navigation = ({
     setIsDrawerOpen(!isDrawerOpen);
   };
   const settings = [{
-    text: '登出',
+    text: <FormattedMessage {...messages.logoutLabel}/>,
     onClick: () => {setLogoutConfirmOpen(true);},
   }];
   return (
@@ -136,10 +140,11 @@ const Navigation = ({
         toggleDrawer={toggleDrawer}
         setThemeMode={setThemeMode}
         setLocale={setLocale}
+        locale={locale}
+        themeMode={themeMode}
       />
-      
       <ConfirmDialog
-        content="请点击确定退出登录"
+        content={<FormattedMessage {...messages.logoutConfirmation} />}
         isOpen={logoutConfirmOpen}
         onClose={() => {setLogoutConfirmOpen(false);}}
         handleConfirmCb={handleLogout}

@@ -1,4 +1,9 @@
 {
-  "reactlocalization.app.header": "Create React App中的本地化",
-  "reactlocalization.app.footer": "爱你3000"
+  "coiliiot.app.navigation.logoutLabel": "登出",
+  "coiliiot.app.navigation.logoutConfirmation": "请点击确定退出登录",
+  "coiliiot.app.navigation.settingDrawer.settingTitle": "页面设置",
+  "coiliiot.app.navigation.settingDrawer.modeTitle": "模式",
+  "coiliiot.app.navigation.settingDrawer.modeLight": "亮屏",
+  "coiliiot.app.navigation.settingDrawer.modeDark": "暗屏",
+  "coiliiot.app.navigation.settingDrawer.languageTitle": "语言"
 }
