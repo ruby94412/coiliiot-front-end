@@ -1,7 +1,7 @@
-import {useState} from 'react';
-import {Button, Drawer} from '@mui/material';
+import { useState } from 'react';
+import { Button, Drawer } from '@mui/material';
 
-const ThemeSwitch = () => {
+function ThemeSwitch() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const handleDrawSwitchOnClick = () => {
     setDrawerOpen(true);
@@ -20,8 +20,8 @@ const ThemeSwitch = () => {
         drawer
       </Drawer>
     </>
-    
+
   );
-};
+}
 
 export default ThemeSwitch;

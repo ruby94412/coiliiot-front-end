@@ -1,8 +1,6 @@
-import {useState} from 'react';
-import {useNavigate} from "react-router-dom";
-import ConfirmDialog from '../common/ConfirmDialog';
-import {logout} from '../../slice/login';
-import {connect} from 'react-redux';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { connect } from 'react-redux';
 import {
   AppBar,
   Box,
@@ -24,25 +22,27 @@ import {
 } from '@mui/icons-material';
 import MenuIcon from '@mui/icons-material/Menu';
 import AdbIcon from '@mui/icons-material/Adb';
+import { FormattedMessage } from 'react-intl';
 import SettingDrawer from './SettingDrawer';
 
-import {FormattedMessage} from 'react-intl';
-import messages from '../hocs/Locale/Messages/Navigation';
-const Navigation = ({
+import { logout } from '../../slice/login';
+import ConfirmDialog from '../common/ConfirmDialog';
+import messages from '../../hocs/Locale/Messages/Navigation';
+
+function Navigation({
   logout,
   setThemeMode,
   setLocale,
   locale,
   themeMode,
-}) => {
-  
+}) {
   const navigate = useNavigate();
   const [logoutConfirmOpen, setLogoutConfirmOpen] = useState(false);
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
-  const toggleDrawer = open => event => {
+  const toggleDrawer = (open) => (event) => {
     if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
       return;
     }
@@ -73,8 +73,8 @@ const Navigation = ({
     setIsDrawerOpen(!isDrawerOpen);
   };
   const settings = [{
-    text: <FormattedMessage {...messages.logoutLabel}/>,
-    onClick: () => {setLogoutConfirmOpen(true);},
+    text: <FormattedMessage {...messages.logoutLabel} />,
+    onClick: () => { setLogoutConfirmOpen(true); },
   }];
   return (
     <>
@@ -102,7 +102,7 @@ const Navigation = ({
             open={Boolean(anchorElUser)}
             onClose={handleCloseUserMenu}
           >
-            {settings.map(setting => (
+            {settings.map((setting) => (
               <MenuItem key={setting.text} onClick={setting.onClick}>
                 <Typography textAlign="center">{setting.text}</Typography>
               </MenuItem>
@@ -146,14 +146,12 @@ const Navigation = ({
       <ConfirmDialog
         content={<FormattedMessage {...messages.logoutConfirmation} />}
         isOpen={logoutConfirmOpen}
-        onClose={() => {setLogoutConfirmOpen(false);}}
+        onClose={() => { setLogoutConfirmOpen(false); }}
         handleConfirmCb={handleLogout}
       />
     </>
-  )
+  );
 }
 
-const mapStateToProps = state => {
-  return {};
-};
-export default connect(mapStateToProps, {logout})(Navigation);
+const mapStateToProps = () => ({});
+export default connect(mapStateToProps, { logout })(Navigation);

@@ -1,0 +1,21 @@
+{
+  "rules": {
+   "react/react-in-jsx-scope": "off",
+   "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
+   "react/prop-types": 0,
+   "react/jsx-props-no-spreading": "off",
+   "no-shadow": "off",
+   "no-unused-vars": "warn",
+   "react/no-array-index-key": "off",
+   "no-plusplus": "off"
+  },
+  "env": {
+    "node": true,
+    "es6": true,
+    "browser": true
+  },
+  "extends": "airbnb",
+  "parserOptions": {
+    "ecmaVersion": "latest"
+  }
+}

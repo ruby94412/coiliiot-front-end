@@ -1,4 +1,4 @@
-import {useState, Fragment} from 'react';
+import { useState, Fragment } from 'react';
 import {
   Grid,
   RadioGroup,
@@ -9,32 +9,30 @@ import {
   Select,
   MenuItem,
 } from '@mui/material';
-import TabPanel from '../../common/TabPanel';
 import SwipeableViews from 'react-swipeable-views';
-import {renderFields} from './utils';
-import {networkIds, networkOptions, aliyunFields, mqttFields, socketFields} from './constants';
+import TabPanel from '../../common/TabPanel';
+import { renderFields } from './utils';
+import {
+  networkIds, networkOptions, aliyunFields, mqttFields, socketFields,
+} from './constants';
 
-const Platform = ({
+function Platform({
   formik,
-}) => {
+}) {
   const [networkId, setNetworkId] = useState(0);
-  const handleNetworkIdChange = event => {
+  const handleNetworkIdChange = (event) => {
     setNetworkId(Number(event.target.value));
   };
 
-  const handleEnabledChange = e => {
+  const handleEnabledChange = (e) => {
     formik.setFieldValue(`networkConfigs[${networkId}].enabled`, e.target.value === 'true');
   };
 
   const renderNetwork = () => {
-    const type = formik.values.networkConfigs[networkId].type;
-    let fields, typeName;
+    const { type } = formik.values.networkConfigs[networkId];
+    let fields; let
+      typeName;
     switch (type) {
-      default:
-      case 0:
-        fields = socketFields;
-        typeName = 'socket';
-        break;
       case 1:
         fields = aliyunFields;
         typeName = 'aliyun';
@@ -43,10 +41,15 @@ const Platform = ({
         fields = mqttFields;
         typeName = 'mqtt';
         break;
+      case 0:
+      default:
+        fields = socketFields;
+        typeName = 'socket';
+        break;
     }
     return (
       <>
-        {fields.map(field => (
+        {fields.map((field) => (
           <Fragment key={field.propertyName}>
             {renderFields({
               value: formik.values.networkConfigs[networkId][typeName][field.propertyName],
@@ -62,7 +65,7 @@ const Platform = ({
           name: `networkConfigs[${networkId}].serialId`,
           handleChange: formik.handleChange,
           fieldType: 'radioGroup',
-          radioOptions: [{label: '1', value: 0}, {label: '2', value: 1}, {label: '3', value: 2}],
+          radioOptions: [{ label: '1', value: 0 }, { label: '2', value: 1 }, { label: '3', value: 2 }],
         })}
       </>
     );
@@ -84,8 +87,8 @@ const Platform = ({
               value={networkId}
             >
               {
-                networkIds.map(id => (
-                  <FormControlLabel key={id} value={id} control={<Radio />} label={id+1} />
+                networkIds.map((id) => (
+                  <FormControlLabel key={id} value={id} control={<Radio />} label={id + 1} />
                 ))
               }
             </RadioGroup>
@@ -95,7 +98,7 @@ const Platform = ({
       <SwipeableViews index={networkId}>
         {
           formik.values.networkConfigs.map((networkConfig, index) => (
-            <TabPanel key={index} index={index} value={networkId} sx={{px: 0, py: 3}}>
+            <TabPanel key={index} index={index} value={networkId} sx={{ px: 0, py: 3 }}>
               <Grid
                 container
                 spacing={2}
@@ -108,33 +111,31 @@ const Platform = ({
                     name: `networkConfigs[${index}].enabled`,
                     handleChange: handleEnabledChange,
                     fieldType: 'radioGroup',
-                    radioOptions: [{label: '启用', value: true}, {label: '不启用', value: false}],
+                    radioOptions: [{ label: '启用', value: true }, { label: '不启用', value: false }],
                   })
                 }
                 {
                   formik.values.networkConfigs[index].enabled && (
-                    <>
-                      <Grid item xs={12} md={4}>
-                        <FormControl sx={{display: 'flex'}}>
-                          <FormLabel>平台类型</FormLabel>
-                          <Select
-                            size="small"
-                            style={{width: '80%'}}
-                            value={formik.values.networkConfigs[index].type}
-                            name={`networkConfigs[${index}].type`}
-                            onChange={formik.handleChange}
-                          >
-                            {
-                              networkOptions.map(network => (
+                    <Grid item xs={12} md={4}>
+                      <FormControl sx={{ display: 'flex' }}>
+                        <FormLabel>平台类型</FormLabel>
+                        <Select
+                          size="small"
+                          style={{ width: '80%' }}
+                          value={formik.values.networkConfigs[index].type}
+                          name={`networkConfigs[${index}].type`}
+                          onChange={formik.handleChange}
+                        >
+                          {
+                              networkOptions.map((network) => (
                                 <MenuItem key={network.label} value={network.value}>
                                   {network.label}
                                 </MenuItem>
                               ))
                             }
-                          </Select>
-                        </FormControl>     
-                      </Grid>
-                    </>
+                        </Select>
+                      </FormControl>
+                    </Grid>
                   )
                 }
               </Grid>
@@ -144,19 +145,19 @@ const Platform = ({
                     container
                     spacing={2}
                     direction="row"
-                    style={{marginTop: '10px'}}
+                    style={{ marginTop: '10px' }}
                   >
                     {renderNetwork()}
                   </Grid>
                 )
               }
-              
+
             </TabPanel>
           ))
         }
       </SwipeableViews>
     </>
-  )
+  );
 }
 
 export default Platform;

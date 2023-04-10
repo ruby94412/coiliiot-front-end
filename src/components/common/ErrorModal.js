@@ -1,10 +1,10 @@
-import {Modal, Typography, Box} from '@mui/material';
+import { Modal, Typography, Box } from '@mui/material';
 
-const ErrorModal = ({
+function ErrorModal({
   errorMessage,
   isErrorModalOpen,
-  onClose
-}) => {
+  onClose,
+}) {
   const style = {
     position: 'absolute',
     top: '50%',
@@ -17,19 +17,19 @@ const ErrorModal = ({
     p: 4,
     color: 'white',
   };
-  
+
   return (
     <Modal open={isErrorModalOpen} onClose={onClose}>
       <Box sx={style}>
         <Typography variant="h6" component="h2">
           错误提示
         </Typography>
-        <Typography sx={{mt: 2}}>
+        <Typography sx={{ mt: 2 }}>
           {errorMessage}
         </Typography>
       </Box>
     </Modal>
-  )
-};
+  );
+}
 
 export default ErrorModal;

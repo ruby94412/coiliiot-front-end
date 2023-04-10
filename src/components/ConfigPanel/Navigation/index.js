@@ -1,8 +1,6 @@
-import {useState} from 'react';
-import {useNavigate} from "react-router-dom";
-import ConfirmDialog from '../../common/ConfirmDialog';
-import {logout} from '../../../slice/login';
-import {connect} from 'react-redux';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { connect } from 'react-redux';
 import {
   AppBar,
   Box,
@@ -18,12 +16,12 @@ import {
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import AdbIcon from '@mui/icons-material/Adb';
+import { logout } from '../../../slice/login';
+import ConfirmDialog from '../../common/ConfirmDialog';
 
-
-const Navigation = ({
+function Navigation({
   logout,
-}) => {
-  
+}) {
   const navigate = useNavigate();
   const [logoutConfirmOpen, setLogoutConfirmOpen] = useState(false);
   const [anchorElNav, setAnchorElNav] = useState(null);
@@ -52,7 +50,7 @@ const Navigation = ({
   const pages = ['分组管理', '设备管理'];
   const settings = [{
     text: '登出',
-    onClick: () => {setLogoutConfirmOpen(true);},
+    onClick: () => { setLogoutConfirmOpen(true); },
   }];
   return (
     <>
@@ -129,7 +127,7 @@ const Navigation = ({
                 open={Boolean(anchorElUser)}
                 onClose={handleCloseUserMenu}
               >
-                {settings.map(setting => (
+                {settings.map((setting) => (
                   <MenuItem key={setting.text} onClick={setting.onClick}>
                     <Typography textAlign="center">{setting.text}</Typography>
                   </MenuItem>
@@ -142,14 +140,12 @@ const Navigation = ({
       <ConfirmDialog
         content="请点击确定退出登录"
         isOpen={logoutConfirmOpen}
-        onClose={() => {setLogoutConfirmOpen(false);}}
+        onClose={() => { setLogoutConfirmOpen(false); }}
         handleConfirmCb={handleLogout}
       />
     </>
-  )
+  );
 }
 
-const mapStateToProps = state => {
-  return {};
-};
-export default connect(mapStateToProps, {logout})(Navigation);
+const mapStateToProps = (state) => ({});
+export default connect(mapStateToProps, { logout })(Navigation);

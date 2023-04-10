@@ -1,22 +1,24 @@
 import {
   GridToolbarContainer,
 } from '@mui/x-data-grid';
-import {Button} from '@mui/material';
+import { Button } from '@mui/material';
 
-const TableToolBar = ({
+function TableToolBar({
   setModalOpen,
   text,
-}) => {
+}) {
   const handleAddClick = () => {
     setModalOpen(true);
-  }
+  };
   return (
     <GridToolbarContainer>
       <Button
         variant="contained"
         onClick={handleAddClick}
         color="primary"
-      >{text}</Button>
+      >
+        {text}
+      </Button>
     </GridToolbarContainer>
   );
 }

@@ -1,27 +1,33 @@
-import {connect} from 'react-redux';
-import ConfigPanel from './components/ConfigPanel';
-import Login from './components/Login';
-import Navigation from './components/Navigation';
+import { connect } from 'react-redux';
 import {
   BrowserRouter,
   Routes,
   Route,
-} from "react-router-dom";
+} from 'react-router-dom';
+import ConfigPanel from './components/ConfigPanel';
+import Login from './components/Login';
+import Navigation from './components/Navigation';
 import './App.css';
-import withTheme from './components/hocs/Theme';
-import withLocale from './components/hocs/Locale';
-const App = ({
+import withTheme from './hocs/Theme';
+import withLocale from './hocs/Locale';
+
+function App({
   userInfo,
   setThemeMode,
   theme,
   setLocale,
   themeMode,
   locale,
-}) => {
+}) {
   return (
-    <div className="App" style={{backgroundColor: theme.palette.darker.main}}>
+    <div className="App" style={{ backgroundColor: theme.palette.darker.main }}>
       <BrowserRouter>
-        <Navigation setThemeMode={setThemeMode} setLocale={setLocale} locale={locale} themeMode={themeMode} />
+        <Navigation
+          setThemeMode={setThemeMode}
+          setLocale={setLocale}
+          locale={locale}
+          themeMode={themeMode}
+        />
         <Routes>
           <Route path="/" element={<Login />} />
           <Route path="/login" element={<Login />} />
@@ -32,14 +38,14 @@ const App = ({
   );
 }
 
-const mapStateToProps = state => {
-  const {userInfo} = state;
-  return {userInfo};
+const mapStateToProps = (state) => {
+  const { userInfo } = state;
+  return { userInfo };
 };
 
 export default connect(
   mapStateToProps,
-  {}
+  {},
 )(
-  withLocale(withTheme(App))
+  withLocale(withTheme(App)),
 );

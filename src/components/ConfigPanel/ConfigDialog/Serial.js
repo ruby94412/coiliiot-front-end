@@ -1,4 +1,4 @@
-import {useState, Fragment} from 'react';
+import { useState, Fragment } from 'react';
 import {
   Grid,
   RadioGroup,
@@ -7,21 +7,21 @@ import {
   FormControlLabel,
   FormLabel,
 } from '@mui/material';
+import SwipeableViews from 'react-swipeable-views';
 import TabPanel from '../../common/TabPanel';
 import AutoPoll from './AutoPoll';
-import SwipeableViews from 'react-swipeable-views';
-import {serialFields} from './constants';
-import {renderFields} from './utils';
+import { serialFields } from './constants';
+import { renderFields } from './utils';
 
-const Serial = ({
+function Serial({
   formik,
-}) => {
+}) {
   const [serialId, setSerialId] = useState(0);
-  const handleSerialIdChange = event => {
+  const handleSerialIdChange = (event) => {
     setSerialId(Number(event.target.value));
   };
 
-  const handleEnabledChange = e => {
+  const handleEnabledChange = (e) => {
     formik.setFieldValue(`serialConfigs[${serialId}].enabled`, e.target.value === 'true');
   };
 
@@ -50,31 +50,32 @@ const Serial = ({
       <SwipeableViews index={serialId}>
         {
           formik.values.serialConfigs.map((serialConfig, index) => (
-            <TabPanel key={index} index={index} value={serialId} sx={{px: 0, py: 3}}>
+            <TabPanel key={index} index={index} value={serialId} sx={{ px: 0, py: 3 }}>
               <Grid
                 container
                 spacing={2}
                 direction="row"
               >
                 <Grid item xs={12} md={4}>
-                  <FormControl sx={{display: 'flex'}}>
+                  <FormControl sx={{ display: 'flex' }}>
                     <FormLabel>启用状态</FormLabel>
                     <RadioGroup
                       row
                       value={formik.values.serialConfigs[serialId].enabled}
                       onChange={handleEnabledChange}
                       name={`serialConfigs[${index}].enabled`}
-                      
+
                     >
-                      <FormControlLabel value={true} control={<Radio />} label="启用" />
+                      <FormControlLabel value control={<Radio />} label="启用" />
                       <FormControlLabel value={false} control={<Radio />} label="不启用" />
                     </RadioGroup>
-                  </FormControl>     
+                  </FormControl>
                 </Grid>
                 {
                   formik.values.serialConfigs[index].enabled
-                    && <>
-                      {serialFields.map(field => (
+                    && (
+                    <>
+                      {serialFields.map((field) => (
                         <Fragment key={field.propertyName}>
                           {renderFields({
                             value: formik.values.serialConfigs[serialId][field.propertyName],
@@ -84,16 +85,17 @@ const Serial = ({
                           })}
                         </Fragment>
                       ))}
-                      <AutoPoll formik={formik} index={index} serialId={serialId}/>
+                      <AutoPoll formik={formik} index={index} serialId={serialId} />
                     </>
+                    )
                 }
-              </Grid>             
+              </Grid>
             </TabPanel>
           ))
         }
       </SwipeableViews>
     </>
-  )
+  );
 }
 
 export default Serial;

@@ -9,22 +9,20 @@ import {
   Tabs,
   Box,
 } from '@mui/material';
-import {LoadingButton} from '@mui/lab';
-import {useState, forwardRef, useImperativeHandle} from 'react';
-import {useFormik} from 'formik';
+import { LoadingButton } from '@mui/lab';
+import { useState, forwardRef, useImperativeHandle } from 'react';
+import { useFormik } from 'formik';
 import SwipeableViews from 'react-swipeable-views';
 import TabPanel from '../../common/TabPanel';
 import Platform from './Platform';
 import Serial from './Serial';
 import Basic from './Basic';
 
-const a11yProps = index => {
-  return {
-    id: `simple-tab-${index}`,
-    'aria-controls': `simple-tabpanel-${index}`,
-    color: 'red',
-  };
-}
+const a11yProps = (index) => ({
+  id: `simple-tab-${index}`,
+  'aria-controls': `simple-tabpanel-${index}`,
+  color: 'red',
+});
 
 const Content = forwardRef(({
   groupRow,
@@ -39,33 +37,37 @@ const Content = forwardRef(({
     setTabIndex(newValue);
   };
 
-  const handleDataConvert = values => {
+  const handleDataConvert = (values) => {
     const config = {
       basicConfigs: {},
-      serialConfigs:[],
+      serialConfigs: [],
       networkConfigs: [],
-      networkSummary: {socket: [], aliyun: [], mqtt:[]},
+      networkSummary: { socket: [], aliyun: [], mqtt: [] },
     };
     config.basicConfigs = values.basicConfigs;
-    values.serialConfigs.forEach(ele => {
+    values.serialConfigs.forEach((ele) => {
       if (ele.enabled) {
-        const {autoPollEnabled, autoPollConfig, ...other} = ele;
+        const { autoPollEnabled, autoPollConfig, ...other } = ele;
         if (autoPollEnabled) {
           config.serialConfigs.push(ele);
         } else {
-          config.serialConfigs.push({autoPollEnabled, ...other});
+          config.serialConfigs.push({ autoPollEnabled, ...other });
         }
       }
     });
     let autoTaskCount = 0;
-    values.networkConfigs.forEach(ele => {
+    values.networkConfigs.forEach((ele) => {
       if (ele.enabled) {
-        const {enabled, serialId, type, networkId} = ele;
+        const {
+          enabled, serialId, type, networkId,
+        } = ele;
         if (config.serialConfigs[serialId].autoPollEnabled) autoTaskCount++;
         const typeArr = ['socket', 'aliyun', 'mqtt'];
         const detail = ele[typeArr[type]];
         config.networkSummary[typeArr[type]].push(networkId);
-        config.networkConfigs.push({enabled, serialId, type, networkId, ...detail});
+        config.networkConfigs.push({
+          enabled, serialId, type, networkId, ...detail,
+        });
       }
     });
     config.config_version = new Date().toString();
@@ -73,9 +75,24 @@ const Content = forwardRef(({
     return config;
   };
 
+  const handleSubmit = async (config, resetForm) => {
+    // console.log(config);
+    setSaveLoading(true);
+    try {
+      await updateConfig({
+        ...groupRow,
+        config,
+      });
+      setSnackbar({ children: '数据已更新', severity: 'success' });
+    } catch (error) {
+      setSnackbar({ children: '更新失败', severity: 'error' });
+    }
+    setSaveLoading(false);
+  };
+
   const formik = useFormik({
-    initialValues: initialValues,
-    onSubmit: (values, {resetForm}) => {
+    initialValues,
+    onSubmit: (values, { resetForm }) => {
       const config = handleDataConvert(values);
       handleSubmit(config, resetForm);
     },
@@ -85,21 +102,6 @@ const Content = forwardRef(({
     dirty: formik.dirty,
   }));
 
-  const handleSubmit = async (config, resetForm) => {
-    // console.log(config);
-    setSaveLoading(true);
-    try {
-      await updateConfig({
-        ...groupRow,
-        config: config,
-      });
-      setSnackbar({children: '数据已更新', severity: 'success'});
-    } catch (error) {
-      setSnackbar({children: "更新失败", severity: 'error'});
-    }
-    setSaveLoading(false);
-  };
-
   const handleCloseSnackbar = () => {
     setSnackbar(null);
     onClose(false);
@@ -108,9 +110,9 @@ const Content = forwardRef(({
   return (
     <>
       <DialogTitle>
-        <Box sx={{borderBottom: 1, borderColor: 'divider'}}>
+        <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
           <Tabs
-            sx={{fontSize: '1rem'}}
+            sx={{ fontSize: '1rem' }}
             value={tabIndex}
             onChange={handleTabChange}
             aria-label="basic tabs"
@@ -133,10 +135,10 @@ const Content = forwardRef(({
             <Platform formik={formik} />
           </TabPanel>
         </SwipeableViews>
-        
+
       </DialogContent>
       <DialogActions>
-        <Button onClick={() => {onClose(formik.dirty);}} variant="contained">
+        <Button onClick={() => { onClose(formik.dirty); }} variant="contained">
           取消
         </Button>
         <LoadingButton onClick={formik.handleSubmit} loading={saveLoading} variant="contained">
@@ -150,6 +152,6 @@ const Content = forwardRef(({
       )}
     </>
   );
-})
+});
 
 export default Content;

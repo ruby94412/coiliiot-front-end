@@ -3,17 +3,18 @@ import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import Button from '@mui/material/Button';
-const ConfirmDialog = ({
+
+function ConfirmDialog({
   title,
   content,
   handleConfirmCb,
   isOpen,
   onClose,
-}) => {
+}) {
   const handleConfirm = () => {
     handleConfirmCb();
     onClose();
-  }
+  };
   return (
     <Dialog
       maxWidth="xs"
@@ -39,6 +40,6 @@ const ConfirmDialog = ({
       </DialogActions>
     </Dialog>
   );
-};
+}
 
 export default ConfirmDialog;

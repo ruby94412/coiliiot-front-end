@@ -1,53 +1,51 @@
-import axiosInstance from "../httpCommon";
-import {refreshToken} from "../slice/login";
+/* eslint-disable no-underscore-dangle */
+import axiosInstance from '../httpCommon';
+import { refreshToken } from '../slice/login';
 
 const getLocalAccessToken = () => {
   const userInfo = JSON.parse(localStorage.getItem('userInfo'));
   if (!userInfo) return null;
   return userInfo.accessToken;
-}
+};
 
 const getLocalRefreshToken = () => {
   const userInfo = JSON.parse(localStorage.getItem('userInfo'));
   if (!userInfo) return null;
   return userInfo.refreshToken;
-}
+};
 
-const updateLocalAccessToken = token => {
-  let userInfo = JSON.parse(localStorage.getItem("userInfo"));
+const updateLocalAccessToken = (token) => {
+  const userInfo = JSON.parse(localStorage.getItem('userInfo'));
   userInfo.accessToken = token;
-  localStorage.setItem("userInfo", JSON.stringify(userInfo));
-}
+  localStorage.setItem('userInfo', JSON.stringify(userInfo));
+};
 
-const setup = store => {
+const setup = (store) => {
   axiosInstance.interceptors.request.use(
-    config => {
+    (config) => {
+      const temp = { ...config };
       const token = getLocalAccessToken();
       if (token) {
-        config.headers["x-access-token"] = token;
+        temp.headers['x-access-token'] = token;
       }
-      return config;
+      return temp;
     },
-    error => {
-      return Promise.reject(error);
-    }
+    (error) => Promise.reject(error),
   );
 
-  const {dispatch} = store;
+  const { dispatch } = store;
   axiosInstance.interceptors.response.use(
-    res => {
-      return res;
-    },
-    async err => {
+    (res) => res,
+    async (err) => {
       const originalConfig = err.config;
-      if (originalConfig.url !== "/login" && err.response) {
+      if (originalConfig.url !== '/login' && err.response) {
         if (err.response.status === 401 && !originalConfig._retry) {
           originalConfig._retry = true;
           try {
-            const rs = await axiosInstance.post("/refreshToken", {
+            const rs = await axiosInstance.post('/refreshToken', {
               refreshToken: getLocalRefreshToken(),
             });
-            const {accessToken} = rs.data;
+            const { accessToken } = rs.data;
             dispatch(refreshToken(accessToken));
             updateLocalAccessToken(accessToken);
             return axiosInstance(originalConfig);
@@ -57,7 +55,7 @@ const setup = store => {
         }
       }
       return Promise.reject(err);
-    }
+    },
   );
 };
 

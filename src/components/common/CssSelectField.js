@@ -1,5 +1,5 @@
-import Select from "@mui/material/Select";
-import { styled } from "@mui/material/styles";
+import Select from '@mui/material/Select';
+import { styled } from '@mui/material/styles';
 
 const CssSelectField = styled(Select)(() => ({
   '& .MuiSelect-select': {
@@ -33,7 +33,7 @@ const CssSelectField = styled(Select)(() => ({
   },
   '& .MuiInputBase-root-MuiInput-root.Mui-disabled:before': {
     borderBottomColor: 'white',
-  }
+  },
 }));
 
 export default CssSelectField;

@@ -3,7 +3,6 @@ export default function authHeader() {
 
   if (userInfo?.accessToken) {
     return { 'x-access-token': userInfo.accessToken };
-  } else {
-    return {};
   }
+  return {};
 }

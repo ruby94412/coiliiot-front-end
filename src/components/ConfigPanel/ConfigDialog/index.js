@@ -1,22 +1,23 @@
-import {Dialog} from '@mui/material';
-import {useState, useEffect, useRef} from 'react';
+import { Dialog } from '@mui/material';
+import { useState, useEffect, useRef } from 'react';
 import DialogContent from './DialogContent';
-import {getInitialValues} from './utils';
+import { getInitialValues } from './utils';
+
 const dialogStyle = {
   backgroundColor: 'secondary.main',
   minWidth: '70%',
-}
+};
 
-const ConfigDialog = ({
+function ConfigDialog({
   groupRow,
   onClose,
   updateConfig,
-}) => {
+}) {
   const [initialValues, setInitialValues] = useState();
   const ref = useRef();
 
   useEffect(() => {
-    if (!!groupRow) {
+    if (groupRow) {
       setInitialValues(getInitialValues(groupRow.config));
     }
   }, [groupRow]);
@@ -25,8 +26,8 @@ const ConfigDialog = ({
     <Dialog
       maxWidth="xs"
       open={!!groupRow}
-      onClose={() => {onClose(ref.current.dirty);}}
-      PaperProps={{style: dialogStyle}}
+      onClose={() => { onClose(ref.current.dirty); }}
+      PaperProps={{ style: dialogStyle }}
     >
       <DialogContent
         ref={ref}

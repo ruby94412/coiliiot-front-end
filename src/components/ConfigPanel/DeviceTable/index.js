@@ -1,25 +1,29 @@
-import {DataGrid} from '@mui/x-data-grid';
-import {useEffect, useState, useMemo, useCallback} from 'react';
-import {Snackbar, Alert, Dialog, DialogContent} from '@mui/material';
-import {connect} from 'react-redux';
-import {getDeviceList, deleteDevice, updateDevice} from '../../../slice/device';
+import { DataGrid } from '@mui/x-data-grid';
+import {
+  useEffect, useState, useMemo, useCallback,
+} from 'react';
+import {
+  Snackbar, Alert, Dialog, DialogContent,
+} from '@mui/material';
+import { connect } from 'react-redux';
+import { getDeviceList, deleteDevice, updateDevice } from '../../../slice/device';
 import ConfirmDialog from '../../common/ConfirmDialog';
 import TableToolBar from '../TableToolBar';
 import getColumns from './columns';
-import AddDevice from "../AddDevice";
+import AddDevice from '../AddDevice';
 
 const dialogStyle = {
   minWidth: '70%',
   height: '50%',
-}
+};
 
-const DeviceTable = ({
+function DeviceTable({
   groupRow,
   onClose,
   getDeviceList,
   deleteDevice,
   updateDevice,
-}) => {
+}) {
   const [rows, setRows] = useState([]);
   const [addDeviceOpen, setAddDeviceOpen] = useState(false);
   const [editParams, setEditParams] = useState(null);
@@ -29,14 +33,14 @@ const DeviceTable = ({
   // table data operations
   // eslint-disable-next-line
   const reloadTable = () => {
-    getDeviceList({groupId: groupRow?.id})
-      .then(res => {
+    getDeviceList({ groupId: groupRow?.id })
+      .then((res) => {
         setRows(res.payload?.data || []);
       });
-  }
+  };
 
   useEffect(() => {
-    console.log(groupRow)
+    // console.log(groupRow);
     if (!!groupRow || !addDeviceOpen) {
       reloadTable();
     }
@@ -44,63 +48,61 @@ const DeviceTable = ({
   }, [groupRow, addDeviceOpen]);
 
   // edit and delete rows
-  const processRowUpdate = useCallback((newRow, oldRow) => {
-    return new Promise((resolve, reject) => {
-      const isMutated = newRow.deviceComment !== oldRow.deviceComment;
-      if (isMutated) {
-        setEditParams({resolve, reject, newRow, oldRow});
-      } else {
-        resolve(oldRow);
-      }
-    });
-  },[]);
+  const processRowUpdate = useCallback((newRow, oldRow) => new Promise((resolve, reject) => {
+    const isMutated = newRow.deviceComment !== oldRow.deviceComment;
+    if (isMutated) {
+      setEditParams({
+        resolve, reject, newRow, oldRow,
+      });
+    } else {
+      resolve(oldRow);
+    }
+  }), []);
 
-  const updateRow = async newRow => {
-    return updateDevice({...newRow, groupId: groupRow.id});
-  }
+  const updateRow = async (newRow) => updateDevice({ ...newRow, groupId: groupRow.id });
 
-  const deleteRow = async params => {
-    return deleteDevice({data: {deviceId: params.id}});
-  }
+  const deleteRow = async (params) => deleteDevice({ data: { deviceId: params.id } });
 
   const handleEditConfirm = async () => {
-    const {newRow, oldRow, reject, resolve} = editParams;
+    const {
+      newRow, oldRow, reject, resolve,
+    } = editParams;
     try {
       const response = await updateRow(newRow);
-      setSnackbar({children: '数据已更新', severity: 'success'});
+      setSnackbar({ children: '数据已更新', severity: 'success' });
       resolve(response);
       setEditParams(null);
       reloadTable();
     } catch (error) {
-      setSnackbar({children: "分组名称不能为空", severity: 'error'});
+      setSnackbar({ children: '分组名称不能为空', severity: 'error' });
       reject(oldRow);
       setEditParams(null);
     }
-  }
+  };
 
   const handleDeleteConfirm = async () => {
     try {
       await deleteRow(deleteParams);
-      setSnackbar({children: '数据已更新', severity: 'success'});
+      setSnackbar({ children: '数据已更新', severity: 'success' });
       setDeleteParams(null);
       reloadTable();
     } catch (error) {
-      setSnackbar({children: "删除失败", severity: 'error'});
+      setSnackbar({ children: '删除失败', severity: 'error' });
       setDeleteParams(null);
     }
-  }
+  };
 
   const handleEditClose = () => {
-    const {oldRow, resolve} = editParams;
+    const { oldRow, resolve } = editParams;
     resolve(oldRow);
     setEditParams(null);
-  }
+  };
 
   // eslint-disable-next-line
   const columns = useMemo(() => getColumns({setDeleteParams}), []);
   const handleCloseSnackbar = () => setSnackbar(null);
   const renderToolBar = () => (
-    <TableToolBar setModalOpen={setAddDeviceOpen} text="+添加设备"/>
+    <TableToolBar setModalOpen={setAddDeviceOpen} text="+添加设备" />
   );
 
   return (
@@ -108,7 +110,7 @@ const DeviceTable = ({
       maxWidth="xs"
       open={!!groupRow}
       onClose={onClose}
-      PaperProps={{style: dialogStyle}}
+      PaperProps={{ style: dialogStyle }}
     >
       <DialogContent>
         <DataGrid
@@ -119,9 +121,9 @@ const DeviceTable = ({
           }}
           rows={rows}
           columns={columns}
-          components={{Toolbar: renderToolBar}}
+          components={{ Toolbar: renderToolBar }}
           processRowUpdate={processRowUpdate}
-          experimentalFeatures={{newEditingApi: true}}
+          experimentalFeatures={{ newEditingApi: true }}
           pageSize={20}
           rowsPerPageOptions={[20]}
           hideFooterSelectedRowCount
@@ -139,7 +141,7 @@ const DeviceTable = ({
         />
         <ConfirmDialog
           isOpen={!!deleteParams}
-          onClose={() => {setDeleteParams(null);}}
+          onClose={() => { setDeleteParams(null); }}
           handleConfirmCb={handleDeleteConfirm}
           content="确认删除该条记录吗?"
         />
@@ -153,10 +155,10 @@ const DeviceTable = ({
   );
 }
 
-const mapStateToProps = state => {
-  const {userInfo} = state;
-  return {userInfo};
-}
+const mapStateToProps = (state) => {
+  const { userInfo } = state;
+  return { userInfo };
+};
 export default connect(mapStateToProps, {
   getDeviceList,
   deleteDevice,

@@ -1,14 +1,14 @@
-import {createSlice, createAsyncThunk} from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import loginServices from '../services/loginServices';
 
 const userInfo = JSON.parse(localStorage.getItem('userInfo'));
 const initialState = userInfo
-  ? {...userInfo, isLoggedIn: true}
-  : {isLoggedIn: false};
+  ? { ...userInfo, isLoggedIn: true }
+  : { isLoggedIn: false };
 
 export const login = createAsyncThunk(
   'login',
-  async loginData => {
+  async (loginData) => {
     let res = null;
     try {
       res = await loginServices.login(loginData);
@@ -19,37 +19,32 @@ export const login = createAsyncThunk(
       res.data.isLoggedIn = false;
     }
     return res?.data;
-  }
+  },
 );
 
 export const logout = createAsyncThunk(
   'logout',
-  async () => {}
+  async () => {},
 );
 
 export const refreshToken = createAsyncThunk(
   'refreshToken',
-  async refreshData => {
-    return refreshData;
-  }
+  async (refreshData) => refreshData,
 );
 
 const loginSlice = createSlice({
   name: 'loginInfo',
   initialState,
-  extraReducers: builder => {
+  extraReducers: (builder) => {
     builder
-      .addCase(login.fulfilled, (state, action) => {
-        return {...action.payload};
-      })
-      .addCase(logout.fulfilled, (state, action) => {
-        return {};
-      })
-      .addCase(refreshToken.fulfilled, (state, action) => {
-        return {...state, accessToken: action.payload};
-      })
-  }
+      .addCase(login.fulfilled, (state, action) => ({ ...action.payload }))
+      .addCase(logout.fulfilled, () => ({}))
+      .addCase(
+        refreshToken.fulfilled,
+        (state, action) => ({ ...state, accessToken: action.payload }),
+      );
+  },
 });
 
-const {reducer} = loginSlice;
+const { reducer } = loginSlice;
 export default reducer;

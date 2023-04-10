@@ -1,5 +1,5 @@
-import TextField from "@mui/material/TextField";
-import { styled } from "@mui/material/styles";
+import TextField from '@mui/material/TextField';
+import { styled } from '@mui/material/styles';
 
 const CssTextField = styled(TextField)(() => ({
   '& .MuiInputBase-root': {
@@ -33,7 +33,7 @@ const CssTextField = styled(TextField)(() => ({
   },
   '& .MuiInputBase-root-MuiInput-root.Mui-disabled:before': {
     borderBottomColor: 'white',
-  }
+  },
 }));
 
 export default CssTextField;
