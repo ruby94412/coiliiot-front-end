@@ -5,8 +5,8 @@ import { useState } from 'react';
 import { useFormik } from 'formik';
 import { connect } from 'react-redux';
 import * as yup from 'yup';
-import { addGroup } from '../../../slice/group';
-import ErrorModal from '../../common/ErrorModal';
+import { addGroup } from 'slice/group';
+import ErrorModal from 'components/common/ErrorModal';
 
 function AddGroup({
   addGroupOpen,

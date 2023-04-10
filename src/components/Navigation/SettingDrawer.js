@@ -23,11 +23,11 @@ function SettingDrawer({
   locale,
   themeMode,
 }) {
-  const handleModeChange = (mode) => (e) => {
+  const handleModeChange = (mode) => () => {
     setThemeMode(mode);
     localStorage.setItem('mode', mode);
   };
-  const handleLocaleChange = (locale) => (e) => {
+  const handleLocaleChange = (locale) => () => {
     setLocale(locale);
     localStorage.setItem('locale', locale);
   };

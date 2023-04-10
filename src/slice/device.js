@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import deviceServices from '../services/deviceServices';
+import deviceServices from 'services/deviceServices';
 
 const initialState = [];
 

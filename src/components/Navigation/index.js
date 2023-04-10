@@ -23,11 +23,11 @@ import {
 import MenuIcon from '@mui/icons-material/Menu';
 import AdbIcon from '@mui/icons-material/Adb';
 import { FormattedMessage } from 'react-intl';
-import SettingDrawer from './SettingDrawer';
 
-import { logout } from '../../slice/login';
-import ConfirmDialog from '../common/ConfirmDialog';
-import messages from '../../hocs/Locale/Messages/Navigation';
+import { logout } from 'slice/login';
+import ConfirmDialog from 'components/common/ConfirmDialog';
+import messages from 'hocs/Locale/Messages/Navigation';
+import SettingDrawer from './SettingDrawer';
 
 function Navigation({
   logout,

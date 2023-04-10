@@ -1,6 +1,6 @@
 /* eslint-disable no-underscore-dangle */
-import axiosInstance from '../httpCommon';
-import { refreshToken } from '../slice/login';
+import axiosInstance from 'httpCommon';
+import { refreshToken } from 'slice/login';
 
 const getLocalAccessToken = () => {
   const userInfo = JSON.parse(localStorage.getItem('userInfo'));

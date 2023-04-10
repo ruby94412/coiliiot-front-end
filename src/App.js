@@ -4,12 +4,12 @@ import {
   Routes,
   Route,
 } from 'react-router-dom';
-import ConfigPanel from './components/ConfigPanel';
-import Login from './components/Login';
-import Navigation from './components/Navigation';
-import './App.css';
-import withTheme from './hocs/Theme';
-import withLocale from './hocs/Locale';
+import ConfigPanel from 'components/ConfigPanel';
+import Login from 'components/Login';
+import Navigation from 'components/Navigation';
+import withTheme from 'hocs/Theme';
+import withLocale from 'hocs/Locale';
+import 'App.css';
 
 function App({
   userInfo,

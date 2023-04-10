@@ -4,8 +4,8 @@ import { useFormik } from 'formik';
 import { connect } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
-import { login as loginRequest } from '../../slice/login';
-import ErrorModal from '../common/ErrorModal';
+import { login as loginRequest } from 'slice/login';
+import ErrorModal from 'components/common/ErrorModal';
 import './Login.css';
 
 function Login({
@@ -108,5 +108,5 @@ function Login({
   );
 }
 
-const mapStateToProps = (state) => ({});
+const mapStateToProps = () => ({});
 export default connect(mapStateToProps, { loginRequest })(Login);

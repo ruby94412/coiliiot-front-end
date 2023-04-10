@@ -1,5 +1,5 @@
 import GroupTable from './GroupTable';
-import Navigation from './Navigation';
+// import Navigation from './Navigation';
 
 function ConfigPanel() {
   return (

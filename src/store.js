@@ -1,6 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit';
-import loginReducer from './slice/login';
-import groupReducer from './slice/group';
+import loginReducer from 'slice/login';
+import groupReducer from 'slice/group';
 
 const reducer = {
   userInfo: loginReducer,

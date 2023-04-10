@@ -13,7 +13,7 @@ import { LoadingButton } from '@mui/lab';
 import { useState, forwardRef, useImperativeHandle } from 'react';
 import { useFormik } from 'formik';
 import SwipeableViews from 'react-swipeable-views';
-import TabPanel from '../../common/TabPanel';
+import TabPanel from 'components/common/TabPanel';
 import Platform from './Platform';
 import Serial from './Serial';
 import Basic from './Basic';
@@ -75,7 +75,7 @@ const Content = forwardRef(({
     return config;
   };
 
-  const handleSubmit = async (config, resetForm) => {
+  const handleSubmit = async (config) => {
     // console.log(config);
     setSaveLoading(true);
     try {

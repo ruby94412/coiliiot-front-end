@@ -1,4 +1,4 @@
-import http from '../httpCommon';
+import http from 'httpCommon';
 import authHeader from './authHeader';
 
 const groupServices = {

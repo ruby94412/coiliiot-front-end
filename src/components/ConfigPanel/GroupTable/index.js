@@ -4,8 +4,8 @@ import {
 } from 'react';
 import { Snackbar, Alert } from '@mui/material';
 import { connect } from 'react-redux';
-import { getGroupList, deleteGroup, updateGroup } from '../../../slice/group';
-import ConfirmDialog from '../../common/ConfirmDialog';
+import { getGroupList, deleteGroup, updateGroup } from 'slice/group';
+import ConfirmDialog from 'components/common/ConfirmDialog';
 import TableToolBar from '../TableToolBar';
 import getColumns from './columns';
 import AddGroup from '../AddGroup';

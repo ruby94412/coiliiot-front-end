@@ -17,5 +17,12 @@
   "extends": "airbnb",
   "parserOptions": {
     "ecmaVersion": "latest"
+  },
+  "settings": {
+    "import/resolver": {
+      "node": {
+        "paths": ["src"]
+      }
+    }
   }
 }

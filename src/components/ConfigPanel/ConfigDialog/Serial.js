@@ -8,7 +8,7 @@ import {
   FormLabel,
 } from '@mui/material';
 import SwipeableViews from 'react-swipeable-views';
-import TabPanel from '../../common/TabPanel';
+import TabPanel from 'components/common/TabPanel';
 import AutoPoll from './AutoPoll';
 import { serialFields } from './constants';
 import { renderFields } from './utils';

@@ -16,8 +16,8 @@ import {
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import AdbIcon from '@mui/icons-material/Adb';
-import { logout } from '../../../slice/login';
-import ConfirmDialog from '../../common/ConfirmDialog';
+import { logout } from 'slice/login';
+import ConfirmDialog from 'components/common/ConfirmDialog';
 
 function Navigation({
   logout,
@@ -147,5 +147,5 @@ function Navigation({
   );
 }
 
-const mapStateToProps = (state) => ({});
+const mapStateToProps = () => ({});
 export default connect(mapStateToProps, { logout })(Navigation);

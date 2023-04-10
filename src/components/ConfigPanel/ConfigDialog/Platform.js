@@ -10,7 +10,7 @@ import {
   MenuItem,
 } from '@mui/material';
 import SwipeableViews from 'react-swipeable-views';
-import TabPanel from '../../common/TabPanel';
+import TabPanel from 'components/common/TabPanel';
 import { renderFields } from './utils';
 import {
   networkIds, networkOptions, aliyunFields, mqttFields, socketFields,

@@ -13,10 +13,8 @@ import {
 import { useState } from 'react';
 import { useFormik } from 'formik';
 import { connect } from 'react-redux';
-import { addDevice } from '../../../slice/device';
-// import CssTextField from '../../common/CssTextField';
-// import CssSelectField from '../../common/CssSelectField';
-import ErrorModal from '../../common/ErrorModal';
+import { addDevice } from 'slice/device';
+import ErrorModal from 'components/common/ErrorModal';
 
 function AddDevice({
   addDeviceOpen,

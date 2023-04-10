@@ -6,8 +6,8 @@ import {
   Snackbar, Alert, Dialog, DialogContent,
 } from '@mui/material';
 import { connect } from 'react-redux';
-import { getDeviceList, deleteDevice, updateDevice } from '../../../slice/device';
-import ConfirmDialog from '../../common/ConfirmDialog';
+import { getDeviceList, deleteDevice, updateDevice } from 'slice/device';
+import ConfirmDialog from 'components/common/ConfirmDialog';
 import TableToolBar from '../TableToolBar';
 import getColumns from './columns';
 import AddDevice from '../AddDevice';
