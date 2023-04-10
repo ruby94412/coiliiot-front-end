@@ -5,6 +5,75 @@
   "coiliiot.app.navigation.settingDrawer.modeTitle": "Mode",
   "coiliiot.app.navigation.settingDrawer.modeLight": "Light",
   "coiliiot.app.navigation.settingDrawer.modeDark": "Dark",
-  "coiliiot.app.navigation.settingDrawer.languageTitle": "Language"
+  "coiliiot.app.navigation.settingDrawer.languageTitle": "Language",
+
+  "coiliiot.app.login.usernameErrorNotification": "Please Enter Username",
+  "coiliiot.app.login.passwordErrorNotification": "Please Enter Password",
+  "coiliiot.app.login.usernameLabel": "Username",
+  "coiliiot.app.login.passwordLabel": "Password",
+  "coiliiot.app.login.loginButtonLabel": "Login",
+
+  "coiliiot.app.configPanel.groupTable.snackBarSuccess": "Data Updated",
+  "coiliiot.app.configPanel.groupTable.snackBarEditError": "Group Name Cannot Be Empty",
+  "coiliiot.app.configPanel.groupTable.snackBarDeleteError": "Failed To Delete",
+  "coiliiot.app.configPanel.groupTable.toolBarAddGroupButton": "+Add Group",
+  "coiliiot.app.configPanel.groupTable.editConfirm": "Please Confirm To Save This Record",
+  "coiliiot.app.configPanel.groupTable.deleteConfirm": "Please Confirm To Delete This Record",
+  "coiliiot.app.configPanel.groupTable.unsavedConfirm": "Confirguration Unsaved, Please Confirm To Close This Window",
+
+  "coiliiot.app.configPanel.groupTable.columns.groupId": "Group ID",
+  "coiliiot.app.configPanel.groupTable.columns.groupName": "Group Name",
+  "coiliiot.app.configPanel.groupTable.columns.updatedTime": "Updated Time",
+  "coiliiot.app.configPanel.groupTable.columns.devices": "Device Amount",
+  "coiliiot.app.configPanel.groupTable.columns.actions": "Actions",
+  "coiliiot.app.configPanel.groupTable.columns.manageGroupDeviceTooltip": "Manage Group Devices",
+  "coiliiot.app.configPanel.groupTable.columns.configGroupTooltip": "Group Configuration",
+  "coiliiot.app.configPanel.groupTable.columns.deleteGroupTooltip": "Delete Group",
+
+  "coiliiot.app.configPanel.deviceTable.snackBarSuccess": "Data Updated",
+  "coiliiot.app.configPanel.deviceTable.snackBarEditError": "Device Name Cannot Be Empty",
+  "coiliiot.app.configPanel.deviceTable.snackBarDeleteError": "Failed To Delete",
+  "coiliiot.app.configPanel.deviceTable.toolBarAddGroupButton": "+Add Device",
+  "coiliiot.app.configPanel.deviceTable.editConfirm": "Please Confirm To Save This Record",
+  "coiliiot.app.configPanel.deviceTable.deleteConfirm": "Please Confirm To Delete This Record",
+
+  "coiliiot.app.configPanel.deviceTable.columns.deviceId": "Device ID",
+  "coiliiot.app.configPanel.deviceTable.columns.deviceComment": "Device Comment",
+  "coiliiot.app.configPanel.deviceTable.columns.updatedTime": "Updated Time",
+  "coiliiot.app.configPanel.deviceTable.columns.deviceType": "Device Type",
+  "coiliiot.app.configPanel.deviceTable.columns.actions": "Actions",
+  "coiliiot.app.configPanel.deviceTable.columns.connectDeviceTooltip": "Connect To Devices",
+  "coiliiot.app.configPanel.deviceTable.columns.deleteDeviceTooltip": "Delete Device",
+
+  "coiliiot.app.configPanel.addDevice.validateDeviceId": "Please Enter Device ID",
+  "coiliiot.app.configPanel.addDevice.validateDeviceType": "Please Choose Device Type",
+  "coiliiot.app.configPanel.addDevice.addDeviceTypography": "Add Device",
+  "coiliiot.app.configPanel.addDevice.deviceIdLabel": "Device ID",
+  "coiliiot.app.configPanel.addDevice.deviceTypeLabel": "Device Type",
+  "coiliiot.app.configPanel.addDevice.deviceCommentLabel": "Device Comment",
+  "coiliiot.app.configPanel.addDevice.confirmButton": "Confirm",
+  "coiliiot.app.configPanel.addDevice.addDeviceError": "Failed To Device",
+
+  "coiliiot.app.configPanel.addGroup.validateGroupName": "Please Enter Group Name",
+  "coiliiot.app.configPanel.addGroup.addGroupTypography": "Add Device",
+  "coiliiot.app.configPanel.addGroup.groupNameLabel": "Group Name",
+  "coiliiot.app.configPanel.addGroup.confirmButton": "Confirm",
+  "coiliiot.app.configPanel.addGroup.addGroupError": "Failed To Group",
+
+  "coiliiot.app.common.confirmDialog.cancelButton": "Cancel",
+  "coiliiot.app.common.confirmDialog.confirmButton": "Confirm",
+  "coiliiot.app.common.errorModal.typography": "Error Warning",
+
+  "coiliiot.app.configPanel.configDialog.serial.serialIdLabel": "Serial Channel ID",
+  "coiliiot.app.configPanel.configDialog.serial.statusLabel": "Status",
+  "coiliiot.app.configPanel.configDialog.serial.statusOptionEnable": "Enable",
+  "coiliiot.app.configPanel.configDialog.serial.statusOptionDisable": "Disable",
+
+  "coiliiot.app.configPanel.configDialog.platform.networkIdLabel": "Network Channel ID",
+  "coiliiot.app.configPanel.configDialog.platform.platformTypeLabel": "Platform Type",
+  "coiliiot.app.configPanel.configDialog.platform.serialIdLabel": "Serial Channel ID",
+  "coiliiot.app.configPanel.configDialog.platform.statusLabel": "Status",
+  "coiliiot.app.configPanel.configDialog.platform.statusOptionEnable": "Enable",
+  "coiliiot.app.configPanel.configDialog.platform.statusOptionDisable": "Disable"
 }
 

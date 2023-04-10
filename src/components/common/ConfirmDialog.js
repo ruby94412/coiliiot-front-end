@@ -3,6 +3,8 @@ import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import Button from '@mui/material/Button';
+import { FormattedMessage } from 'react-intl';
+import messages from 'hocs/Locale/Messages/common/ConfirmDialog';
 
 function ConfirmDialog({
   title,
@@ -34,9 +36,11 @@ function ConfirmDialog({
       </DialogContent>
       <DialogActions>
         <Button onClick={onClose} variant="contained">
-          取消
+          <FormattedMessage {...messages.cancelButton} />
         </Button>
-        <Button onClick={handleConfirm} variant="contained">确定</Button>
+        <Button onClick={handleConfirm} variant="contained">
+          <FormattedMessage {...messages.confirmButton} />
+        </Button>
       </DialogActions>
     </Dialog>
   );

@@ -14,6 +14,8 @@ import { useState } from 'react';
 import { useFormik } from 'formik';
 import { connect } from 'react-redux';
 import { addDevice } from 'slice/device';
+import { FormattedMessage } from 'react-intl';
+import messages from 'hocs/Locale/Messages/ConfigPanel/AddDevice';
 import ErrorModal from 'components/common/ErrorModal';
 
 function AddDevice({
@@ -27,11 +29,11 @@ function AddDevice({
 
   const validationSchema = yup.object({
     deviceId: yup
-      .string('请输入设备序列号')
-      .required('请输入设备序列号'),
+      .string(<FormattedMessage {...messages.validateDeviceId} />)
+      .required(<FormattedMessage {...messages.validateDeviceId} />),
     deviceType: yup
-      .string('请输入选择设备类型')
-      .required('请输入选择设备类型'),
+      .string(<FormattedMessage {...messages.validateDeviceType} />)
+      .required(<FormattedMessage {...messages.validateDeviceType} />),
   });
 
   const handleSubmit = (values) => {
@@ -71,7 +73,7 @@ function AddDevice({
       }
     >
       <Typography variant="h6" component="h2" style={{ textAlign: 'center' }}>
-        添加设备
+        <FormattedMessage {...messages.addDeviceTypography} />
       </Typography>
       <Grid
         container
@@ -83,7 +85,7 @@ function AddDevice({
       >
         <Grid item xs={8}>
           <FormControl sx={{ display: 'flex' }}>
-            <FormLabel>设备序列号</FormLabel>
+            <FormLabel><FormattedMessage {...messages.deviceIdLabel} /></FormLabel>
             <TextField
               required
               size="small"
@@ -99,9 +101,10 @@ function AddDevice({
         </Grid>
         <Grid item xs={8}>
           <FormControl sx={{ display: 'flex' }}>
-            <FormLabel>设备类型</FormLabel>
+            <FormLabel><FormattedMessage {...messages.deviceTypeLabel} /></FormLabel>
             <Select
               size="small"
+              name="deviceType"
               style={{ width: '100%' }}
               value={formik.values.deviceType}
               onChange={formik.handleChange}
@@ -114,7 +117,7 @@ function AddDevice({
         </Grid>
         <Grid item xs={8}>
           <FormControl sx={{ display: 'flex' }}>
-            <FormLabel>设备备注</FormLabel>
+            <FormLabel><FormattedMessage {...messages.deviceCommentLabel} /></FormLabel>
             <TextField
               size="small"
               type="text"
@@ -133,12 +136,12 @@ function AddDevice({
             onClick={formik.handleSubmit}
             style={{ width: '100%' }}
           >
-            确认
+            <FormattedMessage {...messages.confirmButton} />
           </Button>
         </Grid>
       </Grid>
       <ErrorModal
-        errorMessage="添加设备失败"
+        errorMessage={<FormattedMessage {...messages.addDeviceError} />}
         isErrorModalOpen={isErrorModalOpen}
         onClose={() => { setIsErrorModalOpen(false); }}
       />

@@ -9,6 +9,8 @@ import {
 } from '@mui/material';
 import SwipeableViews from 'react-swipeable-views';
 import TabPanel from 'components/common/TabPanel';
+import { FormattedMessage } from 'react-intl';
+import messages from 'hocs/Locale/Messages/ConfigPanel/ConfigDialog/Serial';
 import AutoPoll from './AutoPoll';
 import { serialFields } from './constants';
 import { renderFields } from './utils';
@@ -34,7 +36,7 @@ function Serial({
       >
         <Grid item xs={12}>
           <FormControl>
-            <FormLabel>串口ID</FormLabel>
+            <FormLabel><FormattedMessage {...messages.serialIdLabel} /></FormLabel>
             <RadioGroup
               row
               onChange={handleSerialIdChange}
@@ -58,7 +60,7 @@ function Serial({
               >
                 <Grid item xs={12} md={4}>
                   <FormControl sx={{ display: 'flex' }}>
-                    <FormLabel>启用状态</FormLabel>
+                    <FormLabel><FormattedMessage {...messages.statusLabel} /></FormLabel>
                     <RadioGroup
                       row
                       value={formik.values.serialConfigs[serialId].enabled}
@@ -66,8 +68,16 @@ function Serial({
                       name={`serialConfigs[${index}].enabled`}
 
                     >
-                      <FormControlLabel value control={<Radio />} label="启用" />
-                      <FormControlLabel value={false} control={<Radio />} label="不启用" />
+                      <FormControlLabel
+                        value={true}
+                        control={<Radio />}
+                        label={<FormattedMessage {...messages.statusOptionEnable} />}
+                      />
+                      <FormControlLabel
+                        value={false}
+                        control={<Radio />}
+                        label={<FormattedMessage {...messages.statusOptionDisable} />}
+                      />
                     </RadioGroup>
                   </FormControl>
                 </Grid>

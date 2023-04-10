@@ -3,26 +3,33 @@ import DevicesIcon from '@mui/icons-material/Devices';
 import SettingsIcon from '@mui/icons-material/Settings';
 import { GridActionsCellItem } from '@mui/x-data-grid';
 import { Tooltip } from '@mui/material';
+import messages from 'hocs/Locale/Messages/ConfigPanel/GroupTable/columns';
 
 const getColumns = ({
   setDeleteParams,
   setDeviceTableParams,
   setConfigParams,
+  intl,
 }) => [
   {
-    field: 'id', headerName: '分组序号', flex: 1, minWidth: 200,
+    field: 'id', headerName: intl.formatMessage(messages.groupId), flex: 1, minWidth: 200,
   },
-  { field: 'groupName', headerName: '分组名称', editable: true },
+  {
+    field: 'groupName',
+    headerName: intl.formatMessage(messages.groupName),
+    editable: true,
+    minWidth: 200,
+  },
   {
     field: 'devices',
-    headerName: '设备数量',
+    headerName: intl.formatMessage(messages.devices),
     type: 'number',
-    width: 100,
+    width: 150,
     valueGetter: ({ value }) => value?.length || 0,
   },
   {
     field: 'updateTime',
-    headerName: '更新时间',
+    headerName: intl.formatMessage(messages.updatedTime),
     type: 'date',
     disableColumnMenu: true,
     headerAlign: 'right',
@@ -32,14 +39,14 @@ const getColumns = ({
   },
   {
     field: 'actions',
-    headerName: '操作',
+    headerName: intl.formatMessage(messages.actions),
     type: 'actions',
     flex: 1,
     minWidth: 150,
     getActions: (params) => [
       <GridActionsCellItem
         icon={(
-          <Tooltip title="管理分组设备">
+          <Tooltip title={intl.formatMessage(messages.manageGroupDeviceTooltip)}>
             <DevicesIcon />
           </Tooltip>
         )}
@@ -48,7 +55,7 @@ const getColumns = ({
       />,
       <GridActionsCellItem
         icon={(
-          <Tooltip title="配置分组">
+          <Tooltip title={intl.formatMessage(messages.configGroupTooltip)}>
             <SettingsIcon />
           </Tooltip>
         )}
@@ -57,7 +64,7 @@ const getColumns = ({
       />,
       <GridActionsCellItem
         icon={(
-          <Tooltip title="删除分组">
+          <Tooltip title={intl.formatMessage(messages.deleteGroupTooltip)}>
             <DeleteIcon />
           </Tooltip>
         )}

@@ -1,11 +1,13 @@
 import { DataGrid } from '@mui/x-data-grid';
 import {
-  useEffect, useState, useMemo, useCallback,
+  useEffect, useState, useCallback,
 } from 'react';
 import { Snackbar, Alert } from '@mui/material';
 import { connect } from 'react-redux';
 import { getGroupList, deleteGroup, updateGroup } from 'slice/group';
 import ConfirmDialog from 'components/common/ConfirmDialog';
+import { FormattedMessage, useIntl } from 'react-intl';
+import messages from 'hocs/Locale/Messages/ConfigPanel/GroupTable';
 import TableToolBar from '../TableToolBar';
 import getColumns from './columns';
 import AddGroup from '../AddGroup';
@@ -18,6 +20,7 @@ function GroupTable({
   deleteGroup,
   userInfo,
 }) {
+  const intl = useIntl();
   const [rows, setRows] = useState([]);
   const [addGroupOpen, setAddGroupOpen] = useState(false);
   const [isConfigClosing, setIsConfigClosing] = useState(false);
@@ -28,7 +31,6 @@ function GroupTable({
   const [snackbar, setSnackbar] = useState(null);
 
   // table data operations
-  // eslint-disable-next-line
   const reloadTable = () => {
     getGroupList({ username: userInfo.username }).then((res) => {
       setRows(res.payload?.data || []);
@@ -39,7 +41,6 @@ function GroupTable({
     if (!addGroupOpen || !deviceTableParams || !configParams) {
       reloadTable();
     }
-  // eslint-disable-next-line
   }, [addGroupOpen, deviceTableParams, configParams]);
 
   // edit and delete rows
@@ -64,12 +65,12 @@ function GroupTable({
     } = editParams;
     try {
       const response = await updateRow(newRow);
-      setSnackbar({ children: '数据已更新', severity: 'success' });
+      setSnackbar({ children: <FormattedMessage {...messages.snackBarSuccess} />, severity: 'success' });
       resolve(response);
       setEditParams(null);
       reloadTable();
     } catch (error) {
-      setSnackbar({ children: '分组名称不能为空', severity: 'error' });
+      setSnackbar({ children: <FormattedMessage {...messages.snackBarEditError} />, severity: 'error' });
       reject(oldRow);
       setEditParams(null);
     }
@@ -78,11 +79,11 @@ function GroupTable({
   const handleDeleteConfirm = async () => {
     try {
       await deleteRow(deleteParams);
-      setSnackbar({ children: '数据已更新', severity: 'success' });
+      setSnackbar({ children: <FormattedMessage {...messages.snackBarSuccess} />, severity: 'success' });
       setDeleteParams(null);
       reloadTable();
     } catch (error) {
-      setSnackbar({ children: '删除失败', severity: 'error' });
+      setSnackbar({ children: <FormattedMessage {...messages.snackBarDeleteError} />, severity: 'error' });
       setDeleteParams(null);
     }
   };
@@ -105,12 +106,16 @@ function GroupTable({
     }
   };
 
-  const columnsProps = { setDeviceTableParams, setDeleteParams, setConfigParams };
-  // eslint-disable-next-line
-  const columns = useMemo(() => getColumns(columnsProps), []);
+  const columnsProps = {
+    setDeviceTableParams, setDeleteParams, setConfigParams, intl,
+  };
+  const columns = getColumns(columnsProps);
   const handleCloseSnackbar = () => setSnackbar(null);
   const renderToolBar = () => (
-    <TableToolBar setModalOpen={setAddGroupOpen} text="+添加分组" />
+    <TableToolBar
+      setModalOpen={setAddGroupOpen}
+      text={<FormattedMessage {...messages.toolBarAddGroupButton} />}
+    />
   );
 
   return (
@@ -135,13 +140,13 @@ function GroupTable({
         isOpen={!!editParams}
         onClose={handleEditClose}
         handleConfirmCb={handleEditConfirm}
-        content="确认修改该条记录吗?"
+        content={<FormattedMessage {...messages.editConfirm} />}
       />
       <ConfirmDialog
         isOpen={!!deleteParams}
         onClose={() => { setDeleteParams(null); }}
         handleConfirmCb={handleDeleteConfirm}
-        content="确认删除该条记录吗?"
+        content={<FormattedMessage {...messages.deleteConfirm} />}
       />
       <ConfirmDialog
         isOpen={isConfigClosing}
@@ -150,7 +155,7 @@ function GroupTable({
           setIsConfigClosing(false);
           setConfigParams(null);
         }}
-        content="有未保存的设置,确认关闭此窗口吗?"
+        content={<FormattedMessage {...messages.unsavedConfirm} />}
       />
       {!!snackbar && (
         <Snackbar open onClose={handleCloseSnackbar} autoHideDuration={6000}>

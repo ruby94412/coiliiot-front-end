@@ -5,6 +5,8 @@ import { connect } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
 import { login as loginRequest } from 'slice/login';
+import { FormattedMessage } from 'react-intl';
+import messages from 'hocs/Locale/Messages/Login';
 import ErrorModal from 'components/common/ErrorModal';
 import './Login.css';
 
@@ -17,11 +19,11 @@ function Login({
 
   const validationSchema = yup.object({
     username: yup
-      .string('请输入用户名')
-      .required('请输入用户名'),
+      .string(<FormattedMessage {...messages.usernameErrorNotification} />)
+      .required(<FormattedMessage {...messages.usernameErrorNotification} />),
     password: yup
-      .string('请输入密码')
-      .required('请输入密码'),
+      .string(<FormattedMessage {...messages.passwordErrorNotification} />)
+      .required(<FormattedMessage {...messages.passwordErrorNotification} />),
   });
 
   const handleSubmit = (values) => {
@@ -59,7 +61,7 @@ function Login({
         <Grid item xl={12}>
           <TextField
             required
-            label="用户名"
+            label={<FormattedMessage {...messages.usernameLabel} />}
             size="small"
             type="text"
             name="username"
@@ -74,7 +76,7 @@ function Login({
         <Grid item xl={12}>
           <TextField
             required
-            label="密码"
+            label={<FormattedMessage {...messages.passwordLabel} />}
             size="small"
             type="password"
             name="password"
@@ -93,7 +95,7 @@ function Login({
             onClick={formik.handleSubmit}
             style={{ width: '100%' }}
           >
-            登录
+            <FormattedMessage {...messages.loginButtonLabel} />
           </Button>
         </Grid>
 

@@ -5,5 +5,75 @@
   "coiliiot.app.navigation.settingDrawer.modeTitle": "模式",
   "coiliiot.app.navigation.settingDrawer.modeLight": "亮屏",
   "coiliiot.app.navigation.settingDrawer.modeDark": "暗屏",
-  "coiliiot.app.navigation.settingDrawer.languageTitle": "语言"
+  "coiliiot.app.navigation.settingDrawer.languageTitle": "语言",
+
+  "coiliiot.app.login.usernameErrorNotification": "请输入用户名",
+  "coiliiot.app.login.passwordErrorNotification": "请输入密码",
+  "coiliiot.app.login.usernameLabel": "用户名",
+  "coiliiot.app.login.passwordLabel": "密码",
+  "coiliiot.app.login.loginButtonLabel": "登录",
+
+  "coiliiot.app.configPanel.groupTable.snackBarSuccess": "数据已更新",
+  "coiliiot.app.configPanel.groupTable.snackBarEditError": "分组名称不能为空",
+  "coiliiot.app.configPanel.groupTable.snackBarDeleteError": "删除失败",
+  "coiliiot.app.configPanel.groupTable.toolBarAddGroupButton": "+添加分组",
+  "coiliiot.app.configPanel.groupTable.editConfirm": "确认修改该条记录吗?",
+  "coiliiot.app.configPanel.groupTable.deleteConfirm": "确认删除该条记录吗?",
+  "coiliiot.app.configPanel.groupTable.unsavedConfirm": "有未保存的设置,确认关闭此窗口吗?",
+
+  "coiliiot.app.configPanel.groupTable.columns.groupId": "分组序号",
+  "coiliiot.app.configPanel.groupTable.columns.groupName": "分组名称",
+  "coiliiot.app.configPanel.groupTable.columns.devices": "设备数量",
+  "coiliiot.app.configPanel.groupTable.columns.updatedTime": "更新时间",
+  "coiliiot.app.configPanel.groupTable.columns.actions": "操作",
+  "coiliiot.app.configPanel.groupTable.columns.manageGroupDeviceTooltip": "管理分组设备",
+  "coiliiot.app.configPanel.groupTable.columns.configGroupTooltip": "配置分组",
+  "coiliiot.app.configPanel.groupTable.columns.deleteGroupTooltip": "删除分组",
+
+  "coiliiot.app.configPanel.deviceTable.snackBarSuccess": "数据已更新",
+  "coiliiot.app.configPanel.deviceTable.snackBarEditError": "设备名称不能为空",
+  "coiliiot.app.configPanel.deviceTable.snackBarDeleteError": "删除失败",
+  "coiliiot.app.configPanel.deviceTable.toolBarAddDeviceButton": "+添加设备",
+  "coiliiot.app.configPanel.deviceTable.editConfirm": "确认修改该条记录吗?",
+  "coiliiot.app.configPanel.deviceTable.deleteConfirm": "确认删除该条记录吗?",
+
+  "coiliiot.app.configPanel.deviceTable.columns.deviceId": "设备序列号",
+  "coiliiot.app.configPanel.deviceTable.columns.deviceComment": "设备备注",
+  "coiliiot.app.configPanel.deviceTable.columns.updatedTime": "添加时间",
+  "coiliiot.app.configPanel.deviceTable.columns.deviceType": "设备类型",
+  "coiliiot.app.configPanel.deviceTable.columns.actions": "操作",
+  "coiliiot.app.configPanel.deviceTable.columns.connectDeviceTooltip": "连接设备",
+  "coiliiot.app.configPanel.deviceTable.columns.deleteDeviceTooltip": "删除设备",
+
+  "coiliiot.app.configPanel.addDevice.validateDeviceId": "请输入设备序列号",
+  "coiliiot.app.configPanel.addDevice.validateDeviceType": "请选择设备类型",
+  "coiliiot.app.configPanel.addDevice.addDeviceTypography": "添加设备",
+  "coiliiot.app.configPanel.addDevice.deviceIdLabel": "设备ID",
+  "coiliiot.app.configPanel.addDevice.deviceTypeLabel": "设备类型",
+  "coiliiot.app.configPanel.addDevice.deviceCommentLabel": "设备备注",
+  "coiliiot.app.configPanel.addDevice.confirmButton": "确认",
+  "coiliiot.app.configPanel.addDevice.addDeviceError": "添加设备失败",
+
+
+  "coiliiot.app.configPanel.addGroup.validateGroupName": "请输入分组名称",
+  "coiliiot.app.configPanel.addGroup.addGroupTypography": "添加分组",
+  "coiliiot.app.configPanel.addGroup.groupNameLabel": "分组名称",
+  "coiliiot.app.configPanel.addGroup.confirmButton": "确认",
+  "coiliiot.app.configPanel.addGroup.addGroupError": "添加分组失败",
+
+  "coiliiot.app.common.confirmDialog.cancelButton": "取消",
+  "coiliiot.app.common.confirmDialog.confirmButton": "确认",
+  "coiliiot.app.common.errorModal.typography": "错误提示",
+
+  "coiliiot.app.configPanel.configDialog.serial.serialIdLabel": "串口通道ID",
+  "coiliiot.app.configPanel.configDialog.serial.statusLabel": "启用状态",
+  "coiliiot.app.configPanel.configDialog.serial.statusOptionEnable": "启用",
+  "coiliiot.app.configPanel.configDialog.serial.statusOptionDisable": "不启用",
+
+  "coiliiot.app.configPanel.configDialog.platform.networkIdLabel": "网络通道ID",
+  "coiliiot.app.configPanel.configDialog.platform.platformTypeLabel": "网络类型",
+  "coiliiot.app.configPanel.configDialog.platform.serialIdLabel": "串口ID",
+  "coiliiot.app.configPanel.configDialog.platform.statusLabel": "启用状态",
+  "coiliiot.app.configPanel.configDialog.platform.statusOptionEnable": "启用",
+  "coiliiot.app.configPanel.configDialog.platform.statusOptionDisable": "不启用"
 }

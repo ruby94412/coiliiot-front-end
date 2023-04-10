@@ -1,12 +1,14 @@
 import { DataGrid } from '@mui/x-data-grid';
 import {
-  useEffect, useState, useMemo, useCallback,
+  useEffect, useState, useCallback,
 } from 'react';
 import {
   Snackbar, Alert, Dialog, DialogContent,
 } from '@mui/material';
 import { connect } from 'react-redux';
 import { getDeviceList, deleteDevice, updateDevice } from 'slice/device';
+import { FormattedMessage, useIntl } from 'react-intl';
+import messages from 'hocs/Locale/Messages/ConfigPanel/DeviceTable';
 import ConfirmDialog from 'components/common/ConfirmDialog';
 import TableToolBar from '../TableToolBar';
 import getColumns from './columns';
@@ -24,6 +26,7 @@ function DeviceTable({
   deleteDevice,
   updateDevice,
 }) {
+  const intl = useIntl();
   const [rows, setRows] = useState([]);
   const [addDeviceOpen, setAddDeviceOpen] = useState(false);
   const [editParams, setEditParams] = useState(null);
@@ -31,7 +34,6 @@ function DeviceTable({
   const [snackbar, setSnackbar] = useState(null);
 
   // table data operations
-  // eslint-disable-next-line
   const reloadTable = () => {
     getDeviceList({ groupId: groupRow?.id })
       .then((res) => {
@@ -44,7 +46,6 @@ function DeviceTable({
     if (!!groupRow || !addDeviceOpen) {
       reloadTable();
     }
-  // eslint-disable-next-line
   }, [groupRow, addDeviceOpen]);
 
   // edit and delete rows
@@ -69,12 +70,12 @@ function DeviceTable({
     } = editParams;
     try {
       const response = await updateRow(newRow);
-      setSnackbar({ children: '数据已更新', severity: 'success' });
+      setSnackbar({ children: <FormattedMessage {...messages.snackBarSuccess} />, severity: 'success' });
       resolve(response);
       setEditParams(null);
       reloadTable();
     } catch (error) {
-      setSnackbar({ children: '分组名称不能为空', severity: 'error' });
+      setSnackbar({ children: <FormattedMessage {...messages.snackBarEditError} />, severity: 'error' });
       reject(oldRow);
       setEditParams(null);
     }
@@ -83,11 +84,11 @@ function DeviceTable({
   const handleDeleteConfirm = async () => {
     try {
       await deleteRow(deleteParams);
-      setSnackbar({ children: '数据已更新', severity: 'success' });
+      setSnackbar({ children: <FormattedMessage {...messages.snackBarSuccess} />, severity: 'success' });
       setDeleteParams(null);
       reloadTable();
     } catch (error) {
-      setSnackbar({ children: '删除失败', severity: 'error' });
+      setSnackbar({ children: <FormattedMessage {...messages.snackBarDeleteError} />, severity: 'error' });
       setDeleteParams(null);
     }
   };
@@ -98,11 +99,13 @@ function DeviceTable({
     setEditParams(null);
   };
 
-  // eslint-disable-next-line
-  const columns = useMemo(() => getColumns({setDeleteParams}), []);
+  const columns = getColumns({ setDeleteParams, intl });
   const handleCloseSnackbar = () => setSnackbar(null);
   const renderToolBar = () => (
-    <TableToolBar setModalOpen={setAddDeviceOpen} text="+添加设备" />
+    <TableToolBar
+      setModalOpen={setAddDeviceOpen}
+      text={<FormattedMessage {...messages.toolBarAddDeviceButton} />}
+    />
   );
 
   return (
@@ -137,13 +140,13 @@ function DeviceTable({
           isOpen={!!editParams}
           onClose={handleEditClose}
           handleConfirmCb={handleEditConfirm}
-          content="确认修改该条记录吗?"
+          content={<FormattedMessage {...messages.editConfirm} />}
         />
         <ConfirmDialog
           isOpen={!!deleteParams}
           onClose={() => { setDeleteParams(null); }}
           handleConfirmCb={handleDeleteConfirm}
-          content="确认删除该条记录吗?"
+          content={<FormattedMessage {...messages.deleteConfirm} />}
         />
         {!!snackbar && (
           <Snackbar open onClose={handleCloseSnackbar} autoHideDuration={6000}>

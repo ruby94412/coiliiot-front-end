@@ -11,6 +11,8 @@ import {
 } from '@mui/material';
 import SwipeableViews from 'react-swipeable-views';
 import TabPanel from 'components/common/TabPanel';
+import { FormattedMessage } from 'react-intl';
+import messages from 'hocs/Locale/Messages/ConfigPanel/ConfigDialog/Platform';
 import { renderFields } from './utils';
 import {
   networkIds, networkOptions, aliyunFields, mqttFields, socketFields,
@@ -60,7 +62,7 @@ function Platform({
           </Fragment>
         ))}
         {renderFields({
-          label: '串口ID',
+          label: <FormattedMessage {...messages.serialIdLabel} />,
           value: Number(formik.values.networkConfigs[networkId].serialId),
           name: `networkConfigs[${networkId}].serialId`,
           handleChange: formik.handleChange,
@@ -80,7 +82,7 @@ function Platform({
       >
         <Grid item xs={12}>
           <FormControl>
-            <FormLabel>网络通道ID</FormLabel>
+            <FormLabel><FormattedMessage {...messages.networkIdLabel} /></FormLabel>
             <RadioGroup
               row
               onChange={handleNetworkIdChange}
@@ -106,19 +108,28 @@ function Platform({
               >
                 {
                   renderFields({
-                    label: '启用状态',
+                    label: <FormattedMessage {...messages.statusLabel} />,
                     value: formik.values.networkConfigs[networkId].enabled,
                     name: `networkConfigs[${index}].enabled`,
                     handleChange: handleEnabledChange,
                     fieldType: 'radioGroup',
-                    radioOptions: [{ label: '启用', value: true }, { label: '不启用', value: false }],
+                    radioOptions: [
+                      {
+                        label: <FormattedMessage {...messages.statusOptionEnable} />,
+                        value: true,
+                      },
+                      {
+                        label: <FormattedMessage {...messages.statusOptionDisable} />,
+                        value: false,
+                      },
+                    ],
                   })
                 }
                 {
                   formik.values.networkConfigs[index].enabled && (
                     <Grid item xs={12} md={4}>
                       <FormControl sx={{ display: 'flex' }}>
-                        <FormLabel>平台类型</FormLabel>
+                        <FormLabel><FormattedMessage {...messages.platformTypeLabel} /></FormLabel>
                         <Select
                           size="small"
                           style={{ width: '80%' }}

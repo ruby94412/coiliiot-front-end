@@ -2,18 +2,23 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import SyncIcon from '@mui/icons-material/Sync';
 import { GridActionsCellItem } from '@mui/x-data-grid';
 import { Tooltip } from '@mui/material';
+import { FormattedMessage } from 'react-intl';
+import messages from 'hocs/Locale/Messages/ConfigPanel/DeviceTable/column';
 
 const getColumns = ({
   setDeleteParams,
+  intl,
 }) => [
   {
-    field: 'id', headerName: '设备序列号', flex: 1, minWidth: 200,
+    field: 'id', headerName: intl.formatMessage(messages.deviceId), flex: 1, minWidth: 200,
   },
-  { field: 'deviceComment', headerName: '设备备注', editable: true },
-  { field: 'deviceType', headerName: '设备类型' },
+  {
+    field: 'deviceComment', headerName: intl.formatMessage(messages.deviceComment), editable: true, minWidth: 150,
+  },
+  { field: 'deviceType', headerName: intl.formatMessage(messages.deviceType) },
   {
     field: 'updateTime',
-    headerName: '添加时间',
+    headerName: intl.formatMessage(messages.updatedTime),
     type: 'date',
     disableColumnMenu: true,
     headerAlign: 'right',
@@ -23,14 +28,14 @@ const getColumns = ({
   },
   {
     field: 'actions',
-    headerName: '操作',
+    headerName: intl.formatMessage(messages.actions),
     type: 'actions',
     flex: 1,
     minWidth: 150,
     getActions: (params) => [
       <GridActionsCellItem
         icon={(
-          <Tooltip title="连接设备">
+          <Tooltip title={<FormattedMessage {...messages.connectDeviceTooltip} />}>
             <SyncIcon />
           </Tooltip>
         )}
@@ -38,7 +43,7 @@ const getColumns = ({
       />,
       <GridActionsCellItem
         icon={(
-          <Tooltip title="删除设备">
+          <Tooltip title={<FormattedMessage {...messages.deleteDeviceTooltip} />}>
             <DeleteIcon />
           </Tooltip>
         )}

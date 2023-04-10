@@ -7,6 +7,8 @@ import { connect } from 'react-redux';
 import * as yup from 'yup';
 import { addGroup } from 'slice/group';
 import ErrorModal from 'components/common/ErrorModal';
+import { FormattedMessage } from 'react-intl';
+import messages from 'hocs/Locale/Messages/ConfigPanel/AddGroup';
 
 function AddGroup({
   addGroupOpen,
@@ -19,8 +21,8 @@ function AddGroup({
 
   const validationSchema = yup.object({
     groupName: yup
-      .string('请输入分组名称')
-      .required('请输入分组名称'),
+      .string(<FormattedMessage {...messages.validateGroupName} />)
+      .required(<FormattedMessage {...messages.validateGroupName} />),
   });
 
   const handleSubmit = (values) => {
@@ -56,7 +58,7 @@ function AddGroup({
       }}
     >
       <Typography variant="h6" component="h2" style={{ textAlign: 'center' }}>
-        添加分组
+        <FormattedMessage {...messages.addGroupTypography} />
       </Typography>
       <Grid
         container
@@ -69,7 +71,7 @@ function AddGroup({
         <Grid item xs={8}>
           <TextField
             required
-            label="分组名称"
+            label={<FormattedMessage {...messages.groupNameLabel} />}
             size="small"
             type="text"
             name="groupName"
@@ -86,12 +88,12 @@ function AddGroup({
             onClick={formik.handleSubmit}
             style={{ width: '100%' }}
           >
-            确认
+            <FormattedMessage {...messages.confirmButton} />
           </Button>
         </Grid>
       </Grid>
       <ErrorModal
-        errorMessage="添加分组失败"
+        errorMessage={<FormattedMessage {...messages.addGroupError} />}
         isErrorModalOpen={isErrorModalOpen}
         onClose={() => { setIsErrorModalOpen(false); }}
       />

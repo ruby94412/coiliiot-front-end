@@ -1,4 +1,6 @@
 import { Modal, Typography, Box } from '@mui/material';
+import { FormattedMessage } from 'react-intl';
+import messages from 'hocs/Locale/Messages/common/ErrorModal';
 
 function ErrorModal({
   errorMessage,
@@ -22,7 +24,7 @@ function ErrorModal({
     <Modal open={isErrorModalOpen} onClose={onClose}>
       <Box sx={style}>
         <Typography variant="h6" component="h2">
-          错误提示
+          <FormattedMessage {...messages.typography} />
         </Typography>
         <Typography sx={{ mt: 2 }}>
           {errorMessage}

@@ -9,19 +9,19 @@ import {
   Typography,
   Menu,
   MenuItem,
-  Container,
+  // Container,
   Avatar,
-  Button,
+  // Button,
   Tooltip,
-  Drawer,
+  // Drawer,
 } from '@mui/material';
 import {
   Settings as SettingsIcon,
   AccountCircle,
   MoreVert as MoreIcon,
 } from '@mui/icons-material';
-import MenuIcon from '@mui/icons-material/Menu';
-import AdbIcon from '@mui/icons-material/Adb';
+// import MenuIcon from '@mui/icons-material/Menu';
+// import AdbIcon from '@mui/icons-material/Adb';
 import { FormattedMessage } from 'react-intl';
 
 import { logout } from 'slice/login';
@@ -38,7 +38,7 @@ function Navigation({
 }) {
   const navigate = useNavigate();
   const [logoutConfirmOpen, setLogoutConfirmOpen] = useState(false);
-  const [anchorElNav, setAnchorElNav] = useState(null);
+  // const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
@@ -49,16 +49,16 @@ function Navigation({
     setIsDrawerOpen(open);
   };
 
-  const handleOpenNavMenu = (event) => {
-    setAnchorElNav(event.currentTarget);
-  };
+  // const handleOpenNavMenu = (event) => {
+  //   setAnchorElNav(event.currentTarget);
+  // };
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
   };
 
-  const handleCloseNavMenu = () => {
-    setAnchorElNav(null);
-  };
+  // const handleCloseNavMenu = () => {
+  //   setAnchorElNav(null);
+  // };
 
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
@@ -69,9 +69,9 @@ function Navigation({
     logout();
     navigate('/login');
   };
-  const handleDrawerStateChange = () => {
-    setIsDrawerOpen(!isDrawerOpen);
-  };
+  // const handleDrawerStateChange = () => {
+  //   setIsDrawerOpen(!isDrawerOpen);
+  // };
   const settings = [{
     text: <FormattedMessage {...messages.logoutLabel} />,
     onClick: () => { setLogoutConfirmOpen(true); },

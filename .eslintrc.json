@@ -5,6 +5,7 @@
    "react/prop-types": 0,
    "react/jsx-props-no-spreading": "off",
    "no-shadow": "off",
+   "react/jsx-boolean-value": "off",
    "no-unused-vars": "warn",
    "react/no-array-index-key": "off",
    "no-plusplus": "off"
