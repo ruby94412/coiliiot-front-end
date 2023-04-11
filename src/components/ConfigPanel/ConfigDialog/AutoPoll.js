@@ -4,6 +4,8 @@ import {
   Button,
 } from '@mui/material';
 import { DeleteForever as DeleteIcon } from '@mui/icons-material';
+import { useIntl } from 'react-intl';
+import messages from 'hocs/Locale/Messages/ConfigPanel/ConfigDialog/AutoPoll';
 import { renderFields } from './utils';
 
 function AutoPoll({
@@ -11,6 +13,7 @@ function AutoPoll({
   index,
   serialId,
 }) {
+  const intl = useIntl();
   const handleAutoPollEnabledChange = (e) => {
     formik.setFieldValue(`serialConfigs[${serialId}].autoPollEnabled`, e.target.value === 'true');
   };
@@ -31,12 +34,15 @@ function AutoPoll({
     <>
       {
         renderFields({
-          label: '自定义轮训',
+          label: intl.formatMessage(messages.autoPollLabel),
           value: formik.values.serialConfigs[serialId].autoPollEnabled,
           name: `serialConfigs[${index}].autoPollEnabled`,
           handleChange: handleAutoPollEnabledChange,
           fieldType: 'radioGroup',
-          radioOptions: [{ label: '启用', value: true }, { label: '不启用', value: false }],
+          radioOptions: [
+            { label: intl.formatMessage(messages.autoPollOptionEnable), value: true },
+            { label: intl.formatMessage(messages.autoPollOptionDisable), value: false },
+          ],
         })
       }
       {
@@ -44,7 +50,7 @@ function AutoPoll({
           && (
             <>
               {renderFields({
-                label: '命令间隔时间',
+                label: intl.formatMessage(messages.commandsIntervalLabel),
                 fieldType: 'textField',
                 datatype: 'number',
                 name: `serialConfigs[${index}].autoPollConfig.delay`,
@@ -56,7 +62,7 @@ function AutoPoll({
                   (command, cmdIdx) => (
                     <Fragment key={`cmd${cmdIdx}`}>
                       {renderFields({
-                        label: `命令${cmdIdx + 1}`,
+                        label: `${intl.formatMessage(messages.commandLabel)} ${cmdIdx + 1}`,
                         style: { width: '90%' },
                         layout: { xs: 8 },
                         fieldType: 'textField',
@@ -70,14 +76,14 @@ function AutoPoll({
                             onClick={() => { handleCommandDelete(cmdIdx); }}
                           />,
                         },
-                        helperText: cmdIdx === 0 && '示例: 01 04 00 00 00 01 31 CA',
+                        helperText: cmdIdx === 0 && intl.formatMessage(messages.commandHelperText),
                       })}
                     </Fragment>
                   ),
                 )
               }
               <Grid item xs={12}>
-                <Button variant="contained" onClick={handleCommandAdd}>添加命令</Button>
+                <Button variant="contained" onClick={handleCommandAdd}>{intl.formatMessage(messages.addCommandButton)}</Button>
               </Grid>
             </>
           )

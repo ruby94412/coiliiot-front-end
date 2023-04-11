@@ -12,6 +12,8 @@ import {
 import { LoadingButton } from '@mui/lab';
 import { useState, forwardRef, useImperativeHandle } from 'react';
 import { useFormik } from 'formik';
+import { FormattedMessage } from 'react-intl';
+import messages from 'hocs/Locale/Messages/ConfigPanel/ConfigDialog/DialogContent';
 import SwipeableViews from 'react-swipeable-views';
 import TabPanel from 'components/common/TabPanel';
 import Platform from './Platform';
@@ -83,9 +85,9 @@ const Content = forwardRef(({
         ...groupRow,
         config,
       });
-      setSnackbar({ children: '数据已更新', severity: 'success' });
+      setSnackbar({ children: <FormattedMessage {...messages.snackBarSuccess} />, severity: 'success' });
     } catch (error) {
-      setSnackbar({ children: '更新失败', severity: 'error' });
+      setSnackbar({ children: <FormattedMessage {...messages.snackBarError} />, severity: 'error' });
     }
     setSaveLoading(false);
   };
@@ -117,9 +119,9 @@ const Content = forwardRef(({
             onChange={handleTabChange}
             aria-label="basic tabs"
           >
-            <Tab label="基本参数" {...a11yProps(0)} />
-            <Tab label="串口配置" {...a11yProps(1)} />
-            <Tab label="网络配置" {...a11yProps(2)} />
+            <Tab label={<FormattedMessage {...messages.basicTabLabel} />} {...a11yProps(0)} />
+            <Tab label={<FormattedMessage {...messages.serialTabLabel} />} {...a11yProps(1)} />
+            <Tab label={<FormattedMessage {...messages.networkTabLabel} />} {...a11yProps(2)} />
           </Tabs>
         </Box>
       </DialogTitle>
@@ -139,10 +141,10 @@ const Content = forwardRef(({
       </DialogContent>
       <DialogActions>
         <Button onClick={() => { onClose(formik.dirty); }} variant="contained">
-          取消
+          <FormattedMessage {...messages.cancelButton} />
         </Button>
         <LoadingButton onClick={formik.handleSubmit} loading={saveLoading} variant="contained">
-          提交配置
+          <FormattedMessage {...messages.submitButton} />
         </LoadingButton>
       </DialogActions>
       {!!snackbar && (
