@@ -19,6 +19,7 @@ import TabPanel from 'components/common/TabPanel';
 import Platform from './Platform';
 import Serial from './Serial';
 import Basic from './Basic';
+import AutoPoll from './AutoPoll';
 
 const a11yProps = (index) => ({
   id: `simple-tab-${index}`,
@@ -78,7 +79,6 @@ const Content = forwardRef(({
   };
 
   const handleSubmit = async (config) => {
-    // console.log(config);
     setSaveLoading(true);
     try {
       await updateConfig({
@@ -114,14 +114,16 @@ const Content = forwardRef(({
       <DialogTitle>
         <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
           <Tabs
-            sx={{ fontSize: '1rem' }}
             value={tabIndex}
             onChange={handleTabChange}
             aria-label="basic tabs"
+            variant="scrollable"
           >
             <Tab label={<FormattedMessage {...messages.basicTabLabel} />} {...a11yProps(0)} />
             <Tab label={<FormattedMessage {...messages.serialTabLabel} />} {...a11yProps(1)} />
             <Tab label={<FormattedMessage {...messages.networkTabLabel} />} {...a11yProps(2)} />
+            <Tab label={<FormattedMessage {...messages.autoPollLabel} />} {...a11yProps(3)} />
+            <Tab label={<FormattedMessage {...messages.dataConvertLabel} />} {...a11yProps(4)} />
           </Tabs>
         </Box>
       </DialogTitle>
@@ -135,6 +137,12 @@ const Content = forwardRef(({
           </TabPanel>
           <TabPanel value={tabIndex} index={2}>
             <Platform formik={formik} />
+          </TabPanel>
+          <TabPanel value={tabIndex} index={3}>
+            <AutoPoll formik={formik} />
+          </TabPanel>
+          <TabPanel value={tabIndex} index={4}>
+            asdfasdf
           </TabPanel>
         </SwipeableViews>
 

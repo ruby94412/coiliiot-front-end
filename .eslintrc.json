@@ -8,7 +8,8 @@
    "react/jsx-boolean-value": "off",
    "no-unused-vars": "warn",
    "react/no-array-index-key": "off",
-   "no-plusplus": "off"
+   "no-plusplus": "off",
+   "no-bitwise": "off"
   },
   "env": {
     "node": true,

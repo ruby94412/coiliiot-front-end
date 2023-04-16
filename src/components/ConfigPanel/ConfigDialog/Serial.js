@@ -11,7 +11,6 @@ import SwipeableViews from 'react-swipeable-views';
 import TabPanel from 'components/common/TabPanel';
 import { FormattedMessage } from 'react-intl';
 import messages from 'hocs/Locale/Messages/ConfigPanel/ConfigDialog/Serial';
-import AutoPoll from './AutoPoll';
 import { serialFields } from './constants';
 import { renderFields } from './utils';
 
@@ -95,7 +94,6 @@ function Serial({
                           })}
                         </Fragment>
                       ))}
-                      <AutoPoll formik={formik} index={index} serialId={serialId} />
                     </>
                     )
                 }

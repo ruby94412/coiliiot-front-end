@@ -64,7 +64,7 @@ export const renderFields = ({
               {
                 selectOptions.map((option) => (
                   <MenuItem
-                    key={option?.label || option}
+                    key={option?.value || option}
                     value={option?.label ? option.value : option}
                   >
                     {option?.label || option}
@@ -75,6 +75,8 @@ export const renderFields = ({
           </FormControl>
         </Grid>
       );
+    case 'blank':
+      return (<Grid item {...layout} />);
     case 'textField':
     default:
       return (
@@ -113,7 +115,9 @@ export const getInitialValues = (originalConfig) => {
       stopBit: 1,
       parityMode: 2,
       autoPollEnabled: false,
-      autoPollConfig: { delay: 1000, commands: [], serialId: i },
+      autoPollConfig: {
+        delay: 1000, commands: [], serialId: i, numberOfRetry: 3, timeout: 1, rawCommands: [],
+      },
     });
   }
   for (let i = 0; i < 8; i++) {
@@ -173,4 +177,138 @@ export const getInitialValues = (originalConfig) => {
     rst.networkConfigs[index][typeArr[type]] = other;
   });
   return rst;
+};
+
+export const getCommand = ({
+  slaveId,
+  functionCode,
+  registerOffset,
+  numberOfRegisters,
+}) => {
+  const dec = [];
+  const hex = [];
+  const rawDec = [slaveId, functionCode, registerOffset, numberOfRegisters];
+  dec.push(Number(slaveId));
+  dec.push(Number(functionCode));
+
+  let temp = Number(registerOffset).toString(16);
+  while (temp.length < 4) temp = `0${temp}`;
+  dec.push(Number(`0x${temp.substring(0, 2)}`));
+  dec.push(Number(`0x${temp.substring(2)}`));
+  temp = Number(numberOfRegisters).toString(16);
+  while (temp.length < 4) temp = `0${temp}`;
+  dec.push(Number(`0x${temp.substring(0, 2)}`));
+  dec.push(Number(`0x${temp.substring(2)}`));
+  let crc = 0xFFFF;
+  let odd;
+  for (let i = 0; i < dec.length; i++) {
+    crc ^= dec[i];
+    for (let j = 0; j < 8; j++) {
+      odd = crc & 0x0001;
+      crc >>= 1;
+      if (odd) {
+        crc ^= 0xA001;
+      }
+    }
+  }
+  rawDec.push(crc);
+  temp = crc.toString(16);
+  dec.push(Number(`0x${temp.substring(2)}`));
+  dec.push(Number(`0x${temp.substring(0, 2)}`));
+  dec.forEach((num) => {
+    let s = num.toString(16);
+    while (s.length < 2) s = `0${s}`;
+    hex.push(s.toUpperCase());
+  });
+  const rst = {
+    slaveId: { dec: dec[0], hex: hex[0] },
+    functionCode: { dec: dec[1], hex: hex[1] },
+    registerOffset: {
+      dec: registerOffset, decArr: [dec[2], dec[3]], hexArr: [hex[2], hex[3]], hex: hex[2] + hex[3],
+    },
+    numberOfRegisters: {
+      dec: numberOfRegisters,
+      decArr: [dec[4], dec[5]],
+      hexArr: [hex[4], hex[5]],
+      hex: hex[4] + hex[5],
+    },
+    crc: {
+      dec: crc, decArr: [dec[6], dec[7]], hexArr: [hex[6], hex[7]], hex: hex[6] + hex[7],
+    },
+    hex,
+    dec,
+    rawDec,
+  };
+  return rst;
+};
+
+export const convertRawCommands = (autoPollConfig) => {
+  if (!autoPollConfig || !autoPollConfig.rawCommands?.length) return [];
+  const temp = autoPollConfig.rawCommands?.map((rawCommand) => {
+    const rst = {
+      slaveId: rawCommand.rawDec[0],
+      functionCode: rawCommand.rawDec[1],
+      registerOffset: rawCommand.rawDec[2],
+      numberOfRegisters: rawCommand.rawDec[3],
+    };
+    const command = getCommand(rst);
+    rst.detail = command;
+    rst.id = new Date().toString();
+    rst.period = rawCommand.period;
+    return rst;
+  });
+  return temp;
+};
+
+export const renderCommandDetail = ({
+  slaveId,
+  functionCode,
+  registerOffset,
+  numberOfRegisters,
+}, {
+  slaveIdLabel,
+  functionCodeLabel,
+  registerOffestLabel,
+  numberOfRegistersLabel,
+  requestLabel,
+  decimalLabel,
+  hexLabel,
+  crcLabel,
+}) => {
+  const command = getCommand({
+    slaveId,
+    functionCode,
+    registerOffset,
+    numberOfRegisters,
+  });
+  const maxLen = Math.max(
+    slaveIdLabel.length,
+    functionCodeLabel.length,
+    registerOffestLabel.length,
+    numberOfRegistersLabel.length,
+  );
+  const getFlexSpaces = (label, len) => {
+    let rst = '';
+    while (rst.length + label.length < len) rst = `${rst} `;
+    return rst;
+  };
+  const getSameLen = (label, len) => {
+    let rst = label.toString();
+    while (rst.length < len) rst = ` ${rst}`;
+    return rst;
+  };
+  const startAddress = [0, 0, 10001, 40001, 30001];
+  return `${slaveIdLabel}:${getFlexSpaces(slaveIdLabel, maxLen)} ${getSameLen(command.slaveId.dec, 6)} (${decimalLabel}) |    ${command.slaveId.hex} (${hexLabel})
+${functionCodeLabel}:${getFlexSpaces(functionCodeLabel, maxLen)} ${getSameLen(command.functionCode.dec, 6)} (${decimalLabel}) |    ${command.functionCode.hex} (${hexLabel})
+${registerOffestLabel}:${getFlexSpaces(registerOffestLabel, maxLen)} ${getSameLen(command.registerOffset.dec, 6)} (${decimalLabel}) |  ${command.registerOffset.hex} (${hexLabel})
+${numberOfRegistersLabel}:${getFlexSpaces(numberOfRegistersLabel, maxLen)} ${getSameLen(command.numberOfRegisters.dec, 6)} (${decimalLabel}) |  ${command.numberOfRegisters.hex} (${hexLabel})
+
+${crcLabel}:${getFlexSpaces(crcLabel, maxLen)} ${getSameLen(command.crc.dec, 6)} (${decimalLabel}) |  ${command.crc.hex} (${hexLabel})
+
+${requestLabel}: [${command.slaveId.hex}] [${command.functionCode.hex}] [${command.registerOffset.hex}] [${command.numberOfRegisters.hex}] [${command.crc.hex}]
+         |    |    |      |      |-> ${crcLabel} (${command.crc.dec})
+         |    |    |      |-> ${numberOfRegistersLabel} (${command.numberOfRegisters.dec})
+         |    |    |-> ${registerOffestLabel} (${command.registerOffset.dec} = ${Number(command.registerOffset.dec) + startAddress[command.functionCode.dec]})
+         |    |-> ${functionCodeLabel} (${command.functionCode.dec})
+         |-> ${slaveIdLabel} (${command.slaveId.dec})`;
 };

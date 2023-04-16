@@ -10,7 +10,8 @@ import { getDeviceList, deleteDevice, updateDevice } from 'slice/device';
 import { FormattedMessage, useIntl } from 'react-intl';
 import messages from 'hocs/Locale/Messages/ConfigPanel/DeviceTable';
 import ConfirmDialog from 'components/common/ConfirmDialog';
-import TableToolBar from '../TableToolBar';
+import NoRowsOverlay from 'components/common/NoRowsOverlay';
+import TableToolBar from 'components/common/TableToolBar';
 import getColumns from './columns';
 import AddDevice from '../AddDevice';
 
@@ -124,7 +125,7 @@ function DeviceTable({
           }}
           rows={rows}
           columns={columns}
-          components={{ Toolbar: renderToolBar }}
+          components={{ Toolbar: renderToolBar, NoRowsOverlay }}
           processRowUpdate={processRowUpdate}
           experimentalFeatures={{ newEditingApi: true }}
           pageSize={20}

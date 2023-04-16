@@ -23,6 +23,14 @@ export default defineMessages({
     id: `${scope}.networkTabLabel`,
     defaultMessage: 'Network',
   },
+  autoPollLabel: {
+    id: `${scope}.autoPollLabel`,
+    defaultMessage: 'Data Auto Polling',
+  },
+  dataConvertLabel: {
+    id: `${scope}.dataConvertLabel`,
+    defaultMessage: 'Converting Data',
+  },
   cancelButton: {
     id: `${scope}.cancelButton`,
     defaultMessage: 'Cancel',

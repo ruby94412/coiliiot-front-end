@@ -1,5 +1,11 @@
 import { FormattedMessage } from 'react-intl';
 import messages from 'hocs/Locale/Messages/ConfigPanel/ConfigDialog/constants';
+import {
+  DeleteForever as DeleteIcon,
+  Edit as EditIcon,
+} from '@mui/icons-material';
+import { GridActionsCellItem } from '@mui/x-data-grid';
+import { Tooltip } from '@mui/material';
 
 export const networkIds = [0, 1, 2, 3, 4, 5, 6, 7];
 
@@ -107,5 +113,111 @@ export const serialFields = [
     propertyName: 'stopBit',
     fieldType: 'radioGroup',
     radioOptions: [1, 2],
+  },
+];
+
+export const autoPollFields = [
+  {
+    label: <FormattedMessage {...messages.autoPollInterval} />,
+    propertyName: 'delay',
+    datatype: 'number',
+  },
+  {
+    label: <FormattedMessage {...messages.numberOfRetry} />,
+    propertyName: 'numberOfRetry',
+    datatype: 'number',
+  },
+  {
+    label: <FormattedMessage {...messages.timeout} />,
+    propertyName: 'timeout',
+    datatype: 'number',
+  },
+];
+
+export const commandGeneratorFields = [
+  {
+    label: <FormattedMessage {...messages.period} />,
+    propertyName: 'period',
+    datatype: 'number',
+  },
+  {
+    label: <FormattedMessage {...messages.slaveId} />,
+    propertyName: 'slaveId',
+    datatype: 'number',
+  },
+  {
+    label: <FormattedMessage {...messages.functionCode} />,
+    propertyName: 'functionCode',
+    datatype: 'number',
+    fieldType: 'select',
+    selectOptions: [
+      { label: <FormattedMessage {...messages.readCoilStatus} />, value: 1 },
+      { label: <FormattedMessage {...messages.readInputStatus} />, value: 2 },
+      { label: <FormattedMessage {...messages.readHoldingRegisters} />, value: 3 },
+      { label: <FormattedMessage {...messages.readInputRegisters} />, value: 4 },
+    ],
+  },
+  {
+    label: <FormattedMessage {...messages.registerOffset} />,
+    propertyName: 'registerOffset',
+    datatype: 'number',
+  },
+  {
+    label: <FormattedMessage {...messages.numberOfRegisters} />,
+    propertyName: 'numberOfRegisters',
+    datatype: 'number',
+  },
+];
+
+export const getCommandTableColumns = ({
+  intl,
+  setParams,
+  deleteRow,
+}) => [
+  {
+    field: 'period', headerName: intl.formatMessage(messages.period), flex: 1, minWidth: 200,
+  },
+  {
+    field: 'slaveId', headerName: intl.formatMessage(messages.slaveId), flex: 1, minWidth: 200,
+  },
+  {
+    field: 'functionCode', headerName: intl.formatMessage(messages.functionCode), flex: 1, minWidth: 200,
+  },
+  {
+    field: 'registerOffset', headerName: intl.formatMessage(messages.registerOffset), flex: 1, minWidth: 200,
+  },
+  {
+    field: 'numberOfRegisters', headerName: intl.formatMessage(messages.numberOfRegisters), flex: 1, minWidth: 200,
+  },
+  {
+    field: 'actions',
+    headerName: intl.formatMessage(messages.actions),
+    type: 'actions',
+    flex: 1,
+    minWidth: 200,
+    getActions: (params) => [
+      <GridActionsCellItem
+        icon={(
+          <Tooltip title={intl.formatMessage(messages.editTooltip)}>
+            <EditIcon />
+          </Tooltip>
+        )}
+        label="Edit"
+        onClick={() => {
+          setParams(params?.row);
+        }}
+      />,
+      <GridActionsCellItem
+        icon={(
+          <Tooltip title={intl.formatMessage(messages.deleteTootip)}>
+            <DeleteIcon />
+          </Tooltip>
+        )}
+        label="Delete"
+        onClick={() => {
+          deleteRow(params?.row);
+        }}
+      />,
+    ],
   },
 ];

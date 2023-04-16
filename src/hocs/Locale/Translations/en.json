@@ -63,6 +63,7 @@
   "coiliiot.app.common.confirmDialog.cancelButton": "Cancel",
   "coiliiot.app.common.confirmDialog.confirmButton": "Confirm",
   "coiliiot.app.common.errorModal.typography": "Error Warning",
+  "coiliiot.app.common.noRowsOverlay.message": "No Rows",
 
   "coiliiot.app.configPanel.configDialog.serial.serialIdLabel": "Serial Channel ID",
   "coiliiot.app.configPanel.configDialog.serial.statusLabel": "Status",
@@ -83,14 +84,17 @@
   "coiliiot.app.configPanel.configDialog.dialogContent.networkTabLabel": "Network",
   "coiliiot.app.configPanel.configDialog.dialogContent.cancelButton": "Cancel",
   "coiliiot.app.configPanel.configDialog.dialogContent.submitButton": "Submit",
-
+  "coiliiot.app.configPanel.configDialog.dialogContent.autoPollLabel": "Data Auto Polling",
+  "coiliiot.app.configPanel.configDialog.dialogContent.dataConvertLabel": "Converting Data",
+  
+  "coiliiot.app.configPanel.configDialog.autoPoll.serialIdLabel": "Serial Chanel ID",
   "coiliiot.app.configPanel.configDialog.autoPoll.autoPollLabel": "Auto Data Polling",
   "coiliiot.app.configPanel.configDialog.autoPoll.autoPollOptionEnable": "Enable",
   "coiliiot.app.configPanel.configDialog.autoPoll.autoPollOptionDisable": "Disable",
   "coiliiot.app.configPanel.configDialog.autoPoll.commandLabel": "Command",
   "coiliiot.app.configPanel.configDialog.autoPoll.commandsIntervalLabel": "Interval Between Commands",
   "coiliiot.app.configPanel.configDialog.autoPoll.commandHelperText": "E.g: 01 04 00 00 00 01 31 CA",
-  "coiliiot.app.configPanel.configDialog.autoPoll.addCommandButton": "Add Command",
+  "coiliiot.app.configPanel.configDialog.autoPoll.commandGeneratorButton": "Add Command",
 
   "coiliiot.app.configPanel.configDialog.constants.aliyun": "Aliyun",
   "coiliiot.app.configPanel.configDialog.constants.configVersion": "Configuration Version",
@@ -114,6 +118,28 @@
   "coiliiot.app.configPanel.configDialog.constants.baudrate": "Baudrate",
   "coiliiot.app.configPanel.configDialog.constants.parityMode": "Parity Mode",
   "coiliiot.app.configPanel.configDialog.constants.dataBit": "Data Bit",
-  "coiliiot.app.configPanel.configDialog.constants.stopBit": "Stop Bit"
+  "coiliiot.app.configPanel.configDialog.constants.stopBit": "Stop Bit",
+  "coiliiot.app.configPanel.configDialog.constants.numberOfRetry": "Number Of Retries",
+  "coiliiot.app.configPanel.configDialog.constants.timeout": "Timeout",
+  "coiliiot.app.configPanel.configDialog.constants.period": "Period",
+  "coiliiot.app.configPanel.configDialog.constants.slaveId": "Slave ID",
+  "coiliiot.app.configPanel.configDialog.constants.functionCode": "Function Code",
+  "coiliiot.app.configPanel.configDialog.constants.registerOffset": "Register Offset",
+  "coiliiot.app.configPanel.configDialog.constants.numberOfRegisters": "Number Of Registers",
+  "coiliiot.app.configPanel.configDialog.constants.readCoilStatus": "0x01 Read Coil Status",
+  "coiliiot.app.configPanel.configDialog.constants.readInputStatus": "0x02 Read Input Status",
+  "coiliiot.app.configPanel.configDialog.constants.readHoldingRegisters": "0x03 Read Holding Registers",
+  "coiliiot.app.configPanel.configDialog.constants.readInputRegisters": "0x04 Read Input Registers",
+  "coiliiot.app.configPanel.configDialog.constants.request": "Request",
+  "coiliiot.app.configPanel.configDialog.constants.decimal": "decimal",
+  "coiliiot.app.configPanel.configDialog.constants.hexadecimal": "hexadecimal",
+  "coiliiot.app.configPanel.configDialog.constants.crc": "CRC",
+  "coiliiot.app.configPanel.configDialog.constants.actions": "Actions",
+  "coiliiot.app.configPanel.configDialog.constants.editTooltip": "Edit Command",
+  "coiliiot.app.configPanel.configDialog.constants.deleteTooltip": "Delete Command",
+
+  "coiliiot.app.configPanel.configDialog.commandGenerator.title": "Command Generator",
+  "coiliiot.app.configPanel.configDialog.commandGenerator.confirm": "Confirm",
+  "coiliiot.app.configPanel.configDialog.commandGenerator.cancel": "Cancel"
 }
 

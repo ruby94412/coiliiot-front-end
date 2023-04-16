@@ -95,4 +95,76 @@ export default defineMessages({
     id: `${scope}.stopBit`,
     defaultMessage: 'Stop Bit',
   },
+  numberOfRetry: {
+    id: `${scope}.numberOfRetry`,
+    defaultMessage: 'Number Of Retries',
+  },
+  timeout: {
+    id: `${scope}.timeout`,
+    defaultMessage: 'Timeout',
+  },
+  period: {
+    id: `${scope}.period`,
+    defaultMessage: 'Period',
+  },
+  slaveId: {
+    id: `${scope}.slaveId`,
+    defaultMessage: 'Slave ID',
+  },
+  functionCode: {
+    id: `${scope}.functionCode`,
+    defaultMessage: 'Function Code',
+  },
+  registerOffset: {
+    id: `${scope}.registerOffset`,
+    defaultMessage: 'Register Offset',
+  },
+  numberOfRegisters: {
+    id: `${scope}.numberOfRegisters`,
+    defaultMessage: 'Number Of Registers',
+  },
+  readCoilStatus: {
+    id: `${scope}.readCoilStatus`,
+    defaultMessage: '0x01 Read Coil Status',
+  },
+  readInputStatus: {
+    id: `${scope}.readInputStatus`,
+    defaultMessage: '0x02 Read Input Status',
+  },
+  readHoldingRegisters: {
+    id: `${scope}.readHoldingRegisters`,
+    defaultMessage: '0x03 Read Holding Registers',
+  },
+  readInputRegisters: {
+    id: `${scope}.readInputRegisters`,
+    defaultMessage: '0x04 Read Input Registers',
+  },
+  request: {
+    id: `${scope}.request`,
+    defaultMessage: 'Request',
+  },
+  decimal: {
+    id: `${scope}.decimal`,
+    defaultMessage: 'decimal',
+  },
+  hexadecimal: {
+    id: `${scope}.hexadecimal`,
+    defaultMessage: 'hexadecimal',
+  },
+  crc: {
+    id: `${scope}.crc`,
+    defaultMessage: 'CRC',
+  },
+  actions: {
+    id: `${scope}.actions`,
+    defaultMessage: 'Actions',
+  },
+  editTooltip: {
+    id: `${scope}.editTooltip`,
+    defaultMessage: 'Edit Command',
+  },
+  deleteTootip: {
+    id: `${scope}.deleteTootip`,
+    defaultMessage: 'Delete Command',
+  },
 });

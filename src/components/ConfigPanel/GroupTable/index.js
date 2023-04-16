@@ -8,7 +8,8 @@ import { getGroupList, deleteGroup, updateGroup } from 'slice/group';
 import ConfirmDialog from 'components/common/ConfirmDialog';
 import { FormattedMessage, useIntl } from 'react-intl';
 import messages from 'hocs/Locale/Messages/ConfigPanel/GroupTable';
-import TableToolBar from '../TableToolBar';
+import TableToolBar from 'components/common/TableToolBar';
+import NoRowsOverlay from 'components/common/NoRowsOverlay';
 import getColumns from './columns';
 import AddGroup from '../AddGroup';
 import DeviceTable from '../DeviceTable';
@@ -123,7 +124,7 @@ function GroupTable({
       <DataGrid
         rows={rows}
         columns={columns}
-        components={{ Toolbar: renderToolBar }}
+        components={{ Toolbar: renderToolBar, NoRowsOverlay }}
         processRowUpdate={processRowUpdate}
         experimentalFeatures={{ newEditingApi: true }}
         pageSize={20}
