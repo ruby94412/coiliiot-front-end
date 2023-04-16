@@ -2,16 +2,12 @@ import { Fragment, useState, useEffect } from 'react';
 import { DataGrid } from '@mui/x-data-grid';
 import {
   Grid,
-  Button,
   RadioGroup,
   Radio,
   FormControl,
   FormControlLabel,
   FormLabel,
 } from '@mui/material';
-import {
-  DeleteForever as DeleteIcon,
-} from '@mui/icons-material';
 import TabPanel from 'components/common/TabPanel';
 import { useIntl } from 'react-intl';
 import SwipeableViews from 'react-swipeable-views';
@@ -60,18 +56,6 @@ function AutoPoll({
 
   const handleAutoPollEnabledChange = (e) => {
     formik.setFieldValue(`serialConfigs[${serialId}].autoPollEnabled`, e.target.value === 'true');
-  };
-
-  const handleCommandDelete = (cmdIdx) => {
-    const commandArr = Array.from(formik.values.serialConfigs[serialId].autoPollConfig.commands);
-    commandArr.splice(cmdIdx, 1);
-    formik.setFieldValue(`serialConfigs[${serialId}].autoPollConfig.commands`, commandArr);
-  };
-
-  const handleCommandAdd = () => {
-    const commandArr = Array.from(formik.values.serialConfigs[serialId].autoPollConfig.commands);
-    commandArr.push('');
-    formik.setFieldValue(`serialConfigs[${serialId}].autoPollConfig.commands`, commandArr);
   };
 
   const columns = getCommandTableColumns({ intl, setParams, deleteRow });
@@ -174,37 +158,6 @@ function AutoPoll({
                             setParams={setParams}
                             setRawCommandsField={setRawCommandsField}
                           />
-                        </Grid>
-                        {
-                          formik.values.serialConfigs[serialId].autoPollConfig.commands.map(
-                            (command, cmdIdx) => (
-                              <Fragment key={`cmd${cmdIdx}`}>
-                                {renderFields({
-                                  label: `${intl.formatMessage(messages.commandLabel)} ${cmdIdx + 1}`,
-                                  style: { width: '90%' },
-                                  layout: { xs: 12, md: 8 },
-                                  fieldType: 'textField',
-                                  datatype: 'text',
-                                  name: `serialConfigs[${serialId}].autoPollConfig.commands[${cmdIdx}]`,
-                                  value: command,
-                                  handleChange: formik.handleChange,
-                                  InputProps: {
-                                    endAdornment: <DeleteIcon
-                                      sx={{ '&:hover': { color: 'orangered' } }}
-                                      onClick={() => { handleCommandDelete(cmdIdx); }}
-                                    />,
-                                  },
-                                  helperText: cmdIdx === 0
-                                    && intl.formatMessage(messages.commandHelperText),
-                                })}
-                              </Fragment>
-                            ),
-                          )
-                        }
-                        <Grid item xs={12}>
-                          <Button variant="contained" onClick={handleCommandAdd}>
-                            {intl.formatMessage(messages.commandGeneratorButton)}
-                          </Button>
                         </Grid>
                       </>
                     )
