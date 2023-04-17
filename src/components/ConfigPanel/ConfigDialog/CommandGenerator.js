@@ -10,7 +10,7 @@ import {
 import { FormattedMessage } from 'react-intl';
 import messages from 'hocs/Locale/Messages/ConfigPanel/ConfigDialog/CommandGenerator';
 import CommandDetail from './CommandDetail';
-import { getCommand, renderFields } from './utils';
+import { getCommand, renderFields, getUid } from './utils';
 import { commandGeneratorFields } from './constants';
 
 const dialogStyle = {
@@ -52,7 +52,7 @@ function CommandGenerator({
       setRows(temp);
     } else {
       temp = [...rows];
-      temp.push({ ...data, id: new Date().toString(), detail: command });
+      temp.push({ ...data, id: getUid(), detail: command });
       setRows(temp);
     }
     setRawCommandsField(temp);

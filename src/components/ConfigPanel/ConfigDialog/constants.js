@@ -175,19 +175,50 @@ export const getCommandTableColumns = ({
   deleteRow,
 }) => [
   {
-    field: 'period', headerName: intl.formatMessage(messages.period), flex: 1, minWidth: 200,
+    field:
+    'period',
+    headerName: intl.formatMessage(messages.period),
+    flex: 1,
+    minWidth: 200,
+    type: 'number',
+    headerAlign: 'right',
+    align: 'right',
   },
   {
-    field: 'slaveId', headerName: intl.formatMessage(messages.slaveId), flex: 1, minWidth: 200,
+    field: 'slaveId',
+    headerName: intl.formatMessage(messages.slaveId),
+    flex: 1,
+    minWidth: 200,
+    headerAlign: 'right',
+    type: 'number',
+    align: 'right',
   },
   {
-    field: 'functionCode', headerName: intl.formatMessage(messages.functionCode), flex: 1, minWidth: 200,
+    field: 'functionCode',
+    headerName: intl.formatMessage(messages.functionCode),
+    flex: 1,
+    minWidth: 200,
+    headerAlign: 'right',
+    type: 'number',
+    align: 'right',
   },
   {
-    field: 'registerOffset', headerName: intl.formatMessage(messages.registerOffset), flex: 1, minWidth: 200,
+    field: 'registerOffset',
+    headerName: intl.formatMessage(messages.registerOffset),
+    flex: 1,
+    minWidth: 200,
+    headerAlign: 'right',
+    type: 'number',
+    align: 'right',
   },
   {
-    field: 'numberOfRegisters', headerName: intl.formatMessage(messages.numberOfRegisters), flex: 1, minWidth: 200,
+    field: 'numberOfRegisters',
+    headerName: intl.formatMessage(messages.numberOfRegisters),
+    flex: 1,
+    minWidth: 200,
+    headerAlign: 'right',
+    type: 'number',
+    align: 'right',
   },
   {
     field: 'actions',
@@ -209,7 +240,7 @@ export const getCommandTableColumns = ({
       />,
       <GridActionsCellItem
         icon={(
-          <Tooltip title={intl.formatMessage(messages.deleteTootip)}>
+          <Tooltip title={intl.formatMessage(messages.deleteTooltip)}>
             <DeleteIcon />
           </Tooltip>
         )}

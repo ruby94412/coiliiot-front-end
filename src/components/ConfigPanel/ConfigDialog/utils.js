@@ -242,6 +242,23 @@ export const getCommand = ({
   return rst;
 };
 
+export const getUid = (type) => {
+  const s4 = () => Math.floor((1 + Math.random()) * 0x10000)
+    .toString(16)
+    .substring(1);
+  switch (type) {
+    case 'user':
+      return `${s4() + s4()}-${s4()}-${s4()}`;
+    case 'group':
+      return `${s4() + s4()}-${s4()}-${s4()}-${s4()}`;
+    case 'device':
+      return `${s4() + s4()}-${s4()}-${s4()}-${s4()}-${s4()}${s4()}${s4()}`;
+    case 'token':
+    default:
+      return `${s4() + s4()}-${s4()}-${s4()}-${s4()}-${s4()}${s4()}${s4()}-${s4()}${s4()}${s4()}${s4()}`;
+  }
+};
+
 export const convertRawCommands = (autoPollConfig) => {
   if (!autoPollConfig || !autoPollConfig.rawCommands?.length) return [];
   const temp = autoPollConfig.rawCommands?.map((rawCommand) => {
@@ -253,7 +270,7 @@ export const convertRawCommands = (autoPollConfig) => {
     };
     const command = getCommand(rst);
     rst.detail = command;
-    rst.id = new Date().toString();
+    rst.id = getUid();
     rst.period = rawCommand.period;
     return rst;
   });

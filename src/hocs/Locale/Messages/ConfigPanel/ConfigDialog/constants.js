@@ -163,8 +163,8 @@ export default defineMessages({
     id: `${scope}.editTooltip`,
     defaultMessage: 'Edit Command',
   },
-  deleteTootip: {
-    id: `${scope}.deleteTootip`,
+  deleteTooltip: {
+    id: `${scope}.deleteTooltip`,
     defaultMessage: 'Delete Command',
   },
 });
