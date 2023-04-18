@@ -20,6 +20,7 @@ import Platform from './Platform';
 import Serial from './Serial';
 import Basic from './Basic';
 import AutoPoll from './AutoPoll';
+import DataConversion from './DataConversion';
 
 const a11yProps = (index) => ({
   id: `simple-tab-${index}`,
@@ -142,7 +143,7 @@ const Content = forwardRef(({
             <AutoPoll formik={formik} />
           </TabPanel>
           <TabPanel value={tabIndex} index={4}>
-            asdfasdf
+            <DataConversion formik={formik} />
           </TabPanel>
         </SwipeableViews>
 

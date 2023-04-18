@@ -141,5 +141,9 @@
 
   "coiliiot.app.configPanel.configDialog.commandGenerator.title": "生成命令",
   "coiliiot.app.configPanel.configDialog.commandGenerator.confirm": "确认",
-  "coiliiot.app.configPanel.configDialog.commandGenerator.cancel": "取消"
+  "coiliiot.app.configPanel.configDialog.commandGenerator.cancel": "取消",
+
+
+  "coiliiot.app.configPanel.configDialog.dataConversion.networkDisabledText": "该网络通道尚未启用",
+  "coiliiot.app.configPanel.configDialog.dataConversion.autoPollDisabledText": "该通道尚未设置轮训命令"
 }

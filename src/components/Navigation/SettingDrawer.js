@@ -22,6 +22,7 @@ function SettingDrawer({
   setLocale,
   locale,
   themeMode,
+  anchor,
 }) {
   const handleModeChange = (mode) => () => {
     setThemeMode(mode);
@@ -31,13 +32,14 @@ function SettingDrawer({
     setLocale(locale);
     localStorage.setItem('locale', locale);
   };
+  const boxStyle = anchor === 'right' ? { width: 300 } : {};
   return (
     <Drawer
-      anchor="right"
+      anchor={anchor}
       open={isDrawerOpen}
       onClose={toggleDrawer(false)}
     >
-      <Box sx={{ width: 300 }}>
+      <Box sx={boxStyle}>
         <Box sx={{ p: 2, display: 'flex', alignItems: 'center' }}>
           <Typography variant="h6"><FormattedMessage {...messages.settingTitle} /></Typography>
           <Box sx={{ flexGrow: 1 }} />

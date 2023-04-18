@@ -10,9 +10,9 @@ import {
   Menu,
   MenuItem,
   // Container,
-  Avatar,
+  // Avatar,
   // Button,
-  Tooltip,
+  // Tooltip,
   // Drawer,
 } from '@mui/material';
 import {
@@ -20,8 +20,6 @@ import {
   AccountCircle,
   MoreVert as MoreIcon,
 } from '@mui/icons-material';
-// import MenuIcon from '@mui/icons-material/Menu';
-// import AdbIcon from '@mui/icons-material/Adb';
 import { FormattedMessage } from 'react-intl';
 
 import { logout } from 'slice/login';
@@ -38,27 +36,29 @@ function Navigation({
 }) {
   const navigate = useNavigate();
   const [logoutConfirmOpen, setLogoutConfirmOpen] = useState(false);
-  // const [anchorElNav, setAnchorElNav] = useState(null);
+  const [anchorElMobile, setAnchorElMobile] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [anchorElDrawer, setAnchorElDrawer] = useState('right');
 
-  const toggleDrawer = (open) => (event) => {
+  const toggleDrawer = (open, anchor = '') => (event) => {
+    if (anchor) setAnchorElDrawer(anchor);
     if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
       return;
     }
     setIsDrawerOpen(open);
   };
 
-  // const handleOpenNavMenu = (event) => {
-  //   setAnchorElNav(event.currentTarget);
-  // };
+  const handleOpenMobileMenu = (event) => {
+    setAnchorElMobile(event.currentTarget);
+  };
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
   };
 
-  // const handleCloseNavMenu = () => {
-  //   setAnchorElNav(null);
-  // };
+  const handleCloseMobileMenu = () => {
+    setAnchorElMobile(null);
+  };
 
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
@@ -72,20 +72,47 @@ function Navigation({
   // const handleDrawerStateChange = () => {
   //   setIsDrawerOpen(!isDrawerOpen);
   // };
-  const settings = [{
+  const userActions = [{
     text: <FormattedMessage {...messages.logoutLabel} />,
     onClick: () => { setLogoutConfirmOpen(true); },
   }];
+  const renderMobileMenu = () => (
+    <Menu
+      anchorEl={anchorElMobile}
+      anchorOrigin={{
+        vertical: 'top',
+        horizontal: 'right',
+      }}
+      transformOrigin={{
+        vertical: 'top',
+        horizontal: 'right',
+      }}
+      open={Boolean(anchorElMobile)}
+      onClose={handleCloseMobileMenu}
+    >
+      <MenuItem onClick={toggleDrawer(true, 'bottom')}>
+        <IconButton
+          size="large"
+          color="inherit"
+        >
+          <SettingsIcon />
+        </IconButton>
+        <p>Settings</p>
+      </MenuItem>
+      <MenuItem onClick={handleOpenUserMenu}>
+        <IconButton size="large" color="inherit">
+          <AccountCircle />
+        </IconButton>
+        <p>User Actions</p>
+      </MenuItem>
+    </Menu>
+  );
+
   return (
     <>
       <AppBar position="static" color="primary">
         <Toolbar>
           <Box sx={{ flexGrow: 1 }} />
-          <Tooltip title="Open settings">
-            <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-              <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
-            </IconButton>
-          </Tooltip>
           <Menu
             sx={{ mt: '45px' }}
             id="menu-appbar"
@@ -102,7 +129,7 @@ function Navigation({
             open={Boolean(anchorElUser)}
             onClose={handleCloseUserMenu}
           >
-            {settings.map((setting) => (
+            {userActions.map((setting) => (
               <MenuItem key={setting.text} onClick={setting.onClick}>
                 <Typography textAlign="center">{setting.text}</Typography>
               </MenuItem>
@@ -111,13 +138,16 @@ function Navigation({
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
             <IconButton
               size="large"
-              aria-label="show 4 new mails"
               color="inherit"
-              onClick={toggleDrawer(true)}
+              onClick={toggleDrawer(true, 'right')}
             >
               <SettingsIcon />
             </IconButton>
-            <IconButton size="large" aria-label="show 4 new mails" color="inherit">
+            <IconButton
+              size="large"
+              color="inherit"
+              onClick={handleOpenUserMenu}
+            >
               <AccountCircle />
             </IconButton>
           </Box>
@@ -127,22 +157,24 @@ function Navigation({
               aria-label="show more"
               // aria-controls={mobileMenuId}
               aria-haspopup="true"
-              // onClick={handleMobileMenuOpen}
+              onClick={handleOpenMobileMenu}
               color="inherit"
             >
               <MoreIcon />
             </IconButton>
           </Box>
+          {renderMobileMenu()}
+          <SettingDrawer
+            anchor={anchorElDrawer}
+            isDrawerOpen={isDrawerOpen}
+            toggleDrawer={toggleDrawer}
+            setThemeMode={setThemeMode}
+            setLocale={setLocale}
+            locale={locale}
+            themeMode={themeMode}
+          />
         </Toolbar>
       </AppBar>
-      <SettingDrawer
-        isDrawerOpen={isDrawerOpen}
-        toggleDrawer={toggleDrawer}
-        setThemeMode={setThemeMode}
-        setLocale={setLocale}
-        locale={locale}
-        themeMode={themeMode}
-      />
       <ConfirmDialog
         content={<FormattedMessage {...messages.logoutConfirmation} />}
         isOpen={logoutConfirmOpen}
