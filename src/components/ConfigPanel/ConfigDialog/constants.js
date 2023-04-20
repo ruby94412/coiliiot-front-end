@@ -169,14 +169,42 @@ export const commandGeneratorFields = [
   },
 ];
 
+export const dataMappingFields = [
+  {
+    label: <FormattedMessage {...messages.propertyName} />,
+    propertyName: 'propertyName',
+  },
+  {
+    label: <FormattedMessage {...messages.address} />,
+    propertyName: 'address',
+    datatype: 'number',
+  },
+  {
+    label: <FormattedMessage {...messages.dataType} />,
+    propertyName: 'dataType',
+    datatype: 'number',
+    fieldType: 'select',
+    selectOptions: [
+      { label: 'test1', value: 1 },
+      { label: 'test2', value: 2 },
+      { label: 'test3', value: 3 },
+      { label: 'test4', value: 4 },
+    ],
+  },
+  {
+    label: <FormattedMessage {...messages.ratio} />,
+    propertyName: 'ratio',
+    datatype: 'number',
+  },
+];
+
 export const getCommandTableColumns = ({
   intl,
   setParams,
   deleteRow,
 }) => [
   {
-    field:
-    'period',
+    field: 'period',
     headerName: intl.formatMessage(messages.period),
     flex: 1,
     minWidth: 200,
@@ -241,7 +269,74 @@ export const getCommandTableColumns = ({
       <GridActionsCellItem
         icon={(
           <Tooltip title={intl.formatMessage(messages.deleteTooltip)}>
-            <DeleteIcon />
+            <DeleteIcon sx={{ '&:hover': { color: 'red' } }} />
+          </Tooltip>
+        )}
+        label="Delete"
+        onClick={() => {
+          deleteRow(params?.row);
+        }}
+      />,
+    ],
+  },
+];
+
+export const getMappingTableColumns = ({
+  intl,
+  setParams,
+  deleteRow,
+}) => [
+  {
+    field: 'propertyName',
+    headerName: intl.formatMessage(messages.propertyName),
+    flex: 1,
+    type: 'number',
+    minWidth: 120,
+  },
+  {
+    field: 'address',
+    headerName: intl.formatMessage(messages.address),
+    flex: 1,
+    headerAlign: 'right',
+    type: 'number',
+    align: 'right',
+  },
+  {
+    field: 'dataType',
+    headerName: intl.formatMessage(messages.dataType),
+    flex: 1,
+    type: 'number',
+    minWidth: 120,
+  },
+  {
+    field: 'ratio',
+    headerName: intl.formatMessage(messages.ratio),
+    flex: 1,
+    headerAlign: 'right',
+    type: 'number',
+    align: 'right',
+  },
+  {
+    field: 'actions',
+    headerName: intl.formatMessage(messages.actions),
+    type: 'actions',
+    flex: 1,
+    getActions: (params) => [
+      <GridActionsCellItem
+        icon={(
+          <Tooltip title={intl.formatMessage(messages.editTooltip)}>
+            <EditIcon />
+          </Tooltip>
+        )}
+        label="Edit"
+        onClick={() => {
+          setParams(params?.row);
+        }}
+      />,
+      <GridActionsCellItem
+        icon={(
+          <Tooltip title={intl.formatMessage(messages.deleteTooltip)}>
+            <DeleteIcon sx={{ '&:hover': { color: 'red' } }} />
           </Tooltip>
         )}
         label="Delete"

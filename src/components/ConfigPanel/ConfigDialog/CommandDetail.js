@@ -7,6 +7,7 @@ const CommandDetailWithStyle = styled('pre')(({ theme }) => ({
   borderColor: theme.palette.primary.main,
   borderRadius: '5px',
   color: theme.palette.primary.main,
+  margin: 0,
 }));
 
 function CommandDetail({

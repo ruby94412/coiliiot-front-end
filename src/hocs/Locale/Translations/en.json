@@ -135,14 +135,23 @@
   "coiliiot.app.configPanel.configDialog.constants.hexadecimal": "hexadecimal",
   "coiliiot.app.configPanel.configDialog.constants.crc": "CRC",
   "coiliiot.app.configPanel.configDialog.constants.actions": "Actions",
-  "coiliiot.app.configPanel.configDialog.constants.editTooltip": "Edit Command",
-  "coiliiot.app.configPanel.configDialog.constants.deleteTooltip": "Delete Command",
+  "coiliiot.app.configPanel.configDialog.constants.editTooltip": "Edit",
+  "coiliiot.app.configPanel.configDialog.constants.deleteTooltip": "Delete",
+  "coiliiot.app.configPanel.configDialog.constants.propertyName": "Property Name",
+  "coiliiot.app.configPanel.configDialog.constants.address": "Address",
+  "coiliiot.app.configPanel.configDialog.constants.dataType": "Data Type",
+  "coiliiot.app.configPanel.configDialog.constants.ratio": "Ratio",
 
   "coiliiot.app.configPanel.configDialog.commandGenerator.title": "Command Generator",
   "coiliiot.app.configPanel.configDialog.commandGenerator.confirm": "Confirm",
   "coiliiot.app.configPanel.configDialog.commandGenerator.cancel": "Cancel",
 
   "coiliiot.app.configPanel.configDialog.dataConversion.networkDisabledText": "This Network Channel Is Not Enabled Yet",
-  "coiliiot.app.configPanel.configDialog.dataConversion.autoPollDisabledText": "This Serial Channel Has No Auto Polling Yet"
+  "coiliiot.app.configPanel.configDialog.dataConversion.autoPollDisabledText": "This Serial Channel Has No Auto Polling Yet",
+
+  "coiliiot.app.configPanel.configDialog.dataAccordion.title": "Configure Mapping",
+  "coiliiot.app.configPanel.configDialog.dataAccordion.addMappingButton": "Add Mapping",
+  "coiliiot.app.configPanel.configDialog.dataAccordion.cancel": "Cancel",
+  "coiliiot.app.configPanel.configDialog.dataAccordion.confirm": "Confirm"
 }
 

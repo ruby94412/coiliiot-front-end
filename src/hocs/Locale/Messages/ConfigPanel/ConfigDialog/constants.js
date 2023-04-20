@@ -161,10 +161,26 @@ export default defineMessages({
   },
   editTooltip: {
     id: `${scope}.editTooltip`,
-    defaultMessage: 'Edit Command',
+    defaultMessage: 'Edit',
   },
   deleteTooltip: {
     id: `${scope}.deleteTooltip`,
-    defaultMessage: 'Delete Command',
+    defaultMessage: 'Delete',
+  },
+  propertyName: {
+    id: `${scope}.propertyName`,
+    defaultMessage: 'Property Name',
+  },
+  address: {
+    id: `${scope}.address`,
+    defaultMessage: 'Address',
+  },
+  dataType: {
+    id: `${scope}.dataType`,
+    defaultMessage: 'Data Type',
+  },
+  ratio: {
+    id: `${scope}.ratio`,
+    defaultMessage: 'Ratio',
   },
 });

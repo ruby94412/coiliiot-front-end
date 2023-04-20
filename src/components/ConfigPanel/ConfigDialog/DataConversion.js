@@ -1,37 +1,27 @@
 import { useState, Fragment } from 'react';
 import {
   Grid,
-  RadioGroup,
-  Radio,
-  FormControl,
-  FormControlLabel,
-  FormLabel,
   Typography,
 } from '@mui/material';
-import {
-  Accordion,
-  AccordionDetails,
-  AccordionSummary,
-} from 'components/common/StyledAccordion';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import SwipeableViews from 'react-swipeable-views';
 import TabPanel from 'components/common/TabPanel';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 import platformMessages from 'hocs/Locale/Messages/ConfigPanel/ConfigDialog/Platform';
 import messages from 'hocs/Locale/Messages/ConfigPanel/ConfigDialog/DataConversion';
 import {
   networkIds,
 } from './constants';
-import { convertRawCommands } from './utils';
-import CommandDetail from './CommandDetail';
+import { convertRawCommands, renderFields } from './utils';
+import DataAccordion from './DataAccordion';
 
 function DataConversion({
   formik,
 }) {
+  const intl = useIntl();
   const [networkId, setNetworkId] = useState(0);
   const [expanded, setExpanded] = useState(false);
 
-  const handleChange = (panel) => (event, isExpanded) => {
+  const handleExpandChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
   };
 
@@ -39,37 +29,21 @@ function DataConversion({
     setNetworkId(Number(event.target.value));
   };
 
-  const renderAccordion = (commands) => (
+  const renderAccordions = (commands) => (
     <>
       {commands.map((command, idx) => (
-        <Accordion
+        <DataAccordion
           key={`command${idx}`}
-          expanded={expanded === `command${idx}`}
-          onChange={handleChange(`command${idx}`)}
-        >
-          <AccordionSummary
-            expandIcon={<ExpandMoreIcon />}
-            aria-controls="panel1bh-content"
-            id="panel1bh-header"
-          >
-            <Typography sx={{ width: '20%', flexShrink: 0 }}>
-              {`Command ${idx + 1}`}
-            </Typography>
-            <Typography sx={{ fontFamily: 'Courier' }}>{command.detail.hex.join(' ')}</Typography>
-          </AccordionSummary>
-          <AccordionDetails>
-            <Grid
-              container
-              spacing={2}
-              direction="row"
-            >
-              <Grid item xs={12} md={6}><CommandDetail command={command.detail} /></Grid>
-            </Grid>
-          </AccordionDetails>
-        </Accordion>
+          idx={idx}
+          expanded={expanded}
+          handleExpandChange={handleExpandChange}
+          command={command}
+          setExpanded={setExpanded}
+        />
       ))}
     </>
   );
+
   const renderContent = () => {
     const { values } = formik;
     let type;
@@ -87,13 +61,23 @@ function DataConversion({
     }
     switch (type) {
       case 'hasCommands':
-        return renderAccordion(commands);
+        return renderAccordions(commands);
       case 'networkDisabled':
         return (<Typography><FormattedMessage {...messages.networkDisabledText} /></Typography>);
       case 'hasNoCommands':
       default:
         return (<Typography><FormattedMessage {...messages.autoPollDisabledText} /></Typography>);
     }
+  };
+
+  const networkIdField = {
+    fieldType: 'radioGroup',
+    label: intl.formatMessage(platformMessages.networkIdLabel),
+    handleChange: handleNetworkIdChange,
+    value: networkId,
+    dataType: 'number',
+    radioOptions: networkIds.map((id) => ({ value: id, label: id + 1 })),
+    layout: { xs: 12 },
   };
 
   return (
@@ -103,22 +87,7 @@ function DataConversion({
         spacing={2}
         direction="row"
       >
-        <Grid item xs={12}>
-          <FormControl>
-            <FormLabel><FormattedMessage {...platformMessages.networkIdLabel} /></FormLabel>
-            <RadioGroup
-              row
-              onChange={handleNetworkIdChange}
-              value={networkId}
-            >
-              {
-                networkIds.map((id) => (
-                  <FormControlLabel key={id} value={id} control={<Radio />} label={id + 1} />
-                ))
-              }
-            </RadioGroup>
-          </FormControl>
-        </Grid>
+        {renderFields(networkIdField)}
       </Grid>
       <SwipeableViews index={networkId}>
         {

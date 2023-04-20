@@ -30,7 +30,7 @@ const getColumns = ({
   {
     field: 'updateTime',
     headerName: intl.formatMessage(messages.updatedTime),
-    type: 'date',
+    type: 'Date',
     disableColumnMenu: true,
     headerAlign: 'right',
     align: 'right',

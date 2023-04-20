@@ -84,7 +84,10 @@ function CommandGenerator({
             </Fragment>
           ))}
         </Grid>
-        {data && command && <CommandDetail command={command} />}
+        {
+          data && command
+          && <Grid item xs={12} paddingTop={4}><CommandDetail command={command} /></Grid>
+        }
       </DialogContent>
       <DialogActions>
         <Button onClick={handleClose} variant="contained">

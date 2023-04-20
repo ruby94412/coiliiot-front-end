@@ -5,7 +5,6 @@ import { FormattedMessage } from 'react-intl';
 import messages from 'hocs/Locale/Messages/common/NoRowsOverlay';
 
 const StyledGridOverlay = styled('div')(({ theme }) => ({
-  margin: '10px',
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'center',
