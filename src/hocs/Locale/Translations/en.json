@@ -141,6 +141,8 @@
   "coiliiot.app.configPanel.configDialog.constants.address": "Address",
   "coiliiot.app.configPanel.configDialog.constants.dataType": "Data Type",
   "coiliiot.app.configPanel.configDialog.constants.ratio": "Ratio",
+  "coiliiot.app.configPanel.configDialog.constants.deviation": "Deviation",
+  "coiliiot.app.configPanel.configDialog.constants.order": "Order",
 
   "coiliiot.app.configPanel.configDialog.commandGenerator.title": "Command Generator",
   "coiliiot.app.configPanel.configDialog.commandGenerator.confirm": "Confirm",

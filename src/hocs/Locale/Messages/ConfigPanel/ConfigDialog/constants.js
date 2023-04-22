@@ -183,4 +183,12 @@ export default defineMessages({
     id: `${scope}.ratio`,
     defaultMessage: 'Ratio',
   },
+  deviation: {
+    id: `${scope}.deviation`,
+    defaultMessage: 'Deviation',
+  },
+  order: {
+    id: `${scope}.order`,
+    defaultMessage: 'Order',
+  },
 });

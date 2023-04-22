@@ -254,8 +254,9 @@ export const getUid = (type) => {
     case 'device':
       return `${s4() + s4()}-${s4()}-${s4()}-${s4()}-${s4()}${s4()}${s4()}`;
     case 'token':
-    default:
       return `${s4() + s4()}-${s4()}-${s4()}-${s4()}-${s4()}${s4()}${s4()}-${s4()}${s4()}${s4()}${s4()}`;
+    default:
+      return `${s4()}${s4()}${s4()}${s4()}`;
   }
 };
 
@@ -270,8 +271,8 @@ export const convertRawCommands = (autoPollConfig) => {
     };
     const command = getCommand(rst);
     rst.detail = command;
-    rst.id = getUid();
     rst.period = rawCommand.period;
+    rst.id = rawCommand.id;
     return rst;
   });
   return temp;

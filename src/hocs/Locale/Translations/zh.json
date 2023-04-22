@@ -142,6 +142,8 @@
   "coiliiot.app.configPanel.configDialog.constants.address": "地址",
   "coiliiot.app.configPanel.configDialog.constants.dataType": "数据类型",
   "coiliiot.app.configPanel.configDialog.constants.ratio": "比例",
+  "coiliiot.app.configPanel.configDialog.constants.deviation": "偏移",
+  "coiliiot.app.configPanel.configDialog.constants.order": "顺序",
 
   "coiliiot.app.configPanel.configDialog.commandGenerator.title": "生成命令",
   "coiliiot.app.configPanel.configDialog.commandGenerator.confirm": "确认",

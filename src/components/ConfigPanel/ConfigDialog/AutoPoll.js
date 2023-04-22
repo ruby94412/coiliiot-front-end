@@ -39,6 +39,7 @@ function AutoPoll({
       dec: row.detail.dec,
       rawDec: row.detail.rawDec,
       period: row.period,
+      id: row.id,
     }));
     formik.setFieldValue(`serialConfigs[${serialId}].autoPollConfig.rawCommands`, rawCommands);
   };

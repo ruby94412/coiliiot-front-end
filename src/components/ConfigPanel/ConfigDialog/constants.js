@@ -185,15 +185,32 @@ export const dataMappingFields = [
     datatype: 'number',
     fieldType: 'select',
     selectOptions: [
-      { label: 'test1', value: 1 },
-      { label: 'test2', value: 2 },
-      { label: 'test3', value: 3 },
-      { label: 'test4', value: 4 },
+      { label: 'SHORT', value: 0 },
+      { label: 'LONG', value: 1 },
+      { label: 'FLOAT', value: 2 },
+      { label: 'DOUBLE', value: 3 },
+    ],
+  },
+  {
+    label: <FormattedMessage {...messages.order} />,
+    propertyName: 'order',
+    datatype: 'number',
+    fieldType: 'select',
+    selectOptions: [
+      { label: 'ABCD', value: 0 },
+      { label: 'DCBA', value: 1 },
+      { label: 'BADC', value: 2 },
+      { label: 'CDAB', value: 3 },
     ],
   },
   {
     label: <FormattedMessage {...messages.ratio} />,
     propertyName: 'ratio',
+    datatype: 'number',
+  },
+  {
+    label: <FormattedMessage {...messages.deviation} />,
+    propertyName: 'deviation',
     datatype: 'number',
   },
 ];
@@ -290,7 +307,6 @@ export const getMappingTableColumns = ({
     field: 'propertyName',
     headerName: intl.formatMessage(messages.propertyName),
     flex: 1,
-    type: 'number',
     minWidth: 120,
   },
   {
@@ -300,13 +316,25 @@ export const getMappingTableColumns = ({
     headerAlign: 'right',
     type: 'number',
     align: 'right',
+    minWidth: 80,
   },
   {
     field: 'dataType',
     headerName: intl.formatMessage(messages.dataType),
     flex: 1,
-    type: 'number',
-    minWidth: 120,
+    minWidth: 80,
+    renderCell: (params) => (
+      <span>{['SHORT', 'LONG', 'FLOAT', 'DOUBLE'][params.value]}</span>
+    ),
+  },
+  {
+    field: 'order',
+    headerName: intl.formatMessage(messages.order),
+    flex: 1,
+    minWidth: 80,
+    renderCell: (params) => (
+      <span>{['ABCD', 'DCBA', 'BADC', 'CDAB'][params.value]}</span>
+    ),
   },
   {
     field: 'ratio',
@@ -315,12 +343,23 @@ export const getMappingTableColumns = ({
     headerAlign: 'right',
     type: 'number',
     align: 'right',
+    minWidth: 80,
+  },
+  {
+    field: 'deviation',
+    headerName: intl.formatMessage(messages.deviation),
+    flex: 1,
+    headerAlign: 'right',
+    type: 'number',
+    align: 'right',
+    minWidth: 80,
   },
   {
     field: 'actions',
     headerName: intl.formatMessage(messages.actions),
     type: 'actions',
     flex: 1,
+    minWidth: 80,
     getActions: (params) => [
       <GridActionsCellItem
         icon={(

@@ -4,7 +4,8 @@ import {
   AccordionDetails,
   AccordionSummary,
 } from 'components/common/StyledAccordion';
-import { DataGrid } from '@mui/x-data-grid';
+// import { DataGrid } from '@mui/x-data-grid';
+import StyledDataGrid from 'components/common/StyledDataGrid';
 import {
   Grid,
   Typography,
@@ -69,13 +70,17 @@ function DataAccordion({
   const handleAdd = (e) => {
     e.stopPropagation();
     setParams({
-      propertyName: '', address: 0, dataType: 1, ratio: 1,
+      propertyName: '', address: 0, dataType: 0, ratio: 1, deviation: 0, order: 0,
     });
   };
 
-  const handleFieldChange = (propertyName) => (e) => {
+  const handleFieldChange = (propertyName, datatype) => (e) => {
     const temp = { ...data };
-    temp[propertyName] = e.target.value;
+    if (datatype === 'number') {
+      temp[propertyName] = Number(e.target.value);
+    } else {
+      temp[propertyName] = e.target.value;
+    }
     setData(temp);
   };
 
@@ -104,13 +109,14 @@ function DataAccordion({
           spacing={2}
           direction="row"
         >
-          <Grid item xs={12} md={6}><CommandDetail command={command.detail} /></Grid>
-          <Grid item xs={12} md={6}>
-            <DataGrid
+          <Grid item sm={12} md={6}><CommandDetail command={command.detail} /></Grid>
+          <Grid item sm={12} md={6}>
+            <StyledDataGrid
               sx={{
                 border: '1px dashed',
-                borderColor: 'primary',
+                borderColor: 'primary.main',
                 height: '100%',
+                minHeight: '180px',
               }}
               rows={rows}
               columns={columns}
@@ -136,7 +142,7 @@ function DataAccordion({
               params && data && dataMappingFields.map((field) => (
                 <Fragment key={field.propertyName}>
                   {renderFields({
-                    handleChange: handleFieldChange(field.propertyName),
+                    handleChange: handleFieldChange(field.propertyName, field.datatype),
                     value: data[field.propertyName],
                     style: { width: '100%' },
                     layout: { xs: 12, md: 6 },
