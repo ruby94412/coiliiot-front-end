@@ -168,10 +168,10 @@ export const getInitialValues = (originalConfig) => {
     const index = origin.networkId;
     const defaultConfig = rst.networkConfigs[index];
     const {
-      networkId, type, serialId, ...other
+      networkId, type, serialId, conversionConfigs, ...other
     } = origin;
     rst.networkConfigs[index] = {
-      ...defaultConfig, networkId, type, serialId, enabled: true,
+      ...defaultConfig, networkId, type, serialId, enabled: true, conversionConfigs,
     };
     const typeArr = ['socket', 'aliyun', 'mqtt'];
     rst.networkConfigs[index][typeArr[type]] = other;

@@ -11,7 +11,7 @@ import {
 } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import { useState, forwardRef, useImperativeHandle } from 'react';
-import { useFormik } from 'formik';
+import { useFormik, FastField } from 'formik';
 import { FormattedMessage } from 'react-intl';
 import messages from 'hocs/Locale/Messages/ConfigPanel/ConfigDialog/DialogContent';
 import SwipeableViews from 'react-swipeable-views';
@@ -63,14 +63,14 @@ const Content = forwardRef(({
     values.networkConfigs.forEach((ele) => {
       if (ele.enabled) {
         const {
-          enabled, serialId, type, networkId,
+          enabled, serialId, type, networkId, conversionConfigs,
         } = ele;
         if (config.serialConfigs[serialId].autoPollEnabled) autoTaskCount++;
         const typeArr = ['socket', 'aliyun', 'mqtt'];
         const detail = ele[typeArr[type]];
         config.networkSummary[typeArr[type]].push(networkId);
         config.networkConfigs.push({
-          enabled, serialId, type, networkId, ...detail,
+          enabled, serialId, type, networkId, conversionConfigs, ...detail,
         });
       }
     });

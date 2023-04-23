@@ -4,7 +4,6 @@ import {
   AccordionDetails,
   AccordionSummary,
 } from 'components/common/StyledAccordion';
-// import { DataGrid } from '@mui/x-data-grid';
 import StyledDataGrid from 'components/common/StyledDataGrid';
 import {
   Grid,
@@ -35,9 +34,10 @@ function DataAccordion({
   handleExpandChange,
   command,
   setExpanded,
+  setFields,
 }) {
   const intl = useIntl();
-  const [rows, setRows] = useState([]);
+  const [rows, setRows] = useState(command.initConversions || []);
   const [params, setParams] = useState(null);
   const [data, setData] = useState(null);
 
@@ -49,6 +49,7 @@ function DataAccordion({
     const temp = [...rows];
     temp.splice(temp.findIndex((obj) => obj.id === row.id), 1);
     setRows(temp);
+    setFields({ conversions: temp, commandId: command.id });
   };
 
   const handleClose = () => setParams(null);
@@ -64,6 +65,7 @@ function DataAccordion({
       setRows(temp);
       setExpanded(`command${idx}`);
     }
+    setFields({ conversions: temp, commandId: command.id });
     handleClose();
   };
 

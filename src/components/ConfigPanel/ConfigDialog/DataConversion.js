@@ -1,4 +1,4 @@
-import { useState, Fragment } from 'react';
+import { useState, Fragment, useEffect } from 'react';
 import {
   Grid,
   Typography,
@@ -20,6 +20,33 @@ function DataConversion({
   const intl = useIntl();
   const [networkId, setNetworkId] = useState(0);
   const [expanded, setExpanded] = useState(false);
+  const [commands, setCommands] = useState([]);
+  const [contentType, setContentType] = useState('hasCommands');
+
+  useEffect(() => {
+    const { values } = formik;
+    if (values.networkConfigs[networkId].enabled) {
+      const { serialId } = values.networkConfigs[networkId];
+      if (values.serialConfigs[serialId].autoPollConfig?.rawCommands?.length) {
+        setContentType('hasCommands');
+        const temp = convertRawCommands(values.serialConfigs[serialId].autoPollConfig);
+        const conversionConfigs = values.networkConfigs[networkId].conversionConfigs || [];
+        const rst = [];
+        temp?.forEach((obj) => {
+          const conversions = conversionConfigs
+            .find((cfg) => (cfg.commandId === obj.id))?.conversions;
+          rst.push(conversions ? { ...obj, initConversions: conversions } : obj);
+        });
+        setCommands(rst);
+      } else {
+        setContentType('hasNoCommands');
+        setCommands([]);
+      }
+    } else {
+      setContentType('networkDisabled');
+      setCommands([]);
+    }
+  }, [networkId]);
 
   const handleExpandChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
@@ -27,6 +54,22 @@ function DataConversion({
 
   const handleNetworkIdChange = (event) => {
     setNetworkId(Number(event.target.value));
+  };
+
+  const setFields = (data) => {
+    const origin = formik.values.networkConfigs[networkId].conversionConfigs || [];
+    const temp = [];
+    let flag = false;
+    origin.forEach((conversion) => {
+      if (conversion.commandId === data.commandId) {
+        temp.push(data);
+        flag = true;
+      } else {
+        temp.push(conversion);
+      }
+    });
+    if (!flag) temp.push(data);
+    formik.setFieldValue(`networkConfigs[${networkId}].conversionConfigs`, temp);
   };
 
   const renderAccordions = (commands) => (
@@ -39,27 +82,14 @@ function DataConversion({
           handleExpandChange={handleExpandChange}
           command={command}
           setExpanded={setExpanded}
+          setFields={setFields}
         />
       ))}
     </>
   );
 
   const renderContent = () => {
-    const { values } = formik;
-    let type;
-    let commands = [];
-    if (values.networkConfigs[networkId].enabled) {
-      const { serialId } = values.networkConfigs[networkId];
-      if (values.serialConfigs[serialId].autoPollConfig?.rawCommands?.length) {
-        type = 'hasCommands';
-        commands = convertRawCommands(values.serialConfigs[serialId].autoPollConfig);
-      } else {
-        type = 'hasNoCommands';
-      }
-    } else {
-      type = 'networkDisabled';
-    }
-    switch (type) {
+    switch (contentType) {
       case 'hasCommands':
         return renderAccordions(commands);
       case 'networkDisabled':
