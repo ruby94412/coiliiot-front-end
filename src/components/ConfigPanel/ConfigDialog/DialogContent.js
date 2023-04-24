@@ -11,7 +11,7 @@ import {
 } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import { useState, forwardRef, useImperativeHandle } from 'react';
-import { useFormik, FastField } from 'formik';
+import { useFormik } from 'formik';
 import { FormattedMessage } from 'react-intl';
 import messages from 'hocs/Locale/Messages/ConfigPanel/ConfigDialog/DialogContent';
 import SwipeableViews from 'react-swipeable-views';

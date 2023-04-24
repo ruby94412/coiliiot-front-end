@@ -46,7 +46,7 @@ function DataConversion({
       setContentType('networkDisabled');
       setCommands([]);
     }
-  }, [networkId]);
+  }, [networkId, formik]);
 
   const handleExpandChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);

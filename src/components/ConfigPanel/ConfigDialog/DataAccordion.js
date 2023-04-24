@@ -111,8 +111,8 @@ function DataAccordion({
           spacing={2}
           direction="row"
         >
-          <Grid item sm={12} md={6}><CommandDetail command={command.detail} /></Grid>
-          <Grid item sm={12} md={6}>
+          <Grid item xs={12} xl={6}><CommandDetail command={command.detail} /></Grid>
+          <Grid item xs={12} xl={6}>
             <StyledDataGrid
               sx={{
                 border: '1px dashed',
