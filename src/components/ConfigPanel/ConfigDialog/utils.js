@@ -7,7 +7,7 @@ import {
   FormLabel,
   Select,
   MenuItem,
-  TextField,
+  OutlinedInput,
 } from '@mui/material';
 
 export const renderFields = ({
@@ -77,13 +77,13 @@ export const renderFields = ({
       );
     case 'blank':
       return (<Grid item {...layout} />);
-    case 'textField':
+    case 'OutlinedInput':
     default:
       return (
         <Grid item {...layout}>
           <FormControl sx={{ display: 'flex' }}>
             <FormLabel>{label}</FormLabel>
-            <TextField
+            <OutlinedInput
               size="small"
               style={style}
               value={value}
