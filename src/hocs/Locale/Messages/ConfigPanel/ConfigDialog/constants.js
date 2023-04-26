@@ -191,4 +191,20 @@ export default defineMessages({
     id: `${scope}.order`,
     defaultMessage: 'Order',
   },
+  qos: {
+    id: `${scope}.qos`,
+    defaultMessage: 'Order',
+  },
+  retain: {
+    id: `${scope}.retain`,
+    defaultMessage: 'Order',
+  },
+  lwtMessage: {
+    id: `${scope}.lwtMessage`,
+    defaultMessage: 'Order',
+  },
+  cleanSession: {
+    id: `${scope}.cleanSession`,
+    defaultMessage: 'Order',
+  },
 });

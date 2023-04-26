@@ -1,30 +1,42 @@
-import { useState, Fragment } from 'react';
 import {
-  Grid,
-  RadioGroup,
-  Radio,
-  FormControl,
-  FormControlLabel,
-  FormLabel,
-} from '@mui/material';
+  useState, Fragment, useRef, forwardRef, useImperativeHandle,
+} from 'react';
+import { Grid } from '@mui/material';
 import SwipeableViews from 'react-swipeable-views';
 import TabPanel from 'components/common/TabPanel';
 import { FormattedMessage } from 'react-intl';
 import messages from 'hocs/Locale/Messages/ConfigPanel/ConfigDialog/Serial';
+import { Formik } from 'formik';
 import { serialFields } from './constants';
 import { renderFields } from './utils';
 
-function Serial({
-  formik,
-}) {
+const Serial = forwardRef(({
+  initVals,
+}, ref) => {
   const [serialId, setSerialId] = useState(0);
+
+  const serialIdOptions = [
+    { label: '1', value: 0 }, { label: '2', value: 1 }, { label: '3', value: 2 },
+  ];
+
+  const enableOptions = [
+    { label: <FormattedMessage {...messages.statusOptionEnable} />, value: true },
+    { label: <FormattedMessage {...messages.statusOptionDisable} />, value: false },
+  ];
+
+  const formikRefs = useRef([]);
+
   const handleSerialIdChange = (event) => {
     setSerialId(Number(event.target.value));
   };
 
-  const handleEnabledChange = (e) => {
-    formik.setFieldValue(`serialConfigs[${serialId}].enabled`, e.target.value === 'true');
+  const handleEnabledChange = (index) => (e) => {
+    formikRefs.current[index].setFieldValue('enabled', e.target.value === 'true');
   };
+
+  useImperativeHandle(ref, () => ({
+    form: formikRefs,
+  }));
 
   return (
     <>
@@ -33,77 +45,67 @@ function Serial({
         spacing={2}
         direction="row"
       >
-        <Grid item xs={12}>
-          <FormControl>
-            <FormLabel><FormattedMessage {...messages.serialIdLabel} /></FormLabel>
-            <RadioGroup
-              row
-              onChange={handleSerialIdChange}
-              value={serialId}
-            >
-              <FormControlLabel value={0} control={<Radio />} label="1" />
-              <FormControlLabel value={1} control={<Radio />} label="2" />
-              <FormControlLabel value={2} control={<Radio />} label="3" />
-            </RadioGroup>
-          </FormControl>
-        </Grid>
+        {
+          renderFields({
+            label: <FormattedMessage {...messages.serialIdLabel} />,
+            value: serialId,
+            handleChange: handleSerialIdChange,
+            fieldType: 'radioGroup',
+            radioOptions: serialIdOptions,
+            layout: { xs: 12 },
+          })
+        }
       </Grid>
       <SwipeableViews index={serialId}>
         {
-          formik.values.serialConfigs.map((serialConfig, index) => (
+          initVals.map((serialConfig, index) => (
             <TabPanel key={index} index={index} value={serialId} sx={{ px: 0, py: 3 }}>
-              <Grid
-                container
-                spacing={2}
-                direction="row"
+              <Formik
+                innerRef={(el) => { formikRefs.current[index] = el; }}
+                initialValues={serialConfig}
               >
-                <Grid item xs={12} md={4}>
-                  <FormControl sx={{ display: 'flex' }}>
-                    <FormLabel><FormattedMessage {...messages.statusLabel} /></FormLabel>
-                    <RadioGroup
-                      row
-                      value={formik.values.serialConfigs[serialId].enabled}
-                      onChange={handleEnabledChange}
-                      name={`serialConfigs[${index}].enabled`}
-
-                    >
-                      <FormControlLabel
-                        value={true}
-                        control={<Radio />}
-                        label={<FormattedMessage {...messages.statusOptionEnable} />}
-                      />
-                      <FormControlLabel
-                        value={false}
-                        control={<Radio />}
-                        label={<FormattedMessage {...messages.statusOptionDisable} />}
-                      />
-                    </RadioGroup>
-                  </FormControl>
-                </Grid>
-                {
-                  formik.values.serialConfigs[index].enabled
-                    && (
-                    <>
-                      {serialFields.map((field) => (
-                        <Fragment key={field.propertyName}>
-                          {renderFields({
-                            value: formik.values.serialConfigs[serialId][field.propertyName],
-                            name: `serialConfigs[${index}].${field.propertyName}`,
-                            handleChange: formik.handleChange,
-                            ...field,
-                          })}
-                        </Fragment>
-                      ))}
-                    </>
-                    )
-                }
-              </Grid>
+                {(formikProps) => (
+                  <Grid
+                    container
+                    spacing={2}
+                    direction="row"
+                  >
+                    {
+                      renderFields({
+                        label: <FormattedMessage {...messages.statusLabel} />,
+                        value: formikProps.values.enabled,
+                        name: 'enabled',
+                        handleChange: handleEnabledChange(index),
+                        fieldType: 'radioGroup',
+                        radioOptions: enableOptions,
+                      })
+                    }
+                    {
+                      formikProps.values.enabled
+                        && (
+                        <>
+                          {serialFields.map((field) => (
+                            <Fragment key={field.propertyName}>
+                              {renderFields({
+                                value: formikProps.values[field.propertyName],
+                                name: `${field.propertyName}`,
+                                handleChange: formikProps.handleChange,
+                                ...field,
+                              })}
+                            </Fragment>
+                          ))}
+                        </>
+                        )
+                    }
+                  </Grid>
+                )}
+              </Formik>
             </TabPanel>
           ))
         }
       </SwipeableViews>
     </>
   );
-}
+});
 
 export default Serial;

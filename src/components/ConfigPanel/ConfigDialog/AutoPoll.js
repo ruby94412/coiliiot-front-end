@@ -1,15 +1,11 @@
-import { Fragment, useState, useEffect } from 'react';
-import { DataGrid } from '@mui/x-data-grid';
 import {
-  Grid,
-  RadioGroup,
-  Radio,
-  FormControl,
-  FormControlLabel,
-  FormLabel,
-} from '@mui/material';
+  useState, Fragment, useEffect, useRef, forwardRef, useImperativeHandle,
+} from 'react';
+import { DataGrid } from '@mui/x-data-grid';
+import { Grid } from '@mui/material';
 import TabPanel from 'components/common/TabPanel';
 import { useIntl } from 'react-intl';
+import { Formik } from 'formik';
 import SwipeableViews from 'react-swipeable-views';
 import messages from 'hocs/Locale/Messages/ConfigPanel/ConfigDialog/AutoPoll';
 import TableToolBar from 'components/common/TableToolBar';
@@ -18,45 +14,54 @@ import CommandGenerator from './CommandGenerator';
 import { renderFields, convertRawCommands } from './utils';
 import { autoPollFields, getCommandTableColumns } from './constants';
 
-function AutoPoll({
-  formik,
-}) {
+const AutoPoll = forwardRef(({
+  initVals,
+}, ref) => {
   const intl = useIntl();
   const [params, setParams] = useState(null);
   const [serialId, setSerialId] = useState(0);
   const [rows, setRows] = useState([]);
+  const formikRefs = useRef([]);
+
+  const serialIdOptions = [
+    { label: '1', value: 0 }, { label: '2', value: 1 }, { label: '3', value: 2 },
+  ];
+  const enableOptions = [
+    { label: intl.formatMessage(messages.autoPollOptionEnable), value: true },
+    { label: intl.formatMessage(messages.autoPollOptionDisable), value: false },
+  ];
 
   useEffect(() => {
-    if (formik.values.serialConfigs[serialId].autoPollConfig) {
-      setRows(convertRawCommands(formik.values.serialConfigs[serialId].autoPollConfig));
+    if (formikRefs.current[serialId].values.enabled) {
+      setRows(convertRawCommands(formikRefs.current[serialId].values));
     } else {
       setRows([]);
     }
   }, [serialId]);
 
-  const setRawCommandsField = (tempRows) => {
-    const rawCommands = tempRows.map((row) => ({
+  const setCommandsField = (tempRows) => {
+    const commands = tempRows.map((row) => ({
       dec: row.detail.dec,
       rawDec: row.detail.rawDec,
       period: row.period,
       id: row.id,
     }));
-    formik.setFieldValue(`serialConfigs[${serialId}].autoPollConfig.rawCommands`, rawCommands);
+    formikRefs.current[serialId].setFieldValue('autoPollConfig.commands', commands);
   };
 
   const deleteRow = (row) => {
     const temp = [...rows];
     temp.splice(temp.findIndex((obj) => obj.id === row.id), 1);
     setRows(temp);
-    setRawCommandsField(temp);
+    setCommandsField(temp);
   };
 
   const handleSerialIdChange = (event) => {
     setSerialId(Number(event.target.value));
   };
 
-  const handleAutoPollEnabledChange = (e) => {
-    formik.setFieldValue(`serialConfigs[${serialId}].autoPollEnabled`, e.target.value === 'true');
+  const handleEnabledChange = (index) => (e) => {
+    formikRefs.current[index].setFieldValue('enabled', e.target.value === 'true');
   };
 
   const columns = getCommandTableColumns({ intl, setParams, deleteRow });
@@ -71,6 +76,9 @@ function AutoPoll({
     />
   );
 
+  useImperativeHandle(ref, () => ({
+    form: formikRefs,
+  }));
   return (
     <>
       <Grid
@@ -78,98 +86,97 @@ function AutoPoll({
         spacing={2}
         direction="row"
       >
-        <Grid item xs={12}>
-          <FormControl>
-            <FormLabel>{intl.formatMessage(messages.serialIdLabel)}</FormLabel>
-            <RadioGroup
-              row
-              onChange={handleSerialIdChange}
-              value={serialId}
-            >
-              <FormControlLabel value={0} control={<Radio />} label="1" />
-              <FormControlLabel value={1} control={<Radio />} label="2" />
-              <FormControlLabel value={2} control={<Radio />} label="3" />
-            </RadioGroup>
-          </FormControl>
-        </Grid>
+        {
+          renderFields({
+            label: intl.formatMessage(messages.serialIdLabel),
+            value: serialId,
+            handleChange: handleSerialIdChange,
+            fieldType: 'radioGroup',
+            radioOptions: serialIdOptions,
+            layout: { xs: 12 },
+          })
+        }
       </Grid>
       <SwipeableViews index={serialId}>
         {
-          formik.values.serialConfigs.map((serialConfig, index) => (
+          initVals.map((serialConfig, index) => (
             <TabPanel key={index} index={index} value={serialId} sx={{ px: 0, py: 3 }}>
-              <Grid
-                container
-                spacing={2}
-                direction="row"
+              <Formik
+                innerRef={(el) => { formikRefs.current[index] = el; }}
+                initialValues={serialConfig}
               >
-                {
-                  renderFields({
-                    label: intl.formatMessage(messages.autoPollLabel),
-                    value: formik.values.serialConfigs[serialId].autoPollEnabled,
-                    name: `serialConfigs[${serialId}].autoPollEnabled`,
-                    handleChange: handleAutoPollEnabledChange,
-                    fieldType: 'radioGroup',
-                    radioOptions: [
-                      { label: intl.formatMessage(messages.autoPollOptionEnable), value: true },
-                      { label: intl.formatMessage(messages.autoPollOptionDisable), value: false },
-                    ],
-                    layout: { xs: 12 },
-                  })
-                }
-                {
-                  formik.values.serialConfigs[serialId].autoPollEnabled
-                    && (
-                      <>
-                        {
-                          autoPollFields.map((field) => (
-                            <Fragment key={field.propertyName}>
-                              {renderFields({
-                                value: formik.values.serialConfigs[serialId]
-                                  .autoPollConfig[field.propertyName],
-                                name: `serialConfigs[${serialId}].autoPollConfig.${field.propertyName}`,
-                                handleChange: formik.handleChange,
-                                layout: { xs: 12, md: 4 },
-                                ...field,
-                              })}
-                            </Fragment>
-                          ))
-                        }
-                        <Grid item xs={12}>
-                          <DataGrid
-                            sx={{
-                              boxShadow: 2,
-                              border: 2,
-                              borderColor: 'primary.dark',
-                              height: '300px',
-                            }}
-                            rows={rows}
-                            columns={columns}
-                            components={{
-                              Toolbar: renderToolBar,
-                              NoRowsOverlay,
-                            }}
-                            hideFooterSelectedRowCount
-                            hideFooter
-                            hideFooterPagination
-                          />
-                          <CommandGenerator
-                            rows={rows}
-                            setRows={setRows}
-                            params={params}
-                            setParams={setParams}
-                            setRawCommandsField={setRawCommandsField}
-                          />
-                        </Grid>
-                      </>
-                    )
-                }
-              </Grid>
+                {(formikProps) => (
+                  <Grid
+                    container
+                    spacing={2}
+                    direction="row"
+                  >
+                    {
+                      renderFields({
+                        label: intl.formatMessage(messages.autoPollLabel),
+                        value: formikProps.values.enabled,
+                        name: 'enabled',
+                        handleChange: handleEnabledChange(index),
+                        fieldType: 'radioGroup',
+                        radioOptions: enableOptions,
+                        layout: { xs: 12 },
+                      })
+                    }
+                    {
+                      formikProps.values.enabled
+                        && (
+                          <>
+                            {
+                              autoPollFields.map((field) => (
+                                <Fragment key={field.propertyName}>
+                                  {renderFields({
+                                    value: formikProps.values[field.propertyName],
+                                    name: `${field.propertyName}`,
+                                    handleChange: formikProps.handleChange,
+                                    layout: { xs: 12, md: 4 },
+                                    ...field,
+                                  })}
+                                </Fragment>
+                              ))
+                            }
+                            <Grid item xs={12}>
+                              <DataGrid
+                                sx={{
+                                  boxShadow: 2,
+                                  border: 2,
+                                  borderColor: 'primary.dark',
+                                  height: '300px',
+                                }}
+                                rows={rows}
+                                columns={columns}
+                                components={{
+                                  Toolbar: renderToolBar,
+                                  NoRowsOverlay,
+                                }}
+                                hideFooterSelectedRowCount
+                                hideFooter
+                                hideFooterPagination
+                              />
+                              <CommandGenerator
+                                rows={rows}
+                                setRows={setRows}
+                                params={params}
+                                setParams={setParams}
+                                setCommandsField={setCommandsField}
+                              />
+                            </Grid>
+                          </>
+                        )
+                    }
+                  </Grid>
+                )}
+              </Formik>
             </TabPanel>
           ))
         }
       </SwipeableViews>
     </>
   );
-}
+});
 
 export default AutoPoll;

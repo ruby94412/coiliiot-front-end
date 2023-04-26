@@ -143,6 +143,10 @@
   "coiliiot.app.configPanel.configDialog.constants.ratio": "Ratio",
   "coiliiot.app.configPanel.configDialog.constants.deviation": "Deviation",
   "coiliiot.app.configPanel.configDialog.constants.order": "Order",
+  "coiliiot.app.configPanel.configDialog.constants.retain": "Retain",
+  "coiliiot.app.configPanel.configDialog.constants.lwtMessage": "Last Will and Testament Message",
+  "coiliiot.app.configPanel.configDialog.constants.cleanSession": "Clean Session When Disconnected",
+  "coiliiot.app.configPanel.configDialog.constants.qos": "QoS",
 
   "coiliiot.app.configPanel.configDialog.commandGenerator.title": "Command Generator",
   "coiliiot.app.configPanel.configDialog.commandGenerator.confirm": "Confirm",

@@ -84,6 +84,31 @@ export const mqttFields = [
   { label: 'ClientID', propertyName: 'clientId', datatype: 'text' },
   { label: <FormattedMessage {...messages.subscribeTopic} />, propertyName: 'subscribeTopic', datatype: 'text' },
   { label: <FormattedMessage {...messages.publishTopic} />, propertyName: 'publishTopic', datatype: 'text' },
+  {
+    label: <FormattedMessage {...messages.qos} />,
+    propertyName: 'qos',
+    datatype: 'number',
+    fieldType: 'radioGroup',
+    radioOptions: [0, 1, 2],
+  },
+  {
+    label: <FormattedMessage {...messages.retain} />,
+    propertyName: 'retain',
+    datatype: 'number',
+    fieldType: 'radioGroup',
+    radioOptions: [0, 1],
+  },
+  {
+    label: <FormattedMessage {...messages.cleanSession} />,
+    propertyName: 'cleanSession',
+    datatype: 'boolean',
+    fieldType: 'radioGroup',
+    radioOptions: [
+      { label: <FormattedMessage {...messages.enable} />, value: true },
+      { label: <FormattedMessage {...messages.disable} />, value: false },
+    ],
+  },
+  { label: <FormattedMessage {...messages.lwtMessage} />, propertyName: 'lwtMessage', datatype: 'text' },
 ];
 
 export const serialFields = [

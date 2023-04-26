@@ -1,29 +1,39 @@
-import { Fragment } from 'react';
+import {
+  Fragment, forwardRef, useImperativeHandle, useRef,
+} from 'react';
 import { Grid } from '@mui/material';
+import { Formik } from 'formik';
 import { basicFields } from './constants';
 import { renderFields } from './utils';
 
-function Basic({
-  formik,
-}) {
+const Basic = forwardRef(({
+  initVals,
+}, ref) => {
+  const formikRef = useRef();
+  useImperativeHandle(ref, () => ({
+    form: formikRef,
+  }));
+
   return (
     <Grid
       container
       spacing={2}
       direction="row"
     >
-      {basicFields.map((field) => (
-        <Fragment key={field.propertyName}>
-          {renderFields({
-            value: formik.values.basicConfigs[field.propertyName],
-            name: `basicConfigs.${field.propertyName}`,
-            handleChange: formik.handleChange,
-            ...field,
-          })}
-        </Fragment>
-      ))}
+      <Formik initialValues={initVals} innerRef={formikRef}>
+        {(formikProps) => basicFields.map((field) => (
+          <Fragment key={field.propertyName}>
+            {renderFields({
+              value: formikProps.values[field.propertyName],
+              name: `${field.propertyName}`,
+              handleChange: formikProps.handleChange,
+              ...field,
+            })}
+          </Fragment>
+        ))}
+      </Formik>
     </Grid>
   );
-}
+});
 
 export default Basic;

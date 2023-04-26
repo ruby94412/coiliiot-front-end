@@ -10,12 +10,15 @@ import {
   Box,
 } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
-import { useState, forwardRef, useImperativeHandle } from 'react';
+import {
+  useState, forwardRef, useImperativeHandle, useEffect, useRef,
+} from 'react';
 import { useFormik } from 'formik';
 import { FormattedMessage } from 'react-intl';
 import messages from 'hocs/Locale/Messages/ConfigPanel/ConfigDialog/DialogContent';
 import SwipeableViews from 'react-swipeable-views';
 import TabPanel from 'components/common/TabPanel';
+import { handleFormDataSubmit } from './utils';
 import Platform from './Platform';
 import Serial from './Serial';
 import Basic from './Basic';
@@ -37,79 +40,53 @@ const Content = forwardRef(({
   const [saveLoading, setSaveLoading] = useState(false);
   const [snackbar, setSnackbar] = useState(null);
   const [tabIndex, setTabIndex] = useState(0);
+
+  const tabPanelRefs = useRef([]);
+  const formRef = {
+    basic: useRef(null),
+    serial: useRef(null),
+    network: useRef(null),
+    autoPoll: useRef(null),
+  };
   const handleTabChange = (event, newValue) => {
     setTabIndex(newValue);
   };
 
-  const handleDataConvert = (values) => {
-    const config = {
-      basicConfigs: {},
-      serialConfigs: [],
-      networkConfigs: [],
-      networkSummary: { socket: [], aliyun: [], mqtt: [] },
-    };
-    config.basicConfigs = values.basicConfigs;
-    values.serialConfigs.forEach((ele) => {
-      if (ele.enabled) {
-        const { autoPollEnabled, autoPollConfig, ...other } = ele;
-        if (autoPollEnabled) {
-          config.serialConfigs.push(ele);
-        } else {
-          config.serialConfigs.push({ autoPollEnabled, ...other });
-        }
-      }
-    });
-    let autoTaskCount = 0;
-    values.networkConfigs.forEach((ele) => {
-      if (ele.enabled) {
-        const {
-          enabled, serialId, type, networkId, conversionConfigs,
-        } = ele;
-        if (config.serialConfigs[serialId].autoPollEnabled) autoTaskCount++;
-        const typeArr = ['socket', 'aliyun', 'mqtt'];
-        const detail = ele[typeArr[type]];
-        config.networkSummary[typeArr[type]].push(networkId);
-        config.networkConfigs.push({
-          enabled, serialId, type, networkId, conversionConfigs, ...detail,
-        });
-      }
-    });
-    config.config_version = new Date().toString();
-    config.autoTaskCount = autoTaskCount;
-    return config;
-  };
+  // const handleSubmit = async (config) => {
+  //   setSaveLoading(true);
+  //   try {
+  //     await updateConfig({
+  //       ...groupRow,
+  //       config,
+  //     });
+  //     setSnackbar({
+  //       children: <FormattedMessage {...messages.snackBarSuccess} />, severity: 'success',
+  //     });
+  //   } catch (error) {
+  //     setSnackbar({
+  //       children: <FormattedMessage {...messages.snackBarError} />, severity: 'error',
+  //     });
+  //   }
+  //   setSaveLoading(false);
+  // };
 
-  const handleSubmit = async (config) => {
-    setSaveLoading(true);
-    try {
-      await updateConfig({
-        ...groupRow,
-        config,
-      });
-      setSnackbar({ children: <FormattedMessage {...messages.snackBarSuccess} />, severity: 'success' });
-    } catch (error) {
-      setSnackbar({ children: <FormattedMessage {...messages.snackBarError} />, severity: 'error' });
-    }
-    setSaveLoading(false);
+  const handleSubmit = () => {
+    console.log(formRef.basic.current.form.current.values);
+    console.log(formRef.serial.current.form.current);
+    console.log(formRef.network.current.form.current);
+    console.log(formRef.autoPoll.current.form.current);
   };
-
-  const formik = useFormik({
-    initialValues,
-    onSubmit: (values, { resetForm }) => {
-      const config = handleDataConvert(values);
-      handleSubmit(config, resetForm);
-    },
-  });
 
   useImperativeHandle(ref, () => ({
-    dirty: formik.dirty,
+    dirty: '',
   }));
 
   const handleCloseSnackbar = () => {
     setSnackbar(null);
     onClose(false);
-    formik.resetForm();
+    // formik.resetForm();
   };
+
   return (
     <>
       <DialogTitle>
@@ -131,28 +108,40 @@ const Content = forwardRef(({
       <DialogContent>
         <SwipeableViews index={tabIndex}>
           <TabPanel value={tabIndex} index={0}>
-            <Basic formik={formik} />
+            <Basic
+              initVals={initialValues.basicConfigs}
+              ref={(el) => { formRef.basic.current = el; }}
+            />
           </TabPanel>
           <TabPanel value={tabIndex} index={1}>
-            <Serial formik={formik} />
+            <Serial
+              initVals={initialValues.serialConfigs}
+              ref={(el) => { formRef.serial.current = el; }}
+            />
           </TabPanel>
           <TabPanel value={tabIndex} index={2}>
-            <Platform formik={formik} />
+            <Platform
+              initVals={initialValues.networkConfigs}
+              ref={(el) => { formRef.network.current = el; }}
+            />
           </TabPanel>
           <TabPanel value={tabIndex} index={3}>
-            <AutoPoll formik={formik} />
+            <AutoPoll
+              initVals={initialValues.autoPollConfigs}
+              ref={(el) => { formRef.autoPoll.current = el; }}
+            />
           </TabPanel>
-          <TabPanel value={tabIndex} index={4}>
+          {/* <TabPanel value={tabIndex} index={4}>
             <DataConversion formik={formik} />
-          </TabPanel>
+          </TabPanel> */}
         </SwipeableViews>
 
       </DialogContent>
       <DialogActions>
-        <Button onClick={() => { onClose(formik.dirty); }} variant="contained">
+        {/* <Button onClick={() => { onClose(basicFormik.dirty); }} variant="contained">
           <FormattedMessage {...messages.cancelButton} />
-        </Button>
-        <LoadingButton onClick={formik.handleSubmit} loading={saveLoading} variant="contained">
+        </Button> */}
+        <LoadingButton onClick={handleSubmit} loading={saveLoading} variant="contained">
           <FormattedMessage {...messages.submitButton} />
         </LoadingButton>
       </DialogActions>

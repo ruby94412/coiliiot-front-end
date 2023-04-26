@@ -99,7 +99,9 @@ export const renderFields = ({
 };
 
 export const getInitialValues = (originalConfig) => {
-  const rst = { basicConfigs: {}, serialConfigs: [], networkConfigs: [] };
+  const rst = {
+    basicConfigs: {}, serialConfigs: [], networkConfigs: [], autoPollConfigs: [],
+  };
   rst.basicConfigs = {
     config_version: 0,
     autoUpdateEnabled: true,
@@ -114,10 +116,14 @@ export const getInitialValues = (originalConfig) => {
       dataBit: 8,
       stopBit: 1,
       parityMode: 2,
-      autoPollEnabled: false,
-      autoPollConfig: {
-        delay: 1000, commands: [], serialId: i, numberOfRetry: 3, timeout: 1, rawCommands: [],
-      },
+    });
+    rst.autoPollConfigs.push({
+      enabled: false,
+      delay: 1000,
+      commands: [],
+      serialId: i,
+      numberOfRetry: 3,
+      timeout: 1,
     });
   }
   for (let i = 0; i < 8; i++) {
@@ -150,6 +156,10 @@ export const getInitialValues = (originalConfig) => {
         clientId: '',
         subscribeTopic: '',
         publishTopic: '',
+        retain: 0,
+        lwtMessage: '',
+        qos: 0,
+        cleanSession: true,
       },
       serialId: 0,
     });
@@ -163,6 +173,11 @@ export const getInitialValues = (originalConfig) => {
     const index = origin.serialId;
     const defaultConfig = rst.serialConfigs[index];
     rst.serialConfigs[index] = { ...defaultConfig, ...origin };
+  });
+  originalConfig?.autoPollConfigs?.forEach((origin) => {
+    const index = origin.serialId;
+    const defaultConfig = rst.autoPollConfigs[index];
+    rst.autoPollConfigs[index] = { ...defaultConfig, ...origin };
   });
   originalConfig?.networkConfigs?.forEach((origin) => {
     const index = origin.networkId;
@@ -179,7 +194,7 @@ export const getInitialValues = (originalConfig) => {
   return rst;
 };
 
-export const getCommand = ({
+export const getCommandDetail = ({
   slaveId,
   functionCode,
   registerOffset,
@@ -261,18 +276,18 @@ export const getUid = (type) => {
 };
 
 export const convertRawCommands = (autoPollConfig) => {
-  if (!autoPollConfig || !autoPollConfig.rawCommands?.length) return [];
-  const temp = autoPollConfig.rawCommands?.map((rawCommand) => {
+  if (!autoPollConfig || !autoPollConfig.commands?.length) return [];
+  const temp = autoPollConfig.commands?.map((command) => {
     const rst = {
-      slaveId: rawCommand.rawDec[0],
-      functionCode: rawCommand.rawDec[1],
-      registerOffset: rawCommand.rawDec[2],
-      numberOfRegisters: rawCommand.rawDec[3],
+      slaveId: command.rawDec[0],
+      functionCode: command.rawDec[1],
+      registerOffset: command.rawDec[2],
+      numberOfRegisters: command.rawDec[3],
     };
-    const command = getCommand(rst);
-    rst.detail = command;
-    rst.period = rawCommand.period;
-    rst.id = rawCommand.id;
+    const commandDetail = getCommandDetail(rst);
+    rst.detail = commandDetail;
+    rst.period = command.period;
+    rst.id = command.id;
     return rst;
   });
   return temp;
@@ -293,7 +308,7 @@ export const renderCommandDetail = ({
   hexLabel,
   crcLabel,
 }) => {
-  const command = getCommand({
+  const command = getCommandDetail({
     slaveId,
     functionCode,
     registerOffset,
@@ -329,4 +344,42 @@ ${requestLabel}: [${command.slaveId.hex}] [${command.functionCode.hex}] [${comma
          |    |    |-> ${registerOffestLabel} (${command.registerOffset.dec} = ${Number(command.registerOffset.dec) + startAddress[command.functionCode.dec]})
          |    |-> ${functionCodeLabel} (${command.functionCode.dec})
          |-> ${slaveIdLabel} (${command.slaveId.dec})`;
+};
+
+export const handleFormDataSubmit = (values) => {
+  const config = {
+    basicConfigs: {},
+    serialConfigs: [],
+    networkConfigs: [],
+    networkSummary: { socket: [], aliyun: [], mqtt: [] },
+  };
+  config.basicConfigs = values.basicConfigs;
+  values.serialConfigs.forEach((ele) => {
+    if (ele.enabled) {
+      const { autoPollEnabled, autoPollConfig, ...other } = ele;
+      if (autoPollEnabled) {
+        config.serialConfigs.push(ele);
+      } else {
+        config.serialConfigs.push({ autoPollEnabled, ...other });
+      }
+    }
+  });
+  let autoTaskCount = 0;
+  values.networkConfigs.forEach((ele) => {
+    if (ele.enabled) {
+      const {
+        enabled, serialId, type, networkId, conversionConfigs,
+      } = ele;
+      if (config.serialConfigs[serialId].autoPollEnabled) autoTaskCount++;
+      const typeArr = ['socket', 'aliyun', 'mqtt'];
+      const detail = ele[typeArr[type]];
+      config.networkSummary[typeArr[type]].push(networkId);
+      config.networkConfigs.push({
+        enabled, serialId, type, networkId, conversionConfigs, ...detail,
+      });
+    }
+  });
+  config.config_version = new Date().toString();
+  config.autoTaskCount = autoTaskCount;
+  return config;
 };

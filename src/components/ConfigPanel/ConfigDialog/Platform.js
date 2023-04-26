@@ -1,37 +1,37 @@
-import { useState, Fragment } from 'react';
 import {
-  Grid,
-  RadioGroup,
-  Radio,
-  FormControl,
-  FormControlLabel,
-  FormLabel,
-  Select,
-  MenuItem,
-} from '@mui/material';
+  useState, Fragment, useRef, forwardRef, useImperativeHandle,
+} from 'react';
+import { Grid } from '@mui/material';
+import { FormattedMessage } from 'react-intl';
+import { Formik } from 'formik';
+import messages from 'hocs/Locale/Messages/ConfigPanel/ConfigDialog/Platform';
 import SwipeableViews from 'react-swipeable-views';
 import TabPanel from 'components/common/TabPanel';
-import { FormattedMessage } from 'react-intl';
-import messages from 'hocs/Locale/Messages/ConfigPanel/ConfigDialog/Platform';
 import { renderFields } from './utils';
 import {
   networkIds, networkOptions, aliyunFields, mqttFields, socketFields,
 } from './constants';
 
-function Platform({
-  formik,
-}) {
+const Platform = forwardRef(({
+  initVals,
+}, ref) => {
+  const formikRefs = useRef([]);
   const [networkId, setNetworkId] = useState(0);
+
+  const enableOptions = [
+    { label: <FormattedMessage {...messages.statusOptionEnable} />, value: true },
+    { label: <FormattedMessage {...messages.statusOptionDisable} />, value: false },
+  ];
   const handleNetworkIdChange = (event) => {
     setNetworkId(Number(event.target.value));
   };
 
-  const handleEnabledChange = (e) => {
-    formik.setFieldValue(`networkConfigs[${networkId}].enabled`, e.target.value === 'true');
+  const handleEnabledChange = (index) => (e) => {
+    formikRefs.current[index].setFieldValue('enabled', e.target.value === 'true');
   };
 
-  const renderNetwork = () => {
-    const { type } = formik.values.networkConfigs[networkId];
+  const renderNetwork = (formikProps) => {
+    const { type } = formikProps.values;
     let fields; let
       typeName;
     switch (type) {
@@ -54,24 +54,28 @@ function Platform({
         {fields.map((field) => (
           <Fragment key={field.propertyName}>
             {renderFields({
-              value: formik.values.networkConfigs[networkId][typeName][field.propertyName],
-              name: `networkConfigs[${networkId}].${typeName}.${field.propertyName}`,
-              handleChange: formik.handleChange,
+              value: formikProps.values[typeName][field.propertyName],
+              name: `${typeName}.${field.propertyName}`,
+              handleChange: formikProps.handleChange,
               ...field,
             })}
           </Fragment>
         ))}
         {renderFields({
           label: <FormattedMessage {...messages.serialIdLabel} />,
-          value: Number(formik.values.networkConfigs[networkId].serialId),
-          name: `networkConfigs[${networkId}].serialId`,
-          handleChange: formik.handleChange,
+          value: Number(formikProps.values.serialId),
+          name: 'serialId',
+          handleChange: formikProps.handleChange,
           fieldType: 'radioGroup',
           radioOptions: [{ label: '1', value: 0 }, { label: '2', value: 1 }, { label: '3', value: 2 }],
         })}
       </>
     );
   };
+
+  useImperativeHandle(ref, () => ({
+    form: formikRefs,
+  }));
 
   return (
     <>
@@ -81,94 +85,74 @@ function Platform({
         direction="row"
       >
         <Grid item xs={12}>
-          <FormControl>
-            <FormLabel><FormattedMessage {...messages.networkIdLabel} /></FormLabel>
-            <RadioGroup
-              row
-              onChange={handleNetworkIdChange}
-              value={networkId}
-            >
-              {
-                networkIds.map((id) => (
-                  <FormControlLabel key={id} value={id} control={<Radio />} label={id + 1} />
-                ))
-              }
-            </RadioGroup>
-          </FormControl>
+          {renderFields({
+            label: <FormattedMessage {...messages.networkIdLabel} />,
+            value: networkId,
+            handleChange: handleNetworkIdChange,
+            fieldType: 'radioGroup',
+            datatype: 'number',
+            radioOptions: networkIds.map((id) => ({ label: id + 1, value: id })),
+          })}
         </Grid>
       </Grid>
       <SwipeableViews index={networkId}>
         {
-          formik.values.networkConfigs.map((networkConfig, index) => (
+          initVals.map((networkConfig, index) => (
             <TabPanel key={index} index={index} value={networkId} sx={{ px: 0, py: 3 }}>
-              <Grid
-                container
-                spacing={2}
-                direction="row"
+              <Formik
+                innerRef={(el) => { formikRefs.current[index] = el; }}
+                initialValues={networkConfig}
               >
-                {
-                  renderFields({
-                    label: <FormattedMessage {...messages.statusLabel} />,
-                    value: formik.values.networkConfigs[networkId].enabled,
-                    name: `networkConfigs[${index}].enabled`,
-                    handleChange: handleEnabledChange,
-                    fieldType: 'radioGroup',
-                    radioOptions: [
+                {(formikProps) => (
+                  <>
+                    <Grid
+                      container
+                      spacing={2}
+                      direction="row"
+                    >
                       {
-                        label: <FormattedMessage {...messages.statusOptionEnable} />,
-                        value: true,
-                      },
+                        renderFields({
+                          label: <FormattedMessage {...messages.statusLabel} />,
+                          value: formikProps.values.enabled,
+                          name: 'enabled',
+                          handleChange: handleEnabledChange(index),
+                          fieldType: 'radioGroup',
+                          radioOptions: enableOptions,
+                        })
+                      }
                       {
-                        label: <FormattedMessage {...messages.statusOptionDisable} />,
-                        value: false,
-                      },
-                    ],
-                  })
-                }
-                {
-                  formik.values.networkConfigs[index].enabled && (
-                    <Grid item xs={12} md={4}>
-                      <FormControl sx={{ display: 'flex' }}>
-                        <FormLabel><FormattedMessage {...messages.platformTypeLabel} /></FormLabel>
-                        <Select
-                          size="small"
-                          style={{ width: '80%' }}
-                          value={formik.values.networkConfigs[index].type}
-                          name={`networkConfigs[${index}].type`}
-                          onChange={formik.handleChange}
-                        >
-                          {
-                              networkOptions.map((network) => (
-                                <MenuItem key={network.label} value={network.value}>
-                                  {network.label}
-                                </MenuItem>
-                              ))
-                            }
-                        </Select>
-                      </FormControl>
+                        formikProps.values.enabled
+                          && renderFields({
+                            label: <FormattedMessage {...messages.platformTypeLabel} />,
+                            value: formikProps.values.type,
+                            name: 'type',
+                            handleChange: formikProps.handleChange,
+                            fieldType: 'select',
+                            selectOptions: networkOptions,
+                          })
+                      }
                     </Grid>
-                  )
-                }
-              </Grid>
-              {
-                formik.values.networkConfigs[index].enabled && (
-                  <Grid
-                    container
-                    spacing={2}
-                    direction="row"
-                    style={{ marginTop: '10px' }}
-                  >
-                    {renderNetwork()}
-                  </Grid>
-                )
-              }
-
+                    {
+                      formikProps.values.enabled && (
+                        <Grid
+                          container
+                          spacing={2}
+                          direction="row"
+                          style={{ marginTop: '10px' }}
+                        >
+                          {renderNetwork(formikProps)}
+                        </Grid>
+                      )
+                    }
+                  </>
+                )}
+              </Formik>
             </TabPanel>
           ))
         }
       </SwipeableViews>
     </>
   );
-}
+});
 
 export default Platform;

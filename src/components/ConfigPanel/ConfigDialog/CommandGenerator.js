@@ -10,7 +10,7 @@ import {
 import { FormattedMessage } from 'react-intl';
 import messages from 'hocs/Locale/Messages/ConfigPanel/ConfigDialog/CommandGenerator';
 import CommandDetail from './CommandDetail';
-import { getCommand, renderFields, getUid } from './utils';
+import { getCommandDetail, renderFields, getUid } from './utils';
 import { commandGeneratorFields } from './constants';
 
 const dialogStyle = {
@@ -23,7 +23,7 @@ function CommandGenerator({
   setRows,
   params,
   setParams,
-  setRawCommandsField,
+  setCommandsField,
 }) {
   const handleClose = () => setParams(null);
   const [data, setData] = useState(params);
@@ -35,7 +35,7 @@ function CommandGenerator({
 
   useEffect(() => {
     if (data) {
-      setCommand(getCommand(data));
+      setCommand(getCommandDetail(data));
     }
   }, [data]);
 
@@ -59,7 +59,7 @@ function CommandGenerator({
       temp.push({ ...data, id: getUid(), detail: command });
       setRows(temp);
     }
-    setRawCommandsField(temp);
+    setCommandsField(temp);
     handleClose();
   };
 

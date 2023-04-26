@@ -27,7 +27,7 @@ function DataConversion({
     const { values } = formik;
     if (values.networkConfigs[networkId].enabled) {
       const { serialId } = values.networkConfigs[networkId];
-      if (values.serialConfigs[serialId].autoPollConfig?.rawCommands?.length) {
+      if (values.serialConfigs[serialId].autoPollConfig?.commands?.length) {
         setContentType('hasCommands');
         const temp = convertRawCommands(values.serialConfigs[serialId].autoPollConfig);
         const conversionConfigs = values.networkConfigs[networkId].conversionConfigs || [];

@@ -144,6 +144,10 @@
   "coiliiot.app.configPanel.configDialog.constants.ratio": "比例",
   "coiliiot.app.configPanel.configDialog.constants.deviation": "偏移",
   "coiliiot.app.configPanel.configDialog.constants.order": "顺序",
+  "coiliiot.app.configPanel.configDialog.constants.retain": "发布参数retain",
+  "coiliiot.app.configPanel.configDialog.constants.lwtMessage": "遗嘱信息",
+  "coiliiot.app.configPanel.configDialog.constants.cleanSession": "离线销毁会话",
+  "coiliiot.app.configPanel.configDialog.constants.qos": "QoS级别",
 
   "coiliiot.app.configPanel.configDialog.commandGenerator.title": "生成命令",
   "coiliiot.app.configPanel.configDialog.commandGenerator.confirm": "确认",

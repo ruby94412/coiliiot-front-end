@@ -19,6 +19,7 @@ function ConfigDialog({
   useEffect(() => {
     if (groupRow) {
       setInitialValues(getInitialValues(groupRow.config));
+      // setInitialFormValues(groupRow.config);
     }
   }, [groupRow]);
 
