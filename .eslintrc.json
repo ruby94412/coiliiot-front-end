@@ -9,7 +9,9 @@
    "no-unused-vars": "warn",
    "react/no-array-index-key": "off",
    "no-plusplus": "off",
-   "no-bitwise": "off"
+   "no-bitwise": "off",
+   "import/no-extraneous-dependencies": "off",
+   "react/jsx-no-useless-fragment": "off"
   },
   "env": {
     "node": true,

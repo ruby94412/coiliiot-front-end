@@ -19,4 +19,8 @@ export default defineMessages({
     id: `${scope}.confirm`,
     defaultMessage: 'Confirm',
   },
+  commandDetail: {
+    id: `${scope}.commandDetail`,
+    defaultMessage: 'Command Detail',
+  },
 });

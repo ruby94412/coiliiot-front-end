@@ -91,6 +91,7 @@ const Platform = forwardRef(({
             handleChange: handleNetworkIdChange,
             fieldType: 'radioGroup',
             datatype: 'number',
+            layout: { xs: 12 },
             radioOptions: networkIds.map((id) => ({ label: id + 1, value: id })),
           })}
         </Grid>

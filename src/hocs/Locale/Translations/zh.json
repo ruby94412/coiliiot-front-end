@@ -156,9 +156,11 @@
 
   "coiliiot.app.configPanel.configDialog.dataConversion.networkDisabledText": "该网络通道尚未启用",
   "coiliiot.app.configPanel.configDialog.dataConversion.autoPollDisabledText": "该通道尚未设置轮训命令",
+  "coiliiot.app.configPanel.configDialog.dataConversion.noNetworkConfigedText": "此串口通道尚未配置与之相连的网络通道",
 
   "coiliiot.app.configPanel.configDialog.dataAccordion.title": "配置映射",
   "coiliiot.app.configPanel.configDialog.dataAccordion.addMappingButton": "添加映射",
   "coiliiot.app.configPanel.configDialog.dataAccordion.cancel": "取消",
-  "coiliiot.app.configPanel.configDialog.dataAccordion.confirm": "确定"
+  "coiliiot.app.configPanel.configDialog.dataAccordion.confirm": "确定",
+  "coiliiot.app.configPanel.configDialog.dataAccordion.commandDetail": "命令信息"
 }

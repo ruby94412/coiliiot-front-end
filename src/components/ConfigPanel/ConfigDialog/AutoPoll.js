@@ -14,6 +14,10 @@ import CommandGenerator from './CommandGenerator';
 import { renderFields, convertRawCommands } from './utils';
 import { autoPollFields, getCommandTableColumns } from './constants';
 
+const serialIdOptions = [
+  { label: '1', value: 0 }, { label: '2', value: 1 }, { label: '3', value: 2 },
+];
+
 const AutoPoll = forwardRef(({
   initVals,
 }, ref) => {
@@ -23,9 +27,6 @@ const AutoPoll = forwardRef(({
   const [rows, setRows] = useState([]);
   const formikRefs = useRef([]);
 
-  const serialIdOptions = [
-    { label: '1', value: 0 }, { label: '2', value: 1 }, { label: '3', value: 2 },
-  ];
   const enableOptions = [
     { label: intl.formatMessage(messages.autoPollOptionEnable), value: true },
     { label: intl.formatMessage(messages.autoPollOptionDisable), value: false },
@@ -46,7 +47,7 @@ const AutoPoll = forwardRef(({
       period: row.period,
       id: row.id,
     }));
-    formikRefs.current[serialId].setFieldValue('autoPollConfig.commands', commands);
+    formikRefs.current[serialId].setFieldValue('commands', commands);
   };
 
   const deleteRow = (row) => {
@@ -145,8 +146,8 @@ const AutoPoll = forwardRef(({
                                   boxShadow: 2,
                                   border: 2,
                                   borderColor: 'primary.dark',
-                                  height: '300px',
                                 }}
+                                autoHeight
                                 rows={rows}
                                 columns={columns}
                                 components={{

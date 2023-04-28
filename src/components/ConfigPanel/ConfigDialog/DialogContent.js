@@ -41,12 +41,12 @@ const Content = forwardRef(({
   const [snackbar, setSnackbar] = useState(null);
   const [tabIndex, setTabIndex] = useState(0);
 
-  const tabPanelRefs = useRef([]);
   const formRef = {
     basic: useRef(null),
     serial: useRef(null),
     network: useRef(null),
     autoPoll: useRef(null),
+    dataConversion: useRef(null),
   };
   const handleTabChange = (event, newValue) => {
     setTabIndex(newValue);
@@ -75,6 +75,7 @@ const Content = forwardRef(({
     console.log(formRef.serial.current.form.current);
     console.log(formRef.network.current.form.current);
     console.log(formRef.autoPoll.current.form.current);
+    console.log(formRef.dataConversion.current.form.current);
   };
 
   useImperativeHandle(ref, () => ({
@@ -131,9 +132,14 @@ const Content = forwardRef(({
               ref={(el) => { formRef.autoPoll.current = el; }}
             />
           </TabPanel>
-          {/* <TabPanel value={tabIndex} index={4}>
-            <DataConversion formik={formik} />
-          </TabPanel> */}
+          <TabPanel value={tabIndex} index={4}>
+            <DataConversion
+              networkForm={formRef.network.current}
+              autoPollForm={formRef.autoPoll.current}
+              initVals={initialValues.conversionConfigs}
+              ref={(el) => { formRef.dataConversion.current = el; }}
+            />
+          </TabPanel>
         </SwipeableViews>
 
       </DialogContent>

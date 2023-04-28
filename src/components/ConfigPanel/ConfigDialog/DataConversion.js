@@ -1,63 +1,97 @@
-import { useState, Fragment, useEffect } from 'react';
+import {
+  useState, Fragment, useEffect, forwardRef, useImperativeHandle, useRef,
+} from 'react';
 import {
   Grid,
   Typography,
+  Collapse,
 } from '@mui/material';
+import { TransitionGroup } from 'react-transition-group';
 import SwipeableViews from 'react-swipeable-views';
 import TabPanel from 'components/common/TabPanel';
 import { FormattedMessage, useIntl } from 'react-intl';
+import { Formik } from 'formik';
 import platformMessages from 'hocs/Locale/Messages/ConfigPanel/ConfigDialog/Platform';
 import messages from 'hocs/Locale/Messages/ConfigPanel/ConfigDialog/DataConversion';
-import {
-  networkIds,
-} from './constants';
 import { convertRawCommands, renderFields } from './utils';
 import DataAccordion from './DataAccordion';
 
-function DataConversion({
-  formik,
-}) {
+const serialIdOptions = [
+  { label: '1', value: 0 }, { label: '2', value: 1 }, { label: '3', value: 2 },
+];
+
+const DataConversion = forwardRef(({
+  networkForm,
+  autoPollForm,
+}, ref) => {
   const intl = useIntl();
-  const [networkId, setNetworkId] = useState(0);
+  const [serialId, setSerialId] = useState(0);
+  const [networks, setNetworks] = useState([]);
+  const [networkOptions, setNetworkOptions] = useState([]);
+  const [networkId, setNetworkId] = useState(null);
+  const [autoPolls, setAutoPolls] = useState([]);
   const [expanded, setExpanded] = useState(false);
   const [commands, setCommands] = useState([]);
-  const [contentType, setContentType] = useState('hasCommands');
+  const formikRefs = useRef([]);
 
   useEffect(() => {
-    const { values } = formik;
-    if (values.networkConfigs[networkId].enabled) {
-      const { serialId } = values.networkConfigs[networkId];
-      if (values.serialConfigs[serialId].autoPollConfig?.commands?.length) {
-        setContentType('hasCommands');
-        const temp = convertRawCommands(values.serialConfigs[serialId].autoPollConfig);
-        const conversionConfigs = values.networkConfigs[networkId].conversionConfigs || [];
-        const rst = [];
-        temp?.forEach((obj) => {
-          const conversions = conversionConfigs
-            .find((cfg) => (cfg.commandId === obj.id))?.conversions;
-          rst.push(conversions ? { ...obj, initConversions: conversions } : obj);
-        });
-        setCommands(rst);
-      } else {
-        setContentType('hasNoCommands');
-        setCommands([]);
+    if (networkForm?.form?.current?.length) {
+      const temp = networkForm.form?.current
+        .map((formikForm) => ({ ...formikForm.values }));
+      console.log('networks', temp);
+      setNetworks(temp);
+    }
+    if (autoPollForm?.form?.current?.length) {
+      const temp = autoPollForm.form?.current
+        .map((formikForm) => ({ ...formikForm.values }));
+      console.log('autoPolls', temp);
+      setAutoPolls(temp);
+    }
+  }, [networkForm, autoPollForm]);
+
+  useEffect(() => {
+    const temp = [];
+    networks.forEach((network) => {
+      if (network.enabled && network.serialId === serialId) {
+        temp.push({ label: network.networkId + 1, value: network.networkId });
       }
+    });
+    setNetworkOptions(temp);
+    console.log('networkOptions', temp);
+    if (temp.length) setNetworkId(temp[0].value);
+    else setNetworkId(null);
+  }, [serialId, networks]);
+
+  useEffect(() => {
+    if (autoPolls[serialId]?.commands?.length) {
+      const temp = convertRawCommands(autoPolls[serialId]);
+      // const conversionConfigs = values.networkConfigs[networkId].conversionConfigs || [];
+      // const rst = [];
+      // temp?.forEach((obj) => {
+      //   const conversions = conversionConfigs
+      //     .find((cfg) => (cfg.commandId === obj.id))?.conversions;
+      //   rst.push(conversions ? { ...obj, initConversions: conversions } : obj);
+      // });
+      setCommands(temp);
     } else {
-      setContentType('networkDisabled');
       setCommands([]);
     }
-  }, [networkId, formik]);
+  }, [serialId, autoPolls, networkId]);
 
-  const handleExpandChange = (panel) => (event, isExpanded) => {
-    setExpanded(isExpanded ? panel : false);
+  const handleSerialIdChange = (event) => {
+    setSerialId(Number(event.target.value));
   };
 
   const handleNetworkIdChange = (event) => {
     setNetworkId(Number(event.target.value));
   };
 
+  const handleExpandChange = (panel) => (event, isExpanded) => {
+    setExpanded(isExpanded ? panel : false);
+  };
+
   const setFields = (data) => {
-    const origin = formik.values.networkConfigs[networkId].conversionConfigs || [];
+    const origin = networkForm.form?.current[networkId].values.conversionConfigs || [];
     const temp = [];
     let flag = false;
     origin.forEach((conversion) => {
@@ -69,10 +103,10 @@ function DataConversion({
       }
     });
     if (!flag) temp.push(data);
-    formik.setFieldValue(`networkConfigs[${networkId}].conversionConfigs`, temp);
+    networkForm.form?.current[networkId].setFieldValue('conversionConfigs', temp);
   };
 
-  const renderAccordions = (commands) => (
+  const renderAccordions = () => (
     <>
       {commands.map((command, idx) => (
         <DataAccordion
@@ -88,28 +122,6 @@ function DataConversion({
     </>
   );
 
-  const renderContent = () => {
-    switch (contentType) {
-      case 'hasCommands':
-        return renderAccordions(commands);
-      case 'networkDisabled':
-        return (<Typography><FormattedMessage {...messages.networkDisabledText} /></Typography>);
-      case 'hasNoCommands':
-      default:
-        return (<Typography><FormattedMessage {...messages.autoPollDisabledText} /></Typography>);
-    }
-  };
-
-  const networkIdField = {
-    fieldType: 'radioGroup',
-    label: intl.formatMessage(platformMessages.networkIdLabel),
-    handleChange: handleNetworkIdChange,
-    value: networkId,
-    dataType: 'number',
-    radioOptions: networkIds.map((id) => ({ value: id, label: id + 1 })),
-    layout: { xs: 12 },
-  };
-
   return (
     <>
       <Grid
@@ -117,19 +129,74 @@ function DataConversion({
         spacing={2}
         direction="row"
       >
-        {renderFields(networkIdField)}
-      </Grid>
-      <SwipeableViews index={networkId}>
         {
-          formik.values.networkConfigs.map((networkConfig, index) => (
-            <TabPanel key={index} index={index} value={networkId} sx={{ px: 0, py: 3 }}>
-              {renderContent()}
-            </TabPanel>
-          ))
+          renderFields({
+            label: intl.formatMessage(platformMessages.serialIdLabel),
+            value: serialId,
+            handleChange: handleSerialIdChange,
+            fieldType: 'radioGroup',
+            radioOptions: serialIdOptions,
+            layout: { xs: 12, md: 4 },
+          })
         }
-      </SwipeableViews>
+        {
+          networkOptions.length
+            ? renderFields({
+              fieldType: 'radioGroup',
+              label: intl.formatMessage(platformMessages.networkIdLabel),
+              handleChange: handleNetworkIdChange,
+              value: networkId,
+              dataType: 'number',
+              radioOptions: networkOptions,
+              layout: { xs: 12, md: 4 },
+            })
+            : (
+              <Grid item xs={12} md={8}>
+                <TransitionGroup>
+                  <Collapse>
+                    <Typography style={{ lineHeight: 3 }}>
+                      <FormattedMessage {...messages.noNetworkConfigedText} />
+                    </Typography>
+                  </Collapse>
+                </TransitionGroup>
+              </Grid>
+            )
+        }
+      </Grid>
+      {
+        networkOptions.length ? (
+          <>
+            {
+              networks.map((network, index) => (
+                <Collapse in={index === networkId}>
+                  <Formik
+                    innerRef={(el) => { formikRefs.current[index] = el; }}
+                  >
+                    {renderAccordions()}
+                  </Formik>
+                </Collapse>
+              ))
+            }
+            {/* <Collapse>
+              {
+                commands.length
+                  ? autoPolls.map((autoPolls, index) => (
+                    <TabPanel key={index} index={index} value={serialId} sx={{ px: 0, py: 3 }}>
+                      {renderAccordions()}
+                    </TabPanel>
+                  ))
+                  : (
+                    <Typography>
+                      <FormattedMessage {...messages.autoPollDisabledText} />
+                    </Typography>
+                  )
+              }
+            </Collapse> */}
+          </>
+        ) : (<></>)
+      }
     </>
   );
-}
+});
 
 export default DataConversion;

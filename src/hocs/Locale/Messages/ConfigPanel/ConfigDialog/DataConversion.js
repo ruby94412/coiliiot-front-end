@@ -11,4 +11,8 @@ export default defineMessages({
     id: `${scope}.autoPollDisabledText`,
     defaultMessage: 'This Serial Channel Has No Auto Polling Yet',
   },
+  noNetworkConfigedText: {
+    id: `${scope}.noNetworkConfigedText`,
+    defaultMessage: 'This Serial Channel Has Not Configured A Connected Network Channel',
+  },
 });

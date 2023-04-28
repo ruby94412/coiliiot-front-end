@@ -154,10 +154,12 @@
 
   "coiliiot.app.configPanel.configDialog.dataConversion.networkDisabledText": "This Network Channel Is Not Enabled Yet",
   "coiliiot.app.configPanel.configDialog.dataConversion.autoPollDisabledText": "This Serial Channel Has No Auto Polling Yet",
+  "coiliiot.app.configPanel.configDialog.dataConversion.noNetworkConfigedText": "This Serial Channel Has Not Configured A Connected Network Channel",
 
   "coiliiot.app.configPanel.configDialog.dataAccordion.title": "Configure Mapping",
   "coiliiot.app.configPanel.configDialog.dataAccordion.addMappingButton": "Add Mapping",
   "coiliiot.app.configPanel.configDialog.dataAccordion.cancel": "Cancel",
-  "coiliiot.app.configPanel.configDialog.dataAccordion.confirm": "Confirm"
+  "coiliiot.app.configPanel.configDialog.dataAccordion.confirm": "Confirm",
+  "coiliiot.app.configPanel.configDialog.dataAccordion.commandDetail": "Command Detail"
 }
 

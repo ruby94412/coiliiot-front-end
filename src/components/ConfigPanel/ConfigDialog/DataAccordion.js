@@ -40,6 +40,7 @@ function DataAccordion({
   const [rows, setRows] = useState(command.initConversions || []);
   const [params, setParams] = useState(null);
   const [data, setData] = useState(null);
+  const [showDetail, setShowDetail] = useState(false);
 
   useEffect(() => {
     setData(params);
@@ -54,6 +55,10 @@ function DataAccordion({
 
   const handleClose = () => setParams(null);
 
+  const handleShow = (e) => {
+    e.stopPropagation();
+    setShowDetail(true);
+  };
   const handleConfirm = () => {
     let temp;
     if (params?.id) {
@@ -104,6 +109,9 @@ function DataAccordion({
         <Button variant="outlined" onClick={handleAdd}>
           <FormattedMessage {...messages.addMappingButton} />
         </Button>
+        <Button variant="outlined" onClick={handleShow} style={{ marginLeft: '20px' }}>
+          <FormattedMessage {...messages.commandDetail} />
+        </Button>
       </AccordionSummary>
       <AccordionDetails>
         <Grid
@@ -111,15 +119,13 @@ function DataAccordion({
           spacing={2}
           direction="row"
         >
-          <Grid item xs={12} xl={6}><CommandDetail command={command.detail} /></Grid>
-          <Grid item xs={12} xl={6}>
+          <Grid item xs={12}>
             <StyledDataGrid
               sx={{
                 border: '1px dashed',
                 borderColor: 'primary.main',
-                height: '100%',
-                minHeight: '180px',
               }}
+              autoHeight
               rows={rows}
               columns={columns}
               components={{
@@ -161,6 +167,19 @@ function DataAccordion({
           </Button>
           <Button onClick={handleConfirm} variant="contained">
             <FormattedMessage {...messages.confirm} />
+          </Button>
+        </DialogActions>
+      </Dialog>
+      <Dialog
+        open={showDetail}
+        onClose={() => setShowDetail(false)}
+      >
+        <DialogContent dividers>
+          <CommandDetail command={command.detail} />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setShowDetail(false)} variant="contained">
+            <FormattedMessage {...messages.cancel} />
           </Button>
         </DialogActions>
       </Dialog>
