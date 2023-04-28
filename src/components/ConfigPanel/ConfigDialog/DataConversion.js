@@ -139,7 +139,27 @@ const DataConversion = forwardRef(({
             layout: { xs: 12, md: 4 },
           })
         }
-        {
+        <Grid item xs={12} md={8}>
+          <Collapse in={networkOptions.length > 0} timeout={500} exit>
+            {
+              renderFields({
+                fieldType: 'radioGroup',
+                label: intl.formatMessage(platformMessages.networkIdLabel),
+                handleChange: handleNetworkIdChange,
+                value: networkId,
+                dataType: 'number',
+                radioOptions: networkOptions,
+                layout: { xs: 12 },
+              })
+            }
+          </Collapse>
+          <Collapse in={networkOptions.length === 0} timeout={500} exit>
+            <Typography style={{ lineHeight: 3 }}>
+              <FormattedMessage {...messages.noNetworkConfigedText} />
+            </Typography>
+          </Collapse>
+        </Grid>
+        {/* {
           networkOptions.length
             ? renderFields({
               fieldType: 'radioGroup',
@@ -161,14 +181,14 @@ const DataConversion = forwardRef(({
                 </TransitionGroup>
               </Grid>
             )
-        }
+        } */}
       </Grid>
       {
         networkOptions.length ? (
           <>
             {
               networks.map((network, index) => (
-                <Collapse in={index === networkId}>
+                <Collapse in={index === networkId} key={index} exit timeout={500}>
                   <Formik
                     innerRef={(el) => { formikRefs.current[index] = el; }}
                   >
