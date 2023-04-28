@@ -7,8 +7,6 @@ import {
   Collapse,
 } from '@mui/material';
 import { TransitionGroup } from 'react-transition-group';
-import SwipeableViews from 'react-swipeable-views';
-import TabPanel from 'components/common/TabPanel';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { Formik } from 'formik';
 import platformMessages from 'hocs/Locale/Messages/ConfigPanel/ConfigDialog/Platform';
@@ -188,30 +186,27 @@ const DataConversion = forwardRef(({
           <>
             {
               networks.map((network, index) => (
-                <Collapse in={index === networkId} key={index} exit timeout={500}>
+                <Collapse in={index === networkId} key={index} exit timeout={1000}>
                   <Formik
                     innerRef={(el) => { formikRefs.current[index] = el; }}
                   >
-                    {renderAccordions()}
+                    {(formikProps) => (
+                      <>
+                        {
+                          commands.length
+                            ? renderAccordions()
+                            : (
+                              <Typography>
+                                <FormattedMessage {...messages.autoPollDisabledText} />
+                              </Typography>
+                            )
+                        }
+                      </>
+                    )}
                   </Formik>
                 </Collapse>
               ))
             }
-            {/* <Collapse>
-              {
-                commands.length
-                  ? autoPolls.map((autoPolls, index) => (
-                    <TabPanel key={index} index={index} value={serialId} sx={{ px: 0, py: 3 }}>
-                      {renderAccordions()}
-                    </TabPanel>
-                  ))
-                  : (
-                    <Typography>
-                      <FormattedMessage {...messages.autoPollDisabledText} />
-                    </Typography>
-                  )
-              }
-            </Collapse> */}
           </>
         ) : (<></>)
       }

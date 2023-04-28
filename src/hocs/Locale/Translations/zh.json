@@ -162,5 +162,8 @@
   "coiliiot.app.configPanel.configDialog.dataAccordion.addMappingButton": "添加映射",
   "coiliiot.app.configPanel.configDialog.dataAccordion.cancel": "取消",
   "coiliiot.app.configPanel.configDialog.dataAccordion.confirm": "确定",
-  "coiliiot.app.configPanel.configDialog.dataAccordion.commandDetail": "命令信息"
+  "coiliiot.app.configPanel.configDialog.dataAccordion.commandDetail": "命令信息",
+  "coiliiot.app.configPanel.configDialog.dataAccordion.addPropertyButton": "添加自定义属性",
+  "coiliiot.app.configPanel.configDialog.dataAccordion.propertyValue": "属性值",
+  "coiliiot.app.configPanel.configDialog.dataAccordion.propertyKey": "属性名"
 }

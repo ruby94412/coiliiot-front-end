@@ -160,6 +160,9 @@
   "coiliiot.app.configPanel.configDialog.dataAccordion.addMappingButton": "Add Mapping",
   "coiliiot.app.configPanel.configDialog.dataAccordion.cancel": "Cancel",
   "coiliiot.app.configPanel.configDialog.dataAccordion.confirm": "Confirm",
-  "coiliiot.app.configPanel.configDialog.dataAccordion.commandDetail": "Command Detail"
+  "coiliiot.app.configPanel.configDialog.dataAccordion.commandDetail": "Command Detail",
+  "coiliiot.app.configPanel.configDialog.dataAccordion.addPropertyButton": "Add Custom Property",
+  "coiliiot.app.configPanel.configDialog.dataAccordion.propertyValue": "Value",
+  "coiliiot.app.configPanel.configDialog.dataAccordion.propertyKey": "Key"
 }
 

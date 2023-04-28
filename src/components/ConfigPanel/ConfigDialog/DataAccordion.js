@@ -93,60 +93,61 @@ function DataAccordion({
 
   const columns = getMappingTableColumns({ intl, setParams, deleteRow });
   return (
-    <Accordion
-      expanded={expanded === `command${idx}`}
-      onChange={handleExpandChange(`command${idx}`)}
-    >
-      <AccordionSummary
-        expandIcon={<ExpandMoreIcon />}
-        aria-controls="panel1bh-content"
-        id="panel1bh-header"
+    <>
+      <Accordion
+        expanded={expanded === `command${idx}`}
+        onChange={handleExpandChange(`command${idx}`)}
       >
-        <Typography sx={{ width: '20%', flexShrink: 0, lineHeight: 2.5 }}>
-          {`Command ${idx + 1}`}
-        </Typography>
-        <Typography sx={{ width: '50%', fontFamily: 'Courier', lineHeight: 2.5 }}>{command.detail.hex.join(' ')}</Typography>
-        <Button variant="outlined" onClick={handleAdd}>
-          <FormattedMessage {...messages.addMappingButton} />
-        </Button>
-        <Button variant="outlined" onClick={handleShow} style={{ marginLeft: '20px' }}>
-          <FormattedMessage {...messages.commandDetail} />
-        </Button>
-      </AccordionSummary>
-      <AccordionDetails>
-        <Grid
-          container
-          spacing={2}
-          direction="row"
+        <AccordionSummary
+          expandIcon={<ExpandMoreIcon />}
+          aria-controls="panel1bh-content"
+          id="panel1bh-header"
         >
-          <Grid item xs={12}>
-            <StyledDataGrid
-              sx={{
-                border: '1px dashed',
-                borderColor: 'primary.main',
-              }}
-              autoHeight
-              rows={rows}
-              columns={columns}
-              components={{
-                NoRowsOverlay,
-              }}
-              hideFooterSelectedRowCount
-              hideFooter
-              hideFooterPagination
-            />
-          </Grid>
-        </Grid>
-      </AccordionDetails>
-      <Dialog open={!!params} onClose={handleClose} PaperProps={{ style: dialogStyle }}>
-        <DialogTitle><FormattedMessage {...messages.title} /></DialogTitle>
-        <DialogContent dividers>
+          <Typography sx={{ width: '20%', flexShrink: 0, lineHeight: 2.5 }}>
+            {`Command ${idx + 1}`}
+          </Typography>
+          <Typography sx={{ width: '50%', fontFamily: 'Courier', lineHeight: 2.5 }}>{command.detail.hex.join(' ')}</Typography>
+          <Button variant="outlined" onClick={handleAdd}>
+            <FormattedMessage {...messages.addMappingButton} />
+          </Button>
+          <Button variant="outlined" onClick={handleShow} style={{ marginLeft: '20px' }}>
+            <FormattedMessage {...messages.commandDetail} />
+          </Button>
+        </AccordionSummary>
+        <AccordionDetails>
           <Grid
             container
             spacing={2}
             direction="row"
           >
-            {
+            <Grid item xs={12}>
+              <StyledDataGrid
+                sx={{
+                  border: '1px dashed',
+                  borderColor: 'primary.main',
+                }}
+                autoHeight
+                rows={rows}
+                columns={columns}
+                components={{
+                  NoRowsOverlay,
+                }}
+                hideFooterSelectedRowCount
+                hideFooter
+                hideFooterPagination
+              />
+            </Grid>
+          </Grid>
+        </AccordionDetails>
+        <Dialog open={!!params} onClose={handleClose} PaperProps={{ style: dialogStyle }}>
+          <DialogTitle><FormattedMessage {...messages.title} /></DialogTitle>
+          <DialogContent dividers>
+            <Grid
+              container
+              spacing={2}
+              direction="row"
+            >
+              {
               params && data && dataMappingFields.map((field) => (
                 <Fragment key={field.propertyName}>
                   {renderFields({
@@ -159,31 +160,33 @@ function DataAccordion({
                 </Fragment>
               ))
             }
-          </Grid>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose} variant="contained">
-            <FormattedMessage {...messages.cancel} />
-          </Button>
-          <Button onClick={handleConfirm} variant="contained">
-            <FormattedMessage {...messages.confirm} />
-          </Button>
-        </DialogActions>
-      </Dialog>
-      <Dialog
-        open={showDetail}
-        onClose={() => setShowDetail(false)}
-      >
-        <DialogContent dividers>
-          <CommandDetail command={command.detail} />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setShowDetail(false)} variant="contained">
-            <FormattedMessage {...messages.cancel} />
-          </Button>
-        </DialogActions>
-      </Dialog>
-    </Accordion>
+            </Grid>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleClose} variant="contained">
+              <FormattedMessage {...messages.cancel} />
+            </Button>
+            <Button onClick={handleConfirm} variant="contained">
+              <FormattedMessage {...messages.confirm} />
+            </Button>
+          </DialogActions>
+        </Dialog>
+        <Dialog
+          open={showDetail}
+          onClose={() => setShowDetail(false)}
+        >
+          <DialogContent dividers>
+            <CommandDetail command={command.detail} />
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={() => setShowDetail(false)} variant="contained">
+              <FormattedMessage {...messages.cancel} />
+            </Button>
+          </DialogActions>
+        </Dialog>
+      </Accordion>
+      <Button variant="contained"><FormattedMessage {...messages.addPropertyButton} /></Button>
+    </>
   );
 }
 

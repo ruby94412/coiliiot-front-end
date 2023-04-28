@@ -23,4 +23,16 @@ export default defineMessages({
     id: `${scope}.commandDetail`,
     defaultMessage: 'Command Detail',
   },
+  addPropertyButton: {
+    id: `${scope}.addPropertyButton`,
+    defaultMessage: 'Add Custom Property',
+  },
+  propertyKey: {
+    id: `${scope}.propertyKey`,
+    defaultMessage: 'Key',
+  },
+  propertyValue: {
+    id: `${scope}.propertyValue`,
+    defaultMessage: 'Value',
+  },
 });
