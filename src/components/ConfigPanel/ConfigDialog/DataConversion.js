@@ -5,6 +5,7 @@ import {
   Grid,
   Typography,
   Collapse,
+  Zoom,
 } from '@mui/material';
 import { TransitionGroup } from 'react-transition-group';
 import { FormattedMessage, useIntl } from 'react-intl';
@@ -12,7 +13,7 @@ import { Formik } from 'formik';
 import platformMessages from 'hocs/Locale/Messages/ConfigPanel/ConfigDialog/Platform';
 import messages from 'hocs/Locale/Messages/ConfigPanel/ConfigDialog/DataConversion';
 import { convertRawCommands, renderFields } from './utils';
-import DataAccordion from './DataAccordion';
+import { DataAccordion, CustomPropsAccordion } from './DataAccordion';
 
 const serialIdOptions = [
   { label: '1', value: 0 }, { label: '2', value: 1 }, { label: '3', value: 2 },
@@ -30,7 +31,7 @@ const DataConversion = forwardRef(({
   const [autoPolls, setAutoPolls] = useState([]);
   const [expanded, setExpanded] = useState(false);
   const [commands, setCommands] = useState([]);
-  const formikRefs = useRef([]);
+  const [initCustomProps, setInitCustomProps] = useState([]);
 
   useEffect(() => {
     if (networkForm?.form?.current?.length) {
@@ -63,13 +64,14 @@ const DataConversion = forwardRef(({
   useEffect(() => {
     if (autoPolls[serialId]?.commands?.length) {
       const temp = convertRawCommands(autoPolls[serialId]);
-      // const conversionConfigs = values.networkConfigs[networkId].conversionConfigs || [];
-      // const rst = [];
-      // temp?.forEach((obj) => {
-      //   const conversions = conversionConfigs
-      //     .find((cfg) => (cfg.commandId === obj.id))?.conversions;
-      //   rst.push(conversions ? { ...obj, initConversions: conversions } : obj);
-      // });
+      setInitCustomProps(networks[networkId]?.customProps || []);
+      const conversionConfigs = networks[networkId]?.conversionConfigs || [];
+      const rst = [];
+      temp?.forEach((obj) => {
+        const conversions = conversionConfigs
+          .find((cfg) => (cfg.commandId === obj.id))?.conversions;
+        rst.push(conversions ? { ...obj, initConversions: conversions } : obj);
+      });
       setCommands(temp);
     } else {
       setCommands([]);
@@ -88,8 +90,8 @@ const DataConversion = forwardRef(({
     setExpanded(isExpanded ? panel : false);
   };
 
-  const setFields = (data) => {
-    const origin = networkForm.form?.current[networkId].values.conversionConfigs || [];
+  const setConversionFields = (data) => {
+    const origin = networks[networkId].conversionConfigs || [];
     const temp = [];
     let flag = false;
     origin.forEach((conversion) => {
@@ -101,7 +103,11 @@ const DataConversion = forwardRef(({
       }
     });
     if (!flag) temp.push(data);
-    networkForm.form?.current[networkId].setFieldValue('conversionConfigs', temp);
+    networkForm.form?.current[networkId]?.setFieldValue('conversionConfigs', temp);
+  };
+
+  const setCustomPropsFields = (data) => {
+    networkForm.form?.current[networkId]?.setFieldValue('customProps', data);
   };
 
   const renderAccordions = () => (
@@ -114,9 +120,16 @@ const DataConversion = forwardRef(({
           handleExpandChange={handleExpandChange}
           command={command}
           setExpanded={setExpanded}
-          setFields={setFields}
+          setConversionFields={setConversionFields}
         />
       ))}
+      <CustomPropsAccordion
+        expanded={expanded}
+        handleExpandChange={handleExpandChange}
+        setExpanded={setExpanded}
+        initCustomProps={initCustomProps}
+        setCustomPropsFields={setCustomPropsFields}
+      />
     </>
   );
 
@@ -157,53 +170,24 @@ const DataConversion = forwardRef(({
             </Typography>
           </Collapse>
         </Grid>
-        {/* {
-          networkOptions.length
-            ? renderFields({
-              fieldType: 'radioGroup',
-              label: intl.formatMessage(platformMessages.networkIdLabel),
-              handleChange: handleNetworkIdChange,
-              value: networkId,
-              dataType: 'number',
-              radioOptions: networkOptions,
-              layout: { xs: 12, md: 4 },
-            })
-            : (
-              <Grid item xs={12} md={8}>
-                <TransitionGroup>
-                  <Collapse>
-                    <Typography style={{ lineHeight: 3 }}>
-                      <FormattedMessage {...messages.noNetworkConfigedText} />
-                    </Typography>
-                  </Collapse>
-                </TransitionGroup>
-              </Grid>
-            )
-        } */}
       </Grid>
       {
         networkOptions.length ? (
           <>
             {
               networks.map((network, index) => (
-                <Collapse in={index === networkId} key={index} exit timeout={1000}>
-                  <Formik
-                    innerRef={(el) => { formikRefs.current[index] = el; }}
-                  >
-                    {(formikProps) => (
-                      <>
-                        {
-                          commands.length
-                            ? renderAccordions()
-                            : (
-                              <Typography>
-                                <FormattedMessage {...messages.autoPollDisabledText} />
-                              </Typography>
-                            )
-                        }
-                      </>
-                    )}
-                  </Formik>
+                <Collapse in={index === networkId} key={index} exit timeout={500}>
+                  <div>
+                    {
+                      commands.length
+                        ? renderAccordions()
+                        : (
+                          <Typography>
+                            <FormattedMessage {...messages.autoPollDisabledText} />
+                          </Typography>
+                        )
+                    }
+                  </div>
                 </Collapse>
               ))
             }

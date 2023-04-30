@@ -240,6 +240,28 @@ export const dataMappingFields = [
   },
 ];
 
+export const customPropertyFields = [
+  {
+    label: <FormattedMessage {...messages.propertyKey} />,
+    propertyName: 'propertyKey',
+  },
+  {
+    label: <FormattedMessage {...messages.propertyValue} />,
+    propertyName: 'propertyValue',
+  },
+  {
+    label: <FormattedMessage {...messages.propertyType} />,
+    propertyName: 'propertyType',
+    datatype: 'number',
+    fieldType: 'select',
+    selectOptions: [
+      { label: <FormattedMessage {...messages.string} />, value: 0 },
+      { label: <FormattedMessage {...messages.number} />, value: 1 },
+      { label: <FormattedMessage {...messages.date} />, value: 2 },
+    ],
+  },
+];
+
 export const getCommandTableColumns = ({
   intl,
   setParams,
@@ -378,6 +400,71 @@ export const getMappingTableColumns = ({
     type: 'number',
     align: 'right',
     minWidth: 80,
+  },
+  {
+    field: 'actions',
+    headerName: intl.formatMessage(messages.actions),
+    type: 'actions',
+    flex: 1,
+    minWidth: 80,
+    getActions: (params) => [
+      <GridActionsCellItem
+        icon={(
+          <Tooltip title={intl.formatMessage(messages.editTooltip)}>
+            <EditIcon />
+          </Tooltip>
+        )}
+        label="Edit"
+        onClick={() => {
+          setParams(params?.row);
+        }}
+      />,
+      <GridActionsCellItem
+        icon={(
+          <Tooltip title={intl.formatMessage(messages.deleteTooltip)}>
+            <DeleteIcon sx={{ '&:hover': { color: 'red' } }} />
+          </Tooltip>
+        )}
+        label="Delete"
+        onClick={() => {
+          deleteRow(params?.row);
+        }}
+      />,
+    ],
+  },
+];
+
+export const getCustomTableColumns = ({
+  intl,
+  setParams,
+  deleteRow,
+}) => [
+  {
+    field: 'propertyKey',
+    headerName: intl.formatMessage(messages.propertyKey),
+    flex: 1,
+    minWidth: 80,
+  },
+  {
+    field: 'propertyValue',
+    headerName: intl.formatMessage(messages.propertyValue),
+    flex: 1,
+    minWidth: 80,
+  },
+  {
+    field: 'propertyType',
+    headerName: intl.formatMessage(messages.dataType),
+    flex: 1,
+    minWidth: 80,
+    renderCell: (params) => (
+      <span>
+        {[
+          intl.formatMessage(messages.string),
+          intl.formatMessage(messages.number),
+          intl.formatMessage(messages.date),
+        ][params.value]}
+      </span>
+    ),
   },
   {
     field: 'actions',

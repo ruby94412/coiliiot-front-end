@@ -207,4 +207,28 @@ export default defineMessages({
     id: `${scope}.cleanSession`,
     defaultMessage: 'Order',
   },
+  propertyKey: {
+    id: `${scope}.propertyKey`,
+    defaultMessage: 'Key',
+  },
+  propertyValue: {
+    id: `${scope}.propertyValue`,
+    defaultMessage: 'Value',
+  },
+  propertyType: {
+    id: `${scope}.propertyType`,
+    defaultMessage: 'Property Data Type',
+  },
+  string: {
+    id: `${scope}.string`,
+    defaultMessage: 'Text',
+  },
+  number: {
+    id: `${scope}.number`,
+    defaultMessage: 'Number',
+  },
+  date: {
+    id: `${scope}.date`,
+    defaultMessage: 'Date',
+  },
 });

@@ -147,6 +147,12 @@
   "coiliiot.app.configPanel.configDialog.constants.lwtMessage": "Last Will and Testament Message",
   "coiliiot.app.configPanel.configDialog.constants.cleanSession": "Clean Session When Disconnected",
   "coiliiot.app.configPanel.configDialog.constants.qos": "QoS",
+  "coiliiot.app.configPanel.configDialog.constants.propertyValue": "Value",
+  "coiliiot.app.configPanel.configDialog.constants.propertyKey": "Key",
+  "coiliiot.app.configPanel.configDialog.constants.propertyType": "Property Data Type",
+  "coiliiot.app.configPanel.configDialog.constants.string": "Text",
+  "coiliiot.app.configPanel.configDialog.constants.number": "Number",
+  "coiliiot.app.configPanel.configDialog.constants.date": "Date",
 
   "coiliiot.app.configPanel.configDialog.commandGenerator.title": "Command Generator",
   "coiliiot.app.configPanel.configDialog.commandGenerator.confirm": "Confirm",
@@ -160,9 +166,9 @@
   "coiliiot.app.configPanel.configDialog.dataAccordion.addMappingButton": "Add Mapping",
   "coiliiot.app.configPanel.configDialog.dataAccordion.cancel": "Cancel",
   "coiliiot.app.configPanel.configDialog.dataAccordion.confirm": "Confirm",
+  "coiliiot.app.configPanel.configDialog.dataAccordion.commandText": "Command",
   "coiliiot.app.configPanel.configDialog.dataAccordion.commandDetail": "Command Detail",
-  "coiliiot.app.configPanel.configDialog.dataAccordion.addPropertyButton": "Add Custom Property",
-  "coiliiot.app.configPanel.configDialog.dataAccordion.propertyValue": "Value",
-  "coiliiot.app.configPanel.configDialog.dataAccordion.propertyKey": "Key"
+  "coiliiot.app.configPanel.configDialog.dataAccordion.customPropetyTitle": "Custom Property",
+  "coiliiot.app.configPanel.configDialog.dataAccordion.addPropertyButton": "Add Property"
 }
 

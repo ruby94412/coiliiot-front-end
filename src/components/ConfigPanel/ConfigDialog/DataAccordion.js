@@ -20,7 +20,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import NoRowsOverlay from 'components/common/NoRowsOverlay';
 import CommandDetail from './CommandDetail';
 import {
-  getMappingTableColumns, dataMappingFields,
+  getMappingTableColumns, dataMappingFields, getCustomTableColumns, customPropertyFields,
 } from './constants';
 import { renderFields, getUid } from './utils';
 
@@ -28,13 +28,13 @@ const dialogStyle = {
   minWidth: '20%',
 };
 
-function DataAccordion({
+export function DataAccordion({
   idx,
   expanded,
   handleExpandChange,
   command,
   setExpanded,
-  setFields,
+  setConversionFields,
 }) {
   const intl = useIntl();
   const [rows, setRows] = useState(command.initConversions || []);
@@ -50,7 +50,7 @@ function DataAccordion({
     const temp = [...rows];
     temp.splice(temp.findIndex((obj) => obj.id === row.id), 1);
     setRows(temp);
-    setFields({ conversions: temp, commandId: command.id });
+    setConversionFields({ conversions: temp, commandId: command.id });
   };
 
   const handleClose = () => setParams(null);
@@ -70,7 +70,7 @@ function DataAccordion({
       setRows(temp);
       setExpanded(`command${idx}`);
     }
-    setFields({ conversions: temp, commandId: command.id });
+    setConversionFields({ conversions: temp, commandId: command.id });
     handleClose();
   };
 
@@ -104,7 +104,7 @@ function DataAccordion({
           id="panel1bh-header"
         >
           <Typography sx={{ width: '20%', flexShrink: 0, lineHeight: 2.5 }}>
-            {`Command ${idx + 1}`}
+            {`${intl.formatMessage(messages.commandText)} ${idx + 1}`}
           </Typography>
           <Typography sx={{ width: '50%', fontFamily: 'Courier', lineHeight: 2.5 }}>{command.detail.hex.join(' ')}</Typography>
           <Button variant="outlined" onClick={handleAdd}>
@@ -115,29 +115,21 @@ function DataAccordion({
           </Button>
         </AccordionSummary>
         <AccordionDetails>
-          <Grid
-            container
-            spacing={2}
-            direction="row"
-          >
-            <Grid item xs={12}>
-              <StyledDataGrid
-                sx={{
-                  border: '1px dashed',
-                  borderColor: 'primary.main',
-                }}
-                autoHeight
-                rows={rows}
-                columns={columns}
-                components={{
-                  NoRowsOverlay,
-                }}
-                hideFooterSelectedRowCount
-                hideFooter
-                hideFooterPagination
-              />
-            </Grid>
-          </Grid>
+          <StyledDataGrid
+            sx={{
+              border: '1px dashed',
+              borderColor: 'primary.main',
+            }}
+            autoHeight
+            rows={rows}
+            columns={columns}
+            components={{
+              NoRowsOverlay,
+            }}
+            hideFooterSelectedRowCount
+            hideFooter
+            hideFooterPagination
+          />
         </AccordionDetails>
         <Dialog open={!!params} onClose={handleClose} PaperProps={{ style: dialogStyle }}>
           <DialogTitle><FormattedMessage {...messages.title} /></DialogTitle>
@@ -148,18 +140,18 @@ function DataAccordion({
               direction="row"
             >
               {
-              params && data && dataMappingFields.map((field) => (
-                <Fragment key={field.propertyName}>
-                  {renderFields({
-                    handleChange: handleFieldChange(field.propertyName, field.datatype),
-                    value: data[field.propertyName],
-                    style: { width: '100%' },
-                    layout: { xs: 12, md: 6 },
-                    ...field,
-                  })}
-                </Fragment>
-              ))
-            }
+                params && data && dataMappingFields.map((field) => (
+                  <Fragment key={field.propertyName}>
+                    {renderFields({
+                      handleChange: handleFieldChange(field.propertyName, field.datatype),
+                      value: data[field.propertyName],
+                      style: { width: '100%' },
+                      layout: { xs: 12, md: 6 },
+                      ...field,
+                    })}
+                  </Fragment>
+                ))
+              }
             </Grid>
           </DialogContent>
           <DialogActions>
@@ -185,8 +177,126 @@ function DataAccordion({
           </DialogActions>
         </Dialog>
       </Accordion>
-      <Button variant="contained"><FormattedMessage {...messages.addPropertyButton} /></Button>
     </>
+  );
+}
+
+export function CustomPropsAccordion({
+  expanded,
+  handleExpandChange,
+  setExpanded,
+  initCustomProps,
+  setCustomPropsFields,
+}) {
+  const intl = useIntl();
+  const [params, setParams] = useState(null);
+  const [rows, setRows] = useState(initCustomProps);
+  const [data, setData] = useState(null);
+
+  const handleAdd = (e) => {
+    e.stopPropagation();
+    setParams({
+      propertyKey: '', propertyValue: '', propertyType: 0,
+    });
+  };
+  useEffect(() => {
+    setData(params);
+  }, [params]);
+
+  const handleClose = () => setParams(null);
+  const handleConfirm = () => {
+    let temp;
+    if (params?.id) {
+      temp = rows.map((obj) => (obj.id === data.id ? { ...data } : obj));
+      setRows(temp);
+    } else {
+      temp = [...rows];
+      temp.push({ ...data, id: getUid() });
+      setRows(temp);
+      setExpanded('customFields');
+    }
+    setCustomPropsFields(temp);
+    handleClose();
+  };
+
+  const handleFieldChange = (propertyName, datatype) => (e) => {
+    const temp = { ...data };
+    if (datatype === 'number') {
+      temp[propertyName] = Number(e.target.value);
+    } else {
+      temp[propertyName] = e.target.value;
+    }
+    setData(temp);
+  };
+
+  const deleteRow = (row) => {
+    const temp = [...rows];
+    temp.splice(temp.findIndex((obj) => obj.id === row.id), 1);
+    setRows(temp);
+    setCustomPropsFields(temp);
+  };
+  const columns = getCustomTableColumns({ intl, setParams, deleteRow });
+  return (
+    <Accordion
+      expanded={expanded === 'customFields'}
+      onChange={handleExpandChange('customFields')}
+    >
+      <AccordionSummary
+        expandIcon={<ExpandMoreIcon />}
+        aria-controls="panel1bh-content"
+        id="panel1bh-header"
+      >
+        <Typography sx={{ width: '70%', flexShrink: 0, lineHeight: 2.5 }}>
+          <FormattedMessage {...messages.customPropetyTitle} />
+        </Typography>
+        <Button variant="outlined" onClick={handleAdd}>
+          <FormattedMessage {...messages.addPropertyButton} />
+        </Button>
+      </AccordionSummary>
+      <AccordionDetails>
+        <StyledDataGrid
+          sx={{
+            border: '1px dashed',
+            borderColor: 'primary.main',
+          }}
+          autoHeight
+          rows={rows}
+          columns={columns}
+          components={{
+            NoRowsOverlay,
+          }}
+          hideFooterSelectedRowCount
+          hideFooter
+          hideFooterPagination
+        />
+      </AccordionDetails>
+      <Dialog open={!!params} onClose={handleClose} PaperProps={{ style: dialogStyle }}>
+        <DialogContent dividers>
+          {
+            params && data && customPropertyFields.map((field) => (
+              <Fragment key={field.propertyName}>
+                {renderFields({
+                  handleChange: handleFieldChange(field.propertyName, field.datatype),
+                  value: data[field.propertyName],
+                  style: { width: '100%' },
+                  layout: { xs: 12 },
+                  disabled: data.propertyType === 2 && field.propertyName === 'propertyValue',
+                  ...field,
+                })}
+              </Fragment>
+            ))
+          }
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose} variant="contained">
+            <FormattedMessage {...messages.cancel} />
+          </Button>
+          <Button onClick={handleConfirm} variant="contained">
+            <FormattedMessage {...messages.confirm} />
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </Accordion>
   );
 }
 
