@@ -11,9 +11,8 @@ import {
 } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import {
-  useState, forwardRef, useImperativeHandle, useEffect, useRef,
+  useState, forwardRef, useImperativeHandle, useRef,
 } from 'react';
-import { useFormik } from 'formik';
 import { FormattedMessage } from 'react-intl';
 import messages from 'hocs/Locale/Messages/ConfigPanel/ConfigDialog/DialogContent';
 import SwipeableViews from 'react-swipeable-views';
@@ -46,46 +45,73 @@ const Content = forwardRef(({
     serial: useRef(null),
     network: useRef(null),
     autoPoll: useRef(null),
-    dataConversion: useRef(null),
   };
   const handleTabChange = (event, newValue) => {
     setTabIndex(newValue);
   };
 
-  // const handleSubmit = async (config) => {
-  //   setSaveLoading(true);
-  //   try {
-  //     await updateConfig({
-  //       ...groupRow,
-  //       config,
-  //     });
-  //     setSnackbar({
-  //       children: <FormattedMessage {...messages.snackBarSuccess} />, severity: 'success',
-  //     });
-  //   } catch (error) {
-  //     setSnackbar({
-  //       children: <FormattedMessage {...messages.snackBarError} />, severity: 'error',
-  //     });
-  //   }
-  //   setSaveLoading(false);
-  // };
+  const handleSubmit = async () => {
+    const formValues = {};
+    formValues.basicConfigs = formRef.basic.current.form.current.values;
+    formValues.serialConfigs = formRef.serial.current.form.current
+      .map((serialForm) => (serialForm.values));
+    formValues.networkConfigs = formRef.network.current.form.current
+      .map((networkForm) => (networkForm.values));
+    formValues.autoPollConfigs = formRef.autoPoll.current.form.current
+      .map((autoPollForm) => (autoPollForm.values));
+    const config = handleFormDataSubmit(formValues);
+    setSaveLoading(true);
+    try {
+      await updateConfig({
+        ...groupRow,
+        config,
+      });
+      setSnackbar({
+        children: <FormattedMessage {...messages.snackBarSuccess} />, severity: 'success',
+      });
+    } catch (error) {
+      setSnackbar({
+        children: <FormattedMessage {...messages.snackBarError} />, severity: 'error',
+      });
+    }
+    setSaveLoading(false);
+  };
 
-  const handleSubmit = () => {
-    console.log(formRef.basic.current.form.current.values);
-    console.log(formRef.serial.current.form.current);
-    console.log(formRef.network.current.form.current);
-    console.log(formRef.autoPoll.current.form.current);
-    console.log(formRef.dataConversion.current.form.current);
+  const isDirty = () => {
+    if (formRef.basic?.current?.form?.current?.dirty) return true;
+    for (let i = 0; i < formRef?.serial?.current?.form?.current?.length; i++) {
+      if (formRef.serial.current.form.current[i].dirty) return true;
+    }
+    for (let i = 0; i < formRef?.network?.current?.form?.current?.length; i++) {
+      if (formRef.network.current.form.current[i].dirty) return true;
+    }
+    for (let i = 0; i < formRef?.autoPoll?.current?.form?.current?.length; i++) {
+      if (formRef.autoPoll.current.form.current[i].dirty) return true;
+    }
+    return false;
+  };
+
+  const resetForm = () => {
+    formRef.basic.current.form.current.resetForm();
+    for (let i = 0; i < formRef?.serial?.current?.form?.current?.length; i++) {
+      formRef.serial.current.form.current[i].resetForm();
+    }
+    for (let i = 0; i < formRef?.network?.current?.form?.current?.length; i++) {
+      formRef.network.current.form.current[i].resetForm();
+    }
+    for (let i = 0; i < formRef?.autoPoll?.current?.form?.current?.length; i++) {
+      formRef.autoPoll.current.form.current[i].resetForm();
+    }
   };
 
   useImperativeHandle(ref, () => ({
-    dirty: '',
+    dirty: isDirty(),
   }));
 
   const handleCloseSnackbar = () => {
     setSnackbar(null);
     onClose(false);
-    // formik.resetForm();
+    resetForm();
   };
 
   return (
@@ -137,16 +163,15 @@ const Content = forwardRef(({
               networkForm={formRef.network.current}
               autoPollForm={formRef.autoPoll.current}
               initVals={initialValues.conversionConfigs}
-              ref={(el) => { formRef.dataConversion.current = el; }}
             />
           </TabPanel>
         </SwipeableViews>
 
       </DialogContent>
       <DialogActions>
-        {/* <Button onClick={() => { onClose(basicFormik.dirty); }} variant="contained">
+        <Button onClick={() => { onClose(isDirty()); }} variant="contained">
           <FormattedMessage {...messages.cancelButton} />
-        </Button> */}
+        </Button>
         <LoadingButton onClick={handleSubmit} loading={saveLoading} variant="contained">
           <FormattedMessage {...messages.submitButton} />
         </LoadingButton>

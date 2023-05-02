@@ -183,10 +183,10 @@ export const getInitialValues = (originalConfig) => {
     const index = origin.networkId;
     const defaultConfig = rst.networkConfigs[index];
     const {
-      networkId, type, serialId, conversionConfigs, ...other
+      networkId, type, serialId, conversionConfigs, customProps, ...other
     } = origin;
     rst.networkConfigs[index] = {
-      ...defaultConfig, networkId, type, serialId, enabled: true, conversionConfigs,
+      ...defaultConfig, networkId, type, serialId, enabled: true, conversionConfigs, customProps,
     };
     const typeArr = ['socket', 'aliyun', 'mqtt'];
     rst.networkConfigs[index][typeArr[type]] = other;
@@ -351,35 +351,31 @@ export const handleFormDataSubmit = (values) => {
     basicConfigs: {},
     serialConfigs: [],
     networkConfigs: [],
+    autoPollConfigs: [],
     networkSummary: { socket: [], aliyun: [], mqtt: [] },
   };
   config.basicConfigs = values.basicConfigs;
   values.serialConfigs.forEach((ele) => {
-    if (ele.enabled) {
-      const { autoPollEnabled, autoPollConfig, ...other } = ele;
-      if (autoPollEnabled) {
-        config.serialConfigs.push(ele);
-      } else {
-        config.serialConfigs.push({ autoPollEnabled, ...other });
-      }
-    }
+    if (ele.enabled) config.serialConfigs.push(ele);
   });
-  let autoTaskCount = 0;
+  values.autoPollConfigs.forEach((ele) => {
+    if (ele.enabled) config.autoPollConfigs.push(ele);
+  });
   values.networkConfigs.forEach((ele) => {
     if (ele.enabled) {
       const {
-        enabled, serialId, type, networkId, conversionConfigs,
+        enabled, serialId, type, networkId, conversionConfigs, customProps,
       } = ele;
-      if (config.serialConfigs[serialId].autoPollEnabled) autoTaskCount++;
       const typeArr = ['socket', 'aliyun', 'mqtt'];
       const detail = ele[typeArr[type]];
       config.networkSummary[typeArr[type]].push(networkId);
-      config.networkConfigs.push({
-        enabled, serialId, type, networkId, conversionConfigs, ...detail,
-      });
+      const temp = {
+        enabled, serialId, type, networkId, conversionConfigs, customProps, ...detail,
+      };
+      Object.keys(temp).forEach((key) => temp[key] === undefined && delete temp[key]);
+      config.networkConfigs.push(temp);
     }
   });
   config.config_version = new Date().toString();
-  config.autoTaskCount = autoTaskCount;
   return config;
 };

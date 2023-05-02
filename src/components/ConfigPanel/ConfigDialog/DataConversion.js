@@ -1,15 +1,10 @@
-import {
-  useState, Fragment, useEffect, forwardRef, useImperativeHandle, useRef,
-} from 'react';
+import { useState, useEffect } from 'react';
 import {
   Grid,
   Typography,
   Collapse,
-  Zoom,
 } from '@mui/material';
-import { TransitionGroup } from 'react-transition-group';
 import { FormattedMessage, useIntl } from 'react-intl';
-import { Formik } from 'formik';
 import platformMessages from 'hocs/Locale/Messages/ConfigPanel/ConfigDialog/Platform';
 import messages from 'hocs/Locale/Messages/ConfigPanel/ConfigDialog/DataConversion';
 import { convertRawCommands, renderFields } from './utils';
@@ -19,10 +14,10 @@ const serialIdOptions = [
   { label: '1', value: 0 }, { label: '2', value: 1 }, { label: '3', value: 2 },
 ];
 
-const DataConversion = forwardRef(({
+function DataConversion({
   networkForm,
   autoPollForm,
-}, ref) => {
+}) {
   const intl = useIntl();
   const [serialId, setSerialId] = useState(0);
   const [networks, setNetworks] = useState([]);
@@ -37,13 +32,11 @@ const DataConversion = forwardRef(({
     if (networkForm?.form?.current?.length) {
       const temp = networkForm.form?.current
         .map((formikForm) => ({ ...formikForm.values }));
-      console.log('networks', temp);
       setNetworks(temp);
     }
     if (autoPollForm?.form?.current?.length) {
       const temp = autoPollForm.form?.current
         .map((formikForm) => ({ ...formikForm.values }));
-      console.log('autoPolls', temp);
       setAutoPolls(temp);
     }
   }, [networkForm, autoPollForm]);
@@ -56,7 +49,6 @@ const DataConversion = forwardRef(({
       }
     });
     setNetworkOptions(temp);
-    console.log('networkOptions', temp);
     if (temp.length) setNetworkId(temp[0].value);
     else setNetworkId(null);
   }, [serialId, networks]);
@@ -66,11 +58,10 @@ const DataConversion = forwardRef(({
       const temp = convertRawCommands(autoPolls[serialId]);
       setInitCustomProps(networks[networkId]?.customProps || []);
       const conversionConfigs = networks[networkId]?.conversionConfigs || [];
-      const rst = [];
-      temp?.forEach((obj) => {
+      temp?.forEach((obj, idx) => {
         const conversions = conversionConfigs
           .find((cfg) => (cfg.commandId === obj.id))?.conversions;
-        rst.push(conversions ? { ...obj, initConversions: conversions } : obj);
+        temp[idx] = conversions ? { ...obj, initConversions: conversions } : obj;
       });
       setCommands(temp);
     } else {
@@ -91,7 +82,10 @@ const DataConversion = forwardRef(({
   };
 
   const setConversionFields = (data) => {
-    const origin = networks[networkId].conversionConfigs || [];
+    let origin = networks[networkId].conversionConfigs || [];
+    origin = origin.filter(
+      (conversion) => (commands.findIndex((command) => (command.id === conversion.commandId)) > -1),
+    );
     const temp = [];
     let flag = false;
     origin.forEach((conversion) => {
@@ -196,6 +190,6 @@ const DataConversion = forwardRef(({
       }
     </>
   );
-});
+}
 
 export default DataConversion;

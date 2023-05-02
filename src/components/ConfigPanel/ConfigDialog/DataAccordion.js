@@ -37,10 +37,14 @@ export function DataAccordion({
   setConversionFields,
 }) {
   const intl = useIntl();
-  const [rows, setRows] = useState(command.initConversions || []);
+  const [rows, setRows] = useState([]);
   const [params, setParams] = useState(null);
   const [data, setData] = useState(null);
   const [showDetail, setShowDetail] = useState(false);
+
+  useEffect(() => {
+    setRows(command?.initConversions || []);
+  }, [command]);
 
   useEffect(() => {
     setData(params);
@@ -190,8 +194,12 @@ export function CustomPropsAccordion({
 }) {
   const intl = useIntl();
   const [params, setParams] = useState(null);
-  const [rows, setRows] = useState(initCustomProps);
+  const [rows, setRows] = useState([]);
   const [data, setData] = useState(null);
+
+  useEffect(() => {
+    setRows(initCustomProps);
+  }, [initCustomProps]);
 
   const handleAdd = (e) => {
     e.stopPropagation();
@@ -221,6 +229,7 @@ export function CustomPropsAccordion({
 
   const handleFieldChange = (propertyName, datatype) => (e) => {
     const temp = { ...data };
+    if (propertyName === 'propertyType') temp.propertyValue = '';
     if (datatype === 'number') {
       temp[propertyName] = Number(e.target.value);
     } else {
@@ -235,6 +244,7 @@ export function CustomPropsAccordion({
     setRows(temp);
     setCustomPropsFields(temp);
   };
+
   const columns = getCustomTableColumns({ intl, setParams, deleteRow });
   return (
     <Accordion
