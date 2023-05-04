@@ -2,7 +2,7 @@ import {
   useState, Fragment, useEffect, useRef, forwardRef, useImperativeHandle,
 } from 'react';
 import { DataGrid } from '@mui/x-data-grid';
-import { Grid } from '@mui/material';
+import { Grid, Collapse } from '@mui/material';
 import TabPanel from 'components/common/TabPanel';
 import { useIntl } from 'react-intl';
 import { Formik } from 'formik';
@@ -107,13 +107,13 @@ const AutoPoll = forwardRef(({
                 initialValues={serialConfig}
               >
                 {(formikProps) => (
-                  <Grid
-                    container
-                    spacing={2}
-                    direction="row"
-                  >
-                    {
-                      renderFields({
+                  <>
+                    <Grid
+                      container
+                      spacing={2}
+                      direction="row"
+                    >
+                      {renderFields({
                         label: intl.formatMessage(messages.autoPollLabel),
                         value: formikProps.values.enabled,
                         name: 'enabled',
@@ -121,55 +121,55 @@ const AutoPoll = forwardRef(({
                         fieldType: 'radioGroup',
                         radioOptions: enableOptions,
                         layout: { xs: 12 },
-                      })
-                    }
-                    {
-                      formikProps.values.enabled
-                        && (
-                          <>
-                            {
-                              autoPollFields.map((field) => (
-                                <Fragment key={field.propertyName}>
-                                  {renderFields({
-                                    value: formikProps.values[field.propertyName],
-                                    name: `${field.propertyName}`,
-                                    handleChange: formikProps.handleChange,
-                                    layout: { xs: 12, md: 4 },
-                                    ...field,
-                                  })}
-                                </Fragment>
-                              ))
-                            }
-                            <Grid item xs={12}>
-                              <DataGrid
-                                sx={{
-                                  boxShadow: 2,
-                                  border: 2,
-                                  borderColor: 'primary.dark',
-                                }}
-                                autoHeight
-                                rows={rows}
-                                columns={columns}
-                                components={{
-                                  Toolbar: renderToolBar,
-                                  NoRowsOverlay,
-                                }}
-                                hideFooterSelectedRowCount
-                                hideFooter
-                                hideFooterPagination
-                              />
-                              <CommandGenerator
-                                rows={rows}
-                                setRows={setRows}
-                                params={params}
-                                setParams={setParams}
-                                setCommandsField={setCommandsField}
-                              />
-                            </Grid>
-                          </>
-                        )
-                    }
-                  </Grid>
+                      })}
+
+                    </Grid>
+                    <Collapse in={formikProps.values.enabled} timeout={500} exit style={{ marginTop: '10px' }}>
+                      <Grid
+                        container
+                        spacing={2}
+                        direction="row"
+                      >
+                        {autoPollFields.map((field) => (
+                          <Fragment key={field.propertyName}>
+                            {renderFields({
+                              value: formikProps.values[field.propertyName],
+                              name: `${field.propertyName}`,
+                              handleChange: formikProps.handleChange,
+                              layout: { xs: 12, md: 4 },
+                              ...field,
+                            })}
+                          </Fragment>
+                        ))}
+                        <Grid item xs={12}>
+                          <DataGrid
+                            sx={{
+                              boxShadow: 2,
+                              border: 2,
+                              borderColor: 'primary.dark',
+                            }}
+                            autoHeight
+                            rows={rows}
+                            columns={columns}
+                            components={{
+                              Toolbar: renderToolBar,
+                              NoRowsOverlay,
+                            }}
+                            hideFooterSelectedRowCount
+                            hideFooter
+                            hideFooterPagination
+                          />
+                          <CommandGenerator
+                            rows={rows}
+                            setRows={setRows}
+                            params={params}
+                            setParams={setParams}
+                            setCommandsField={setCommandsField}
+                          />
+                        </Grid>
+                      </Grid>
+                    </Collapse>
+                  </>
                 )}
               </Formik>
             </TabPanel>
