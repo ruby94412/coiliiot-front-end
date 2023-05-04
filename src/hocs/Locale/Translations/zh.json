@@ -154,6 +154,9 @@
   "coiliiot.app.configPanel.configDialog.constants.string": "字符串",
   "coiliiot.app.configPanel.configDialog.constants.number": "数字",
   "coiliiot.app.configPanel.configDialog.constants.date": "时间",
+  "coiliiot.app.configPanel.configDialog.constants.registerType": "注册类型",
+  "coiliiot.app.configPanel.configDialog.constants.applyProductSecret": "一型一密",
+  "coiliiot.app.configPanel.configDialog.constants.applyDeviceSecret": "一机一密",
 
   "coiliiot.app.configPanel.configDialog.commandGenerator.title": "生成命令",
   "coiliiot.app.configPanel.configDialog.commandGenerator.confirm": "确认",

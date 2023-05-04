@@ -69,11 +69,47 @@ export const socketFields = [
 
 export const aliyunFields = [
   { label: <FormattedMessage {...messages.regionId} />, propertyName: 'regionId', datatype: 'text' },
+  {
+    label: <FormattedMessage {...messages.registerType} />,
+    propertyName: 'registerType',
+    datatype: 'number',
+    fieldType: 'radioGroup',
+    radioOptions: [
+      { label: <FormattedMessage {...messages.applyDeviceSecret} />, value: 0 },
+      { label: <FormattedMessage {...messages.applyProductSecret} />, value: 1 },
+    ],
+  },
   { label: 'ProductKey', propertyName: 'productKey', datatype: 'text' },
+  { label: 'ProductSecret', propertyName: 'productSecret', datatype: 'text' },
   { label: 'DeviceSecret', propertyName: 'deviceSecret', datatype: 'text' },
   { label: 'DeviceName', propertyName: 'deviceName', datatype: 'text' },
   { label: <FormattedMessage {...messages.subscribeTopic} />, propertyName: 'subscribeTopic', datatype: 'text' },
   { label: <FormattedMessage {...messages.publishTopic} />, propertyName: 'publishTopic', datatype: 'text' },
+  {
+    label: <FormattedMessage {...messages.qos} />,
+    propertyName: 'qos',
+    datatype: 'number',
+    fieldType: 'radioGroup',
+    radioOptions: [0, 1, 2],
+  },
+  {
+    label: <FormattedMessage {...messages.retain} />,
+    propertyName: 'retain',
+    datatype: 'number',
+    fieldType: 'radioGroup',
+    radioOptions: [0, 1],
+  },
+  {
+    label: <FormattedMessage {...messages.cleanSession} />,
+    propertyName: 'cleanSession',
+    datatype: 'boolean',
+    fieldType: 'radioGroup',
+    radioOptions: [
+      { label: <FormattedMessage {...messages.enable} />, value: true },
+      { label: <FormattedMessage {...messages.disable} />, value: false },
+    ],
+  },
+  { label: <FormattedMessage {...messages.lwtMessage} />, propertyName: 'lwtMessage', datatype: 'text' },
 ];
 
 export const mqttFields = [
@@ -126,18 +162,18 @@ export const serialFields = [
     radioOptions: [7, 8],
   },
   {
+    label: <FormattedMessage {...messages.stopBit} />,
+    propertyName: 'stopBit',
+    fieldType: 'radioGroup',
+    radioOptions: [1, 2],
+  },
+  {
     label: <FormattedMessage {...messages.parityMode} />,
     propertyName: 'parityMode',
     fieldType: 'radioGroup',
     layout: { xs: 12, md: 8 },
     radioOptions: [{ label: 'UART.PAR_EVEN', value: 0 }, { label: 'UART.PAR_ODD', value: 1 },
       { label: 'UART.PAR_NONE', value: 2 }],
-  },
-  {
-    label: <FormattedMessage {...messages.stopBit} />,
-    propertyName: 'stopBit',
-    fieldType: 'radioGroup',
-    radioOptions: [1, 2],
   },
 ];
 

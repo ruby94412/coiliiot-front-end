@@ -231,4 +231,16 @@ export default defineMessages({
     id: `${scope}.date`,
     defaultMessage: 'Date',
   },
+  registerType: {
+    id: `${scope}.registerType`,
+    defaultMessage: 'Register Type',
+  },
+  applyProductSecret: {
+    id: `${scope}.applyProductSecret`,
+    defaultMessage: 'Apply ProductSecret',
+  },
+  applyDeviceSecret: {
+    id: `${scope}.applyDeviceSecret`,
+    defaultMessage: 'Apply DeviceSecret',
+  },
 });

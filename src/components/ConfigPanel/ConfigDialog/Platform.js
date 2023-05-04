@@ -1,7 +1,7 @@
 import {
   useState, Fragment, useRef, forwardRef, useImperativeHandle,
 } from 'react';
-import { Grid } from '@mui/material';
+import { Grid, Collapse } from '@mui/material';
 import { FormattedMessage } from 'react-intl';
 import { Formik } from 'formik';
 import messages from 'hocs/Locale/Messages/ConfigPanel/ConfigDialog/Platform';
@@ -31,7 +31,7 @@ const Platform = forwardRef(({
   };
 
   const renderNetwork = (formikProps) => {
-    const { type } = formikProps.values;
+    const { type, aliyun } = formikProps.values;
     let fields; let
       typeName;
     switch (type) {
@@ -49,16 +49,38 @@ const Platform = forwardRef(({
         typeName = 'socket';
         break;
     }
+    const shouldUnmount = (field) => {
+      const condition = (
+        typeName === 'aliyun'
+          && Number(aliyun.registerType) === 0
+          && field.propertyName === 'productSecret'
+      ) || (
+        typeName === 'aliyun'
+          && Number(aliyun.registerType) === 1
+          && field.propertyName === 'deviceSecret'
+      );
+      return condition;
+    };
+
     return (
       <>
         {fields.map((field) => (
           <Fragment key={field.propertyName}>
-            {renderFields({
-              value: formikProps.values[typeName][field.propertyName],
-              name: `${typeName}.${field.propertyName}`,
-              handleChange: formikProps.handleChange,
-              ...field,
-            })}
+            {
+              shouldUnmount(field) ? (<></>)
+                : (
+                  <>
+                    {
+                      renderFields({
+                        value: formikProps.values[typeName][field.propertyName],
+                        name: `${typeName}.${field.propertyName}`,
+                        handleChange: formikProps.handleChange,
+                        ...field,
+                      })
+                    }
+                  </>
+                )
+            }
           </Fragment>
         ))}
         {renderFields({
@@ -99,7 +121,7 @@ const Platform = forwardRef(({
       <SwipeableViews index={networkId}>
         {
           initVals.map((networkConfig, index) => (
-            <TabPanel key={index} index={index} value={networkId} sx={{ px: 0, py: 3 }}>
+            <TabPanel key={index} index={index} value={networkId} sx={{ px: 0, py: 1 }}>
               <Formik
                 innerRef={(el) => { formikRefs.current[index] = el; }}
                 initialValues={networkConfig}
@@ -121,30 +143,24 @@ const Platform = forwardRef(({
                           radioOptions: enableOptions,
                         })
                       }
-                      {
-                        formikProps.values.enabled
-                          && renderFields({
-                            label: <FormattedMessage {...messages.platformTypeLabel} />,
-                            value: formikProps.values.type,
-                            name: 'type',
-                            handleChange: formikProps.handleChange,
-                            fieldType: 'select',
-                            selectOptions: networkOptions,
-                          })
-                      }
                     </Grid>
-                    {
-                      formikProps.values.enabled && (
-                        <Grid
-                          container
-                          spacing={2}
-                          direction="row"
-                          style={{ marginTop: '10px' }}
-                        >
-                          {renderNetwork(formikProps)}
-                        </Grid>
-                      )
-                    }
+                    <Collapse in={formikProps.values.enabled} timeout={500} exit style={{ marginTop: '10px' }}>
+                      <Grid
+                        container
+                        spacing={2}
+                        direction="row"
+                      >
+                        {renderFields({
+                          label: <FormattedMessage {...messages.platformTypeLabel} />,
+                          value: formikProps.values.type,
+                          name: 'type',
+                          handleChange: formikProps.handleChange,
+                          fieldType: 'select',
+                          selectOptions: networkOptions,
+                        })}
+                        {renderNetwork(formikProps)}
+                      </Grid>
+                    </Collapse>
                   </>
                 )}
               </Formik>

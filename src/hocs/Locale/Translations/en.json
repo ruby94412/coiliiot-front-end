@@ -153,6 +153,9 @@
   "coiliiot.app.configPanel.configDialog.constants.string": "Text",
   "coiliiot.app.configPanel.configDialog.constants.number": "Number",
   "coiliiot.app.configPanel.configDialog.constants.date": "Date",
+  "coiliiot.app.configPanel.configDialog.constants.registerType": "Register Type",
+  "coiliiot.app.configPanel.configDialog.constants.applyProductSecret": "Apply ProductSecret",
+  "coiliiot.app.configPanel.configDialog.constants.applyDeviceSecret": "Apply DeviceSecret",
 
   "coiliiot.app.configPanel.configDialog.commandGenerator.title": "Command Generator",
   "coiliiot.app.configPanel.configDialog.commandGenerator.confirm": "Confirm",
