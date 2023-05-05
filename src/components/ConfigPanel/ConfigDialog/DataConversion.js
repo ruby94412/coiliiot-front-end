@@ -165,29 +165,22 @@ function DataConversion({
           </Collapse>
         </Grid>
       </Grid>
-      {
-        networkOptions.length ? (
-          <>
-            {
-              networks.map((network, index) => (
-                <Collapse in={index === networkId} key={index} exit timeout={500}>
-                  <div>
-                    {
-                      commands.length
-                        ? renderAccordions()
-                        : (
-                          <Typography>
-                            <FormattedMessage {...messages.autoPollDisabledText} />
-                          </Typography>
-                        )
-                    }
-                  </div>
-                </Collapse>
-              ))
-            }
-          </>
-        ) : (<></>)
-      }
+      <Collapse
+        in={commands.length > 0 && networkOptions.length > 0}
+        exit
+        timeout={500}
+        style={{ marginTop: '10px' }}
+      >
+        {
+          commands.length
+            ? renderAccordions()
+            : (
+              <Typography>
+                <FormattedMessage {...messages.autoPollDisabledText} />
+              </Typography>
+            )
+        }
+      </Collapse>
     </>
   );
 }
