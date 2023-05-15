@@ -156,6 +156,8 @@
   "coiliiot.app.configPanel.configDialog.constants.registerType": "Register Type",
   "coiliiot.app.configPanel.configDialog.constants.applyProductSecret": "Apply ProductSecret",
   "coiliiot.app.configPanel.configDialog.constants.applyDeviceSecret": "Apply DeviceSecret",
+  "coiliiot.app.configPanel.configDialog.constants.second": "second",
+  "coiliiot.app.configPanel.configDialog.constants.millisecond": "ms",
 
   "coiliiot.app.configPanel.configDialog.commandGenerator.title": "Command Generator",
   "coiliiot.app.configPanel.configDialog.commandGenerator.confirm": "Confirm",

@@ -39,13 +39,9 @@ function CommandGenerator({
     }
   }, [data]);
 
-  const handleDataChange = (propertyName, datatype) => (e) => {
+  const handleDataChange = (propertyName) => (e) => {
     const updatedData = { ...data };
-    if (datatype === 'number') {
-      updatedData[propertyName] = Number(e.target.value);
-    } else {
-      updatedData[propertyName] = e.target.value;
-    }
+    updatedData[propertyName] = e.target.value;
     setData(updatedData);
   };
 
@@ -81,7 +77,7 @@ function CommandGenerator({
               {renderFields({
                 name: field.propertyName,
                 value: data[field.propertyName],
-                handleChange: handleDataChange(field.propertyName, field.datatype),
+                handleChange: handleDataChange(field.propertyName),
                 layout: { xs: 12, md: 6 },
                 ...field,
               })}

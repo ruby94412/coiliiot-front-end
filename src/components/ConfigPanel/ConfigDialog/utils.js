@@ -124,6 +124,7 @@ export const getInitialValues = (originalConfig) => {
       serialId: i,
       numberOfRetry: 3,
       timeout: 1,
+      period: 600,
     });
   }
   for (let i = 0; i < 8; i++) {
@@ -292,7 +293,6 @@ export const convertRawCommands = (autoPollConfig) => {
     };
     const commandDetail = getCommandDetail(rst);
     rst.detail = commandDetail;
-    rst.period = command.period;
     rst.id = command.id;
     return rst;
   });

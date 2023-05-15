@@ -243,4 +243,12 @@ export default defineMessages({
     id: `${scope}.applyDeviceSecret`,
     defaultMessage: 'Apply DeviceSecret',
   },
+  second: {
+    id: `${scope}.second`,
+    defaultMessage: 'second',
+  },
+  millisecond: {
+    id: `${scope}.millisecond`,
+    defaultMessage: 'millisecond',
+  },
 });

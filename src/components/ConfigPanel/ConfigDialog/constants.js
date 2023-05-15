@@ -5,7 +5,7 @@ import {
   Edit as EditIcon,
 } from '@mui/icons-material';
 import { GridActionsCellItem } from '@mui/x-data-grid';
-import { Tooltip } from '@mui/material';
+import { Tooltip, InputAdornment } from '@mui/material';
 
 export const networkIds = [0, 1, 2, 3, 4, 5, 6, 7];
 
@@ -182,6 +182,7 @@ export const autoPollFields = [
     label: <FormattedMessage {...messages.autoPollInterval} />,
     propertyName: 'delay',
     datatype: 'number',
+    endAdornment: <InputAdornment position="end"><FormattedMessage {...messages.millisecond} /></InputAdornment>,
   },
   {
     label: <FormattedMessage {...messages.numberOfRetry} />,
@@ -192,15 +193,17 @@ export const autoPollFields = [
     label: <FormattedMessage {...messages.timeout} />,
     propertyName: 'timeout',
     datatype: 'number',
+    endAdornment: <InputAdornment position="end"><FormattedMessage {...messages.millisecond} /></InputAdornment>,
   },
-];
-
-export const commandGeneratorFields = [
   {
     label: <FormattedMessage {...messages.period} />,
     propertyName: 'period',
     datatype: 'number',
+    endAdornment: <InputAdornment position="end"><FormattedMessage {...messages.second} /></InputAdornment>,
   },
+];
+
+export const commandGeneratorFields = [
   {
     label: <FormattedMessage {...messages.slaveId} />,
     propertyName: 'slaveId',
@@ -303,15 +306,6 @@ export const getCommandTableColumns = ({
   setParams,
   deleteRow,
 }) => [
-  {
-    field: 'period',
-    headerName: intl.formatMessage(messages.period),
-    flex: 1,
-    minWidth: 80,
-    type: 'number',
-    headerAlign: 'right',
-    align: 'right',
-  },
   {
     field: 'slaveId',
     headerName: intl.formatMessage(messages.slaveId),

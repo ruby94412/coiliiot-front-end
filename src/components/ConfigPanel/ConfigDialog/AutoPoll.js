@@ -44,7 +44,6 @@ const AutoPoll = forwardRef(({
     const commands = tempRows.map((row) => ({
       dec: row.detail.dec,
       rawDec: row.detail.rawDec,
-      period: row.period,
       id: row.id,
     }));
     formikRefs.current[serialId].setFieldValue('commands', commands);
@@ -70,7 +69,7 @@ const AutoPoll = forwardRef(({
     <TableToolBar
       setModalOpen={() => {
         setParams({
-          period: 0, slaveId: 1, functionCode: 1, registerOffset: 0, numberOfRegisters: 1,
+          slaveId: 1, functionCode: 1, registerOffset: 0, numberOfRegisters: 1,
         });
       }}
       text={intl.formatMessage(messages.commandGeneratorButton)}
