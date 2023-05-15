@@ -6,6 +6,8 @@ import {
 } from 'components/common/StyledAccordion';
 import StyledDataGrid from 'components/common/StyledDataGrid';
 import {
+  Badge,
+  Box,
   Grid,
   Typography,
   Button,
@@ -16,7 +18,10 @@ import {
 } from '@mui/material';
 import { FormattedMessage, useIntl } from 'react-intl';
 import messages from 'hocs/Locale/Messages/ConfigPanel/ConfigDialog/DataAccordion';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import {
+  ExpandMore as ExpandMoreIcon,
+  Description as DescriptionIcon,
+} from '@mui/icons-material';
 import NoRowsOverlay from 'components/common/NoRowsOverlay';
 import CommandDetail from './CommandDetail';
 import {
@@ -107,16 +112,22 @@ export function DataAccordion({
           aria-controls="panel1bh-content"
           id="panel1bh-header"
         >
-          <Typography sx={{ width: '20%', flexShrink: 0, lineHeight: 2.5 }}>
+          <Typography sx={{ lineHeight: 2.5, width: '15%' }}>
             {`${intl.formatMessage(messages.commandText)} ${idx + 1}`}
           </Typography>
-          <Typography sx={{ width: '50%', fontFamily: 'Courier', lineHeight: 2.5 }}>{command.detail.hex.join(' ')}</Typography>
+          <Typography sx={{ fontFamily: 'Courier', lineHeight: 2.5 }}>
+            {command.detail.hex.join(' ')}
+          </Typography>
+          <Box sx={{ flexGrow: 1 }} />
           <Button variant="outlined" onClick={handleAdd}>
             <FormattedMessage {...messages.addMappingButton} />
           </Button>
           <Button variant="outlined" onClick={handleShow} style={{ marginLeft: '20px' }}>
             <FormattedMessage {...messages.commandDetail} />
           </Button>
+          <Badge badgeContent={Number(rows.length).toString()} color="error" style={{ margin: '10px' }}>
+            <DescriptionIcon color="primary" />
+          </Badge>
         </AccordionSummary>
         <AccordionDetails>
           <StyledDataGrid
@@ -256,12 +267,16 @@ export function CustomPropsAccordion({
         aria-controls="panel1bh-content"
         id="panel1bh-header"
       >
-        <Typography sx={{ width: '70%', flexShrink: 0, lineHeight: 2.5 }}>
+        <Typography sx={{ lineHeight: 2.5 }}>
           <FormattedMessage {...messages.customPropetyTitle} />
         </Typography>
+        <Box sx={{ flexGrow: 1 }} />
         <Button variant="outlined" onClick={handleAdd}>
           <FormattedMessage {...messages.addPropertyButton} />
         </Button>
+        <Badge badgeContent={Number(rows.length).toString()} color="error" style={{ margin: '10px' }}>
+          <DescriptionIcon color="primary" />
+        </Badge>
       </AccordionSummary>
       <AccordionDetails>
         <StyledDataGrid
