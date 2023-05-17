@@ -68,6 +68,7 @@ export function DataAccordion({
     e.stopPropagation();
     setShowDetail(true);
   };
+
   const handleConfirm = () => {
     let temp;
     if (params?.id) {
@@ -79,7 +80,11 @@ export function DataAccordion({
       setRows(temp);
       setExpanded(`command${idx}`);
     }
-    setConversionFields({ conversions: temp, commandId: command.id });
+    setConversionFields({
+      conversions: temp,
+      commandId: command.id,
+      registerOffset: command.registerOffset,
+    });
     handleClose();
   };
 
