@@ -84,6 +84,7 @@ export function DataAccordion({
       conversions: temp,
       commandId: command.id,
       registerOffset: command.registerOffset,
+      dec: command.detail.dec,
     });
     handleClose();
   };
