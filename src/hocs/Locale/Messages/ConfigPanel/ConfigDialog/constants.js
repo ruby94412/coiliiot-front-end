@@ -159,6 +159,10 @@ export default defineMessages({
     id: `${scope}.actions`,
     defaultMessage: 'Actions',
   },
+  addTooltip: {
+    id: `${scope}.addTooltip`,
+    defaultMessage: 'Add',
+  },
   editTooltip: {
     id: `${scope}.editTooltip`,
     defaultMessage: 'Edit',
@@ -230,6 +234,10 @@ export default defineMessages({
   date: {
     id: `${scope}.date`,
     defaultMessage: 'Date',
+  },
+  object: {
+    id: `${scope}.object`,
+    defaultMessage: 'Object',
   },
   registerType: {
     id: `${scope}.registerType`,

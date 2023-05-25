@@ -3,6 +3,7 @@ import messages from 'hocs/Locale/Messages/ConfigPanel/ConfigDialog/constants';
 import {
   DeleteForever as DeleteIcon,
   Edit as EditIcon,
+  Add as AddIcon,
 } from '@mui/icons-material';
 import { GridActionsCellItem } from '@mui/x-data-grid';
 import { Tooltip, InputAdornment } from '@mui/material';
@@ -263,8 +264,6 @@ export const dataMappingFields = [
     selectOptions: [
       { label: 'ABCD', value: 0 },
       { label: 'DCBA', value: 1 },
-      { label: 'BADC', value: 2 },
-      { label: 'CDAB', value: 3 },
     ],
   },
   {
@@ -297,6 +296,7 @@ export const customPropertyFields = [
       { label: <FormattedMessage {...messages.string} />, value: 0 },
       { label: <FormattedMessage {...messages.number} />, value: 1 },
       { label: <FormattedMessage {...messages.date} />, value: 2 },
+      { label: <FormattedMessage {...messages.object} />, value: 3 },
     ],
   },
 ];
@@ -492,6 +492,7 @@ export const getCustomTableColumns = ({
           intl.formatMessage(messages.string),
           intl.formatMessage(messages.number),
           intl.formatMessage(messages.date),
+          intl.formatMessage(messages.object),
         ][params.value]}
       </span>
     ),
@@ -502,29 +503,47 @@ export const getCustomTableColumns = ({
     type: 'actions',
     flex: 1,
     minWidth: 80,
-    getActions: (params) => [
-      <GridActionsCellItem
-        icon={(
-          <Tooltip title={intl.formatMessage(messages.editTooltip)}>
-            <EditIcon />
-          </Tooltip>
-        )}
-        label="Edit"
-        onClick={() => {
-          setParams(params?.row);
-        }}
-      />,
-      <GridActionsCellItem
-        icon={(
-          <Tooltip title={intl.formatMessage(messages.deleteTooltip)}>
-            <DeleteIcon sx={{ '&:hover': { color: 'red' } }} />
-          </Tooltip>
-        )}
-        label="Delete"
-        onClick={() => {
-          deleteRow(params?.row);
-        }}
-      />,
-    ],
+    getActions: (params) => {
+      const actions = [
+        <GridActionsCellItem
+          icon={(
+            <Tooltip title={intl.formatMessage(messages.editTooltip)}>
+              <EditIcon />
+            </Tooltip>
+          )}
+          label="Edit"
+          onClick={() => {
+            setParams(params?.row);
+          }}
+        />,
+        <GridActionsCellItem
+          icon={(
+            <Tooltip title={intl.formatMessage(messages.deleteTooltip)}>
+              <DeleteIcon sx={{ '&:hover': { color: 'red' } }} />
+            </Tooltip>
+          )}
+          label="Delete"
+          onClick={() => {
+            deleteRow(params?.row);
+          }}
+        />,
+      ];
+      if (params?.row?.propertyType === 3) {
+        actions.unshift(
+          <GridActionsCellItem
+            icon={(
+              <Tooltip title={intl.formatMessage(messages.addTooltip)}>
+                <AddIcon />
+              </Tooltip>
+            )}
+            label="Add"
+            onClick={() => {
+              setParams(params?.row);
+            }}
+          />,
+        );
+      }
+      return actions;
+    },
   },
 ];
