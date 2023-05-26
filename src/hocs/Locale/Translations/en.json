@@ -155,6 +155,7 @@
   "coiliiot.app.configPanel.configDialog.constants.number": "Number",
   "coiliiot.app.configPanel.configDialog.constants.date": "Date",
   "coiliiot.app.configPanel.configDialog.constants.object": "Object",
+  "coiliiot.app.configPanel.configDialog.constants.array": "Array",
   "coiliiot.app.configPanel.configDialog.constants.registerType": "Register Type",
   "coiliiot.app.configPanel.configDialog.constants.applyProductSecret": "Apply ProductSecret",
   "coiliiot.app.configPanel.configDialog.constants.applyDeviceSecret": "Apply DeviceSecret",

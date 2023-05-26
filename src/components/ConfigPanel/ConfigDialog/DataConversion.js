@@ -8,7 +8,8 @@ import { FormattedMessage, useIntl } from 'react-intl';
 import platformMessages from 'hocs/Locale/Messages/ConfigPanel/ConfigDialog/Platform';
 import messages from 'hocs/Locale/Messages/ConfigPanel/ConfigDialog/DataConversion';
 import { convertRawCommands, renderFields } from './utils';
-import { DataAccordion, CustomPropsAccordion } from './DataAccordion';
+import DataAccordion from './DataAccordion';
+import CustomizeJson from './CustomizeJson';
 
 const serialIdOptions = [
   { label: '1', value: 0 }, { label: '2', value: 1 }, { label: '3', value: 2 },
@@ -117,7 +118,7 @@ function DataConversion({
           setConversionFields={setConversionFields}
         />
       ))}
-      <CustomPropsAccordion
+      <CustomizeJson
         expanded={expanded}
         handleExpandChange={handleExpandChange}
         setExpanded={setExpanded}

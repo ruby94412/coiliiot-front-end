@@ -25,7 +25,7 @@ import {
 import NoRowsOverlay from 'components/common/NoRowsOverlay';
 import CommandDetail from './CommandDetail';
 import {
-  getMappingTableColumns, dataMappingFields, getCustomTableColumns, customPropertyFields,
+  getMappingTableColumns, dataMappingFields,
 } from './constants';
 import { renderFields, getUid } from './utils';
 
@@ -33,7 +33,7 @@ const dialogStyle = {
   minWidth: '20%',
 };
 
-export function DataAccordion({
+function DataAccordion({
   idx,
   expanded,
   handleExpandChange,
@@ -199,135 +199,6 @@ export function DataAccordion({
         </Dialog>
       </Accordion>
     </>
-  );
-}
-
-export function CustomPropsAccordion({
-  expanded,
-  handleExpandChange,
-  setExpanded,
-  initCustomProps,
-  setCustomPropsFields,
-}) {
-  const intl = useIntl();
-  const [params, setParams] = useState(null);
-  const [rows, setRows] = useState([]);
-  const [data, setData] = useState(null);
-
-  useEffect(() => {
-    setRows(initCustomProps);
-  }, [initCustomProps]);
-
-  const handleAdd = (e) => {
-    e.stopPropagation();
-    setParams({
-      propertyKey: '', propertyValue: '', propertyType: 0,
-    });
-  };
-  useEffect(() => {
-    setData(params);
-  }, [params]);
-
-  const handleClose = () => setParams(null);
-  const handleConfirm = () => {
-    let temp;
-    if (params?.id) {
-      temp = rows.map((obj) => (obj.id === data.id ? { ...data } : obj));
-      setRows(temp);
-    } else {
-      temp = [...rows];
-      temp.push({ ...data, id: getUid() });
-      setRows(temp);
-      setExpanded('customFields');
-    }
-    setCustomPropsFields(temp);
-    handleClose();
-  };
-
-  const handleFieldChange = (propertyName, datatype) => (e) => {
-    const temp = { ...data };
-    if (propertyName === 'propertyType') temp.propertyValue = '';
-    if (datatype === 'number') {
-      temp[propertyName] = Number(e.target.value);
-    } else {
-      temp[propertyName] = e.target.value;
-    }
-    setData(temp);
-  };
-
-  const deleteRow = (row) => {
-    const temp = [...rows];
-    temp.splice(temp.findIndex((obj) => obj.id === row.id), 1);
-    setRows(temp);
-    setCustomPropsFields(temp);
-  };
-
-  const columns = getCustomTableColumns({ intl, setParams, deleteRow });
-  return (
-    <Accordion
-      expanded={expanded === 'customFields'}
-      onChange={handleExpandChange('customFields')}
-    >
-      <AccordionSummary
-        expandIcon={<ExpandMoreIcon />}
-        aria-controls="panel1bh-content"
-        id="panel1bh-header"
-      >
-        <Typography sx={{ lineHeight: 2.5 }}>
-          <FormattedMessage {...messages.customPropetyTitle} />
-        </Typography>
-        <Box sx={{ flexGrow: 1 }} />
-        <Button variant="outlined" onClick={handleAdd}>
-          <FormattedMessage {...messages.addPropertyButton} />
-        </Button>
-        <Badge badgeContent={Number(rows.length).toString()} color="error" style={{ margin: '10px' }}>
-          <DescriptionIcon color="primary" />
-        </Badge>
-      </AccordionSummary>
-      <AccordionDetails>
-        <StyledDataGrid
-          sx={{
-            border: '1px dashed',
-            borderColor: 'primary.main',
-          }}
-          autoHeight
-          rows={rows}
-          columns={columns}
-          components={{
-            NoRowsOverlay,
-          }}
-          hideFooterSelectedRowCount
-          hideFooter
-          hideFooterPagination
-        />
-      </AccordionDetails>
-      <Dialog open={!!params} onClose={handleClose} PaperProps={{ style: dialogStyle }}>
-        <DialogContent dividers>
-          {
-            params && data && customPropertyFields.map((field) => (
-              <Fragment key={field.propertyName}>
-                {renderFields({
-                  handleChange: handleFieldChange(field.propertyName, field.datatype),
-                  value: data[field.propertyName],
-                  style: { width: '100%' },
-                  layout: { xs: 12 },
-                  disabled: data.propertyType === 2 && field.propertyName === 'propertyValue',
-                  ...field,
-                })}
-              </Fragment>
-            ))
-          }
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose} variant="contained">
-            <FormattedMessage {...messages.cancel} />
-          </Button>
-          <Button onClick={handleConfirm} variant="contained">
-            <FormattedMessage {...messages.confirm} />
-          </Button>
-        </DialogActions>
-      </Dialog>
-    </Accordion>
   );
 }
 

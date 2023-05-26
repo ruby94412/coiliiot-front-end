@@ -239,6 +239,10 @@ export default defineMessages({
     id: `${scope}.object`,
     defaultMessage: 'Object',
   },
+  array: {
+    id: `${scope}.array`,
+    defaultMessage: 'Array',
+  },
   registerType: {
     id: `${scope}.registerType`,
     defaultMessage: 'Register Type',

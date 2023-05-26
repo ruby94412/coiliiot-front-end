@@ -297,6 +297,7 @@ export const customPropertyFields = [
       { label: <FormattedMessage {...messages.number} />, value: 1 },
       { label: <FormattedMessage {...messages.date} />, value: 2 },
       { label: <FormattedMessage {...messages.object} />, value: 3 },
+      { label: <FormattedMessage {...messages.array} />, value: 4 },
     ],
   },
 ];
@@ -493,6 +494,7 @@ export const getCustomTableColumns = ({
           intl.formatMessage(messages.number),
           intl.formatMessage(messages.date),
           intl.formatMessage(messages.object),
+          intl.formatMessage(messages.array),
         ][params.value]}
       </span>
     ),
