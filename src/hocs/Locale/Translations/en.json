@@ -176,7 +176,7 @@
   "coiliiot.app.configPanel.configDialog.dataAccordion.confirm": "Confirm",
   "coiliiot.app.configPanel.configDialog.dataAccordion.commandText": "Command",
   "coiliiot.app.configPanel.configDialog.dataAccordion.commandDetail": "Command Detail",
-  "coiliiot.app.configPanel.configDialog.dataAccordion.customPropetyTitle": "Custom Property",
+  "coiliiot.app.configPanel.configDialog.dataAccordion.customizeJsonTitle": "Customize Json Format",
   "coiliiot.app.configPanel.configDialog.dataAccordion.addPropertyButton": "Add Property"
 }
 

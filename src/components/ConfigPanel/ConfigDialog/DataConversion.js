@@ -27,7 +27,8 @@ function DataConversion({
   const [autoPolls, setAutoPolls] = useState([]);
   const [expanded, setExpanded] = useState(false);
   const [commands, setCommands] = useState([]);
-  const [initCustomProps, setInitCustomProps] = useState([]);
+  const [mappingRows, setMappingRows] = useState([]);
+  const [initCustomizedJson, setInitCustomizedJson] = useState([]);
 
   useEffect(() => {
     if (networkForm?.form?.current?.length) {
@@ -57,7 +58,7 @@ function DataConversion({
   useEffect(() => {
     if (autoPolls[serialId]?.commands?.length) {
       const temp = convertRawCommands(autoPolls[serialId]);
-      setInitCustomProps(networks[networkId]?.customProps || []);
+      setInitCustomizedJson(networks[networkId]?.customizedJson);
       const conversionConfigs = networks[networkId]?.conversionConfigs || [];
       temp?.forEach((obj, idx) => {
         const conversions = conversionConfigs
@@ -101,8 +102,8 @@ function DataConversion({
     networkForm.form?.current[networkId]?.setFieldValue('conversionConfigs', temp);
   };
 
-  const setCustomPropsFields = (data) => {
-    networkForm.form?.current[networkId]?.setFieldValue('customProps', data);
+  const setCustomizedJsonField = (data) => {
+    networkForm.form?.current[networkId]?.setFieldValue('customizedJson', data);
   };
 
   const renderAccordions = () => (
@@ -111,19 +112,21 @@ function DataConversion({
         <DataAccordion
           key={`command${idx}`}
           idx={idx}
-          expanded={expanded}
-          handleExpandChange={handleExpandChange}
           command={command}
+          expanded={expanded}
+          rows={mappingRows}
+          setRows={setMappingRows}
           setExpanded={setExpanded}
           setConversionFields={setConversionFields}
+          handleExpandChange={handleExpandChange}
         />
       ))}
       <CustomizeJson
         expanded={expanded}
         handleExpandChange={handleExpandChange}
-        setExpanded={setExpanded}
-        initCustomProps={initCustomProps}
-        setCustomPropsFields={setCustomPropsFields}
+        initCustomizedJson={initCustomizedJson}
+        setCustomizedJsonField={setCustomizedJsonField}
+        mappingRows={mappingRows}
       />
     </>
   );

@@ -190,10 +190,10 @@ export const getInitialValues = (originalConfig) => {
     const index = origin.networkId;
     const defaultConfig = rst.networkConfigs[index];
     const {
-      networkId, type, serialId, conversionConfigs, customProps, ...other
+      networkId, type, serialId, conversionConfigs, customizedJson, ...other
     } = origin;
     rst.networkConfigs[index] = {
-      ...defaultConfig, networkId, type, serialId, enabled: true, conversionConfigs, customProps,
+      ...defaultConfig, networkId, type, serialId, enabled: true, conversionConfigs, customizedJson,
     };
     const typeArr = ['socket', 'aliyun', 'mqtt'];
     rst.networkConfigs[index][typeArr[type]] = other;
@@ -370,13 +370,13 @@ export const handleFormDataSubmit = (values) => {
   values.networkConfigs.forEach((ele) => {
     if (ele.enabled) {
       const {
-        enabled, serialId, type, networkId, conversionConfigs, customProps,
+        enabled, serialId, type, networkId, conversionConfigs, customizedJson,
       } = ele;
       const typeArr = ['socket', 'aliyun', 'mqtt'];
       const detail = ele[typeArr[type]];
       config.networkSummary[typeArr[type]].push(networkId);
       const temp = {
-        enabled, serialId, type, networkId, conversionConfigs, customProps, ...detail,
+        enabled, serialId, type, networkId, conversionConfigs, customizedJson, ...detail,
       };
       Object.keys(temp).forEach((key) => temp[key] === undefined && delete temp[key]);
       config.networkConfigs.push(temp);
@@ -384,4 +384,34 @@ export const handleFormDataSubmit = (values) => {
   });
   config.config_version = new Date().toString();
   return config;
+};
+
+export const nodeToJson = (node) => {
+  if (!node) return null;
+  const {
+    propertyKey, propertyValue, propertyType, children,
+  } = node;
+  const rst = {};
+  switch (propertyType) {
+    case 3: {
+      let temp = {};
+      if (children?.length) {
+        children.forEach((child) => {
+          temp = { ...temp, ...nodeToJson(child) };
+        });
+      }
+      rst[propertyKey] = temp;
+      break;
+    }
+    case 2:
+      // eslint-disable-next-line no-template-curly-in-string
+      rst[propertyKey] = '${Date}';
+      break;
+    case 0:
+    case 1:
+    default:
+      rst[propertyKey] = propertyValue;
+      break;
+  }
+  return rst;
 };

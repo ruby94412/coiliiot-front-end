@@ -1,9 +1,11 @@
+/* eslint-disable no-extra-boolean-cast */
 import { useState, useEffect, Fragment } from 'react';
 import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
 } from 'components/common/StyledAccordion';
+import { TreeView } from '@mui/lab';
 import {
   DeleteForever as DeleteIcon,
   Edit as EditIcon,
@@ -14,7 +16,6 @@ import {
   DataObject as ObjectIcon,
   DataArray as ArrayIcon,
   ExpandMore as ExpandMoreIcon,
-  Description as DescriptionIcon,
 } from '@mui/icons-material';
 import {
   StyledTreeItem,
@@ -23,20 +24,19 @@ import {
   CloseSquare,
 } from 'components/common/StyledTreeView';
 import {
-  Badge,
+  IconButton,
   Box,
   Typography,
   Button,
   Dialog,
   DialogActions,
   DialogContent,
-  DialogTitle,
+  Tooltip,
 } from '@mui/material';
 import { FormattedMessage, useIntl } from 'react-intl';
 import messages from 'hocs/Locale/Messages/ConfigPanel/ConfigDialog/DataAccordion';
-import {
-  getCustomTableColumns, customPropertyFields,
-} from './constants';
+import constMessages from 'hocs/Locale/Messages/ConfigPanel/ConfigDialog/constants';
+import { customPropertyFields } from './constants';
 import { renderFields, getUid } from './utils';
 
 const dialogStyle = {
@@ -44,34 +44,70 @@ const dialogStyle = {
 };
 
 function TreeItemLabel({
-  propertyType,
-  propertyValue,
-  propertyKey,
+  node,
+  setParams,
+  deleteNode,
 }) {
+  const {
+    propertyType, propertyKey, propertyValue, id,
+  } = node;
+  const intl = useIntl();
   const icons = [TextIcon, NumberIcon, DateIcon, ObjectIcon, ArrayIcon];
+  const tooltips = ['string', 'number', 'date', 'object', 'array'];
   const [isHovered, setIsHovered] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
   const shouldDisplay = isHovered || isFocused;
   const addCondition = (propertyType === 3 || propertyType === 4) && shouldDisplay;
+  const onAdd = (e) => {
+    e.stopPropagation();
+    setParams({
+      root: node,
+    });
+  };
+  const onEdit = (e) => {
+    e.stopPropagation();
+    setParams({ node });
+  };
+  const onDelete = () => {
+    deleteNode(id);
+  };
   return (
     <Box
       sx={{
-        display: 'flex', alignItems: 'center',
+        display: 'flex', alignItems: 'center', height: '2.2rem',
       }}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       onFocus={() => setIsFocused(true)}
       onBlur={() => setIsFocused(false)}
     >
-      <Box component={icons[propertyType]} color="inherit" sx={{ mr: 1, fontSize: '1rem' }} />
-      <Typography sx={{ fontWeight: 'inherit', flexGrow: 1 }}>
-        {propertyKey}
-      </Typography>
-      {addCondition && <Box component={AddIcon} color="inherit" sx={{ mr: 1, fontSize: '1.2rem' }} />}
-      {shouldDisplay && (
+      <Tooltip title={intl.formatMessage(constMessages[tooltips[propertyType]])}>
+        <Box component={icons[propertyType]} color="inherit" sx={{ fontSize: '1.5rem', fontWeight: 1 }} />
+      </Tooltip>
+      <Tooltip title={intl.formatMessage(constMessages.propertyKey)}>
+        <Typography sx={{ fontWeight: 'inherit', px: 1 }}>
+          {`${propertyKey}${!!propertyValue ? ':' : ''}`}
+        </Typography>
+      </Tooltip>
+      <Tooltip title={intl.formatMessage(constMessages.propertyValue)}>
+        <Typography sx={{ fontWeight: 'inherit', px: 1 }}>
+          {propertyValue}
+        </Typography>
+      </Tooltip>
+      <Box sx={{ flexGrow: 0.9 }} />
+      {addCondition && (
+        <Tooltip title={intl.formatMessage(constMessages.addTooltip)}>
+          <IconButton size="small" color="inherit" onClick={onAdd}><AddIcon /></IconButton>
+        </Tooltip>
+      )}
+      {node.id !== 'main' && shouldDisplay && (
         <>
-          <Box component={EditIcon} color="inherit" sx={{ mr: 1, fontSize: '1.2rem' }} />
-          <Box component={DeleteIcon} color="inherit" sx={{ mr: 1, fontSize: '1.2rem' }} />
+          <Tooltip title={intl.formatMessage(constMessages.editTooltip)}>
+            <IconButton size="small" color="inherit" onClick={onEdit}><EditIcon /></IconButton>
+          </Tooltip>
+          <Tooltip title={intl.formatMessage(constMessages.deleteTooltip)}>
+            <IconButton size="small" color="inherit" onClick={onDelete}><DeleteIcon /></IconButton>
+          </Tooltip>
         </>
       )}
     </Box>
@@ -81,65 +117,123 @@ function TreeItemLabel({
 function CustomizeJson({
   expanded,
   handleExpandChange,
-  setExpanded,
-  initCustomProps,
-  setCustomPropsFields,
+  initCustomizedJson,
+  setCustomizedJsonField,
+  mappingRows,
 }) {
-  const intl = useIntl();
   const [params, setParams] = useState(null);
-  const [rows, setRows] = useState([]);
-  const [data, setData] = useState(null);
-
+  const [propertyData, setPropertyData] = useState(null);
+  const [rootNode, setRootNode] = useState(null);
+  const [fields, setFields] = useState(customPropertyFields);
+  const [mappingOptions, setMappingOptions] = useState([]);
   useEffect(() => {
-    setRows(initCustomProps);
-  }, [initCustomProps]);
-
-  const handleAdd = (e) => {
-    e.stopPropagation();
-    setParams({
-      propertyKey: '', propertyValue: '', propertyType: 0,
+    setRootNode(initCustomizedJson || {
+      propertyKey: '',
+      id: 'main',
+      propertyType: 3,
+      children: [],
     });
-  };
+  }, [initCustomizedJson]);
 
   useEffect(() => {
-    setData(params);
+    setPropertyData(
+      params?.root
+        ? { propertyKey: '', propertyValue: '', propertyType: 0 }
+        : params?.node,
+    );
   }, [params]);
 
+  useEffect(() => {
+    setMappingOptions(
+      mappingRows.map((row) => ({ label: row.propertyName, value: row.propertyName })),
+    );
+  }, [mappingRows]);
   const handleClose = () => setParams(null);
   const handleConfirm = () => {
-    let temp;
-    if (params?.id) {
-      temp = rows.map((obj) => (obj.id === data.id ? { ...data } : obj));
-      setRows(temp);
+    if (params?.root) {
+      const child = { ...propertyData, id: getUid() };
+      if (child.propertyType > 2) child.children = [];
+      params.root.children.push(child);
     } else {
-      temp = [...rows];
-      temp.push({ ...data, id: getUid() });
-      setRows(temp);
-      setExpanded('customFields');
+      Object.assign(params.node, propertyData);
+      if (params.node.propertyType > 2 && !params.node.children) params.node.children = [];
     }
-    setCustomPropsFields(temp);
+    const temp = { ...rootNode };
+    setRootNode(temp);
+    setCustomizedJsonField(temp);
     handleClose();
   };
 
   const handleFieldChange = (propertyName, datatype) => (e) => {
-    const temp = { ...data };
-    if (propertyName === 'propertyType') temp.propertyValue = '';
+    const temp = { ...propertyData };
+    if (propertyName === 'propertyType') {
+      temp.propertyValue = '';
+      const tempFields = [...fields];
+      let keyField = tempFields.shift();
+      if (Number(e.target.value) === 4) {
+        keyField = {
+          ...keyField,
+          fieldType: 'select',
+          selectOptions: mappingOptions,
+        };
+      } else {
+        const { label, propertyName } = keyField;
+        keyField = { label, propertyName };
+      }
+      tempFields.unshift(keyField);
+      setFields(tempFields);
+    }
     if (datatype === 'number') {
       temp[propertyName] = Number(e.target.value);
     } else {
       temp[propertyName] = e.target.value;
     }
-    setData(temp);
+    setPropertyData(temp);
   };
 
-  const deleteRow = (row) => {
-    const temp = [...rows];
-    temp.splice(temp.findIndex((obj) => obj.id === row.id), 1);
-    setRows(temp);
-    setCustomPropsFields(temp);
+  const deleteNode = (id, node) => {
+    if (!node) deleteNode(id, rootNode);
+    if (node?.children?.length) {
+      for (let i = 0; i < node.children.length; i++) {
+        if (node.children[i].id === id) {
+          node.children.splice(i, 1);
+          const temp = { ...rootNode };
+          setRootNode(temp);
+          return;
+        }
+        deleteNode(id, node.children[i]);
+      }
+    }
   };
 
-  const columns = getCustomTableColumns({ intl, setParams, deleteRow });
+  const renderTreeView = (node) => {
+    if (!node) return (<></>);
+    const {
+      propertyType, children, id,
+    } = node;
+    const actionProps = { setParams, deleteNode };
+    if (propertyType < 3) {
+      return (
+        <StyledTreeItem
+          key={id}
+          nodeId={id}
+          label={<TreeItemLabel node={node} {...actionProps} />}
+        />
+      );
+    }
+    return (
+      <StyledTreeItem
+        key={id}
+        nodeId={id}
+        label={<TreeItemLabel node={node} {...actionProps} />}
+      >
+        {
+          children?.map((child) => renderTreeView(child))
+        }
+      </StyledTreeItem>
+    );
+  };
+
   return (
     <Accordion
       expanded={expanded === 'customFields'}
@@ -151,44 +245,33 @@ function CustomizeJson({
         id="panel1bh-header"
       >
         <Typography sx={{ lineHeight: 2.5 }}>
-          <FormattedMessage {...messages.customPropetyTitle} />
+          <FormattedMessage {...messages.customizeJsonTitle} />
         </Typography>
         <Box sx={{ flexGrow: 1 }} />
-        <Button variant="outlined" onClick={handleAdd}>
-          <FormattedMessage {...messages.addPropertyButton} />
-        </Button>
-        <Badge badgeContent={Number(rows.length).toString()} color="error" style={{ margin: '10px' }}>
-          <DescriptionIcon color="primary" />
-        </Badge>
       </AccordionSummary>
       <AccordionDetails>
-        {/* <StyledDataGrid
-          sx={{
-            border: '1px dashed',
-            borderColor: 'primary.main',
-          }}
-          autoHeight
-          rows={rows}
-          columns={columns}
-          components={{
-            NoRowsOverlay,
-          }}
-          hideFooterSelectedRowCount
-          hideFooter
-          hideFooterPagination
-        /> */}
+        <TreeView
+          aria-label="customized"
+          defaultExpanded={['main']}
+          defaultCollapseIcon={<MinusSquare />}
+          defaultExpandIcon={<PlusSquare />}
+          defaultEndIcon={<CloseSquare />}
+          sx={{ maxWidth: '40%' }}
+        >
+          {renderTreeView(rootNode)}
+        </TreeView>
       </AccordionDetails>
       <Dialog open={!!params} onClose={handleClose} PaperProps={{ style: dialogStyle }}>
         <DialogContent dividers>
           {
-            params && data && customPropertyFields.map((field) => (
+            params && propertyData && fields.map((field) => (
               <Fragment key={field.propertyName}>
                 {renderFields({
                   handleChange: handleFieldChange(field.propertyName, field.datatype),
-                  value: data[field.propertyName],
+                  value: propertyData[field.propertyName],
                   style: { width: '100%' },
                   layout: { xs: 12 },
-                  disabled: data.propertyType === 2 && field.propertyName === 'propertyValue',
+                  disabled: propertyData.propertyType > 1 && field.propertyName === 'propertyValue',
                   ...field,
                 })}
               </Fragment>

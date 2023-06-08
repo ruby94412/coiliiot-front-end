@@ -36,13 +36,15 @@ const dialogStyle = {
 function DataAccordion({
   idx,
   expanded,
-  handleExpandChange,
   command,
+  rows,
+  setRows,
   setExpanded,
   setConversionFields,
+  handleExpandChange,
 }) {
   const intl = useIntl();
-  const [rows, setRows] = useState([]);
+  // const [rows, setRows] = useState([]);
   const [params, setParams] = useState(null);
   const [data, setData] = useState(null);
   const [showDetail, setShowDetail] = useState(false);
@@ -144,6 +146,7 @@ function DataAccordion({
             autoHeight
             rows={rows}
             columns={columns}
+            rowHeight={35}
             components={{
               NoRowsOverlay,
             }}

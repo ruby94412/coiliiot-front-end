@@ -178,6 +178,6 @@
   "coiliiot.app.configPanel.configDialog.dataAccordion.confirm": "确定",
   "coiliiot.app.configPanel.configDialog.dataAccordion.commandText": "命令",
   "coiliiot.app.configPanel.configDialog.dataAccordion.commandDetail": "命令信息",
-  "coiliiot.app.configPanel.configDialog.dataAccordion.customPropetyTitle": "自定义属性",
+  "coiliiot.app.configPanel.configDialog.dataAccordion.customizeJsonTitle": "自定义数据格式",
   "coiliiot.app.configPanel.configDialog.dataAccordion.addPropertyButton": "添加属性"
 }

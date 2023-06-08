@@ -31,8 +31,8 @@ export default defineMessages({
     id: `${scope}.commandText`,
     defaultMessage: 'Command',
   },
-  customPropetyTitle: {
-    id: `${scope}.customPropetyTitle`,
-    defaultMessage: 'Custom Property',
+  customizeJsonTitle: {
+    id: `${scope}.customizeJsonTitle`,
+    defaultMessage: 'Customize Json Format',
   },
 });

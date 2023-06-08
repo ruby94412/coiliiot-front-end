@@ -148,6 +148,7 @@ const AutoPoll = forwardRef(({
                               borderColor: 'primary.dark',
                             }}
                             autoHeight
+                            rowHeight={35}
                             rows={rows}
                             columns={columns}
                             components={{
