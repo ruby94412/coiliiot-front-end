@@ -1,3 +1,4 @@
+/* eslint-disable no-template-curly-in-string */
 /* eslint-disable no-extra-boolean-cast */
 import { useState, useEffect, Fragment } from 'react';
 import {
@@ -14,7 +15,7 @@ import {
   Numbers as NumberIcon,
   CalendarMonth as DateIcon,
   DataObject as ObjectIcon,
-  DataArray as ArrayIcon,
+  AttachMoney as MappingIcon,
   ExpandMore as ExpandMoreIcon,
 } from '@mui/icons-material';
 import {
@@ -52,12 +53,12 @@ function TreeItemLabel({
     propertyType, propertyKey, propertyValue, id,
   } = node;
   const intl = useIntl();
-  const icons = [TextIcon, NumberIcon, DateIcon, ObjectIcon, ArrayIcon];
-  const tooltips = ['string', 'number', 'date', 'object', 'array'];
+  const icons = [TextIcon, NumberIcon, DateIcon, MappingIcon, ObjectIcon];
+  const tooltips = ['string', 'number', 'date', 'mappingProperty', 'object'];
   const [isHovered, setIsHovered] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
   const shouldDisplay = isHovered || isFocused;
-  const addCondition = (propertyType === 3 || propertyType === 4) && shouldDisplay;
+  const addCondition = propertyType === 4 && shouldDisplay;
   const onAdd = (e) => {
     e.stopPropagation();
     setParams({
@@ -90,7 +91,7 @@ function TreeItemLabel({
         </Typography>
       </Tooltip>
       <Tooltip title={intl.formatMessage(constMessages.propertyValue)}>
-        <Typography sx={{ fontWeight: 'inherit', px: 1 }}>
+        <Typography sx={{ fontWeight: 'inherit' }}>
           {propertyValue}
         </Typography>
       </Tooltip>
@@ -123,16 +124,18 @@ function CustomizeJson({
 }) {
   const [params, setParams] = useState(null);
   const [propertyData, setPropertyData] = useState(null);
-  const [rootNode, setRootNode] = useState(null);
+  const [rootNode, setRootNode] = useState(initCustomizedJson);
   const [fields, setFields] = useState(customPropertyFields);
   const [mappingOptions, setMappingOptions] = useState([]);
   useEffect(() => {
-    setRootNode(initCustomizedJson || {
-      propertyKey: '',
-      id: 'main',
-      propertyType: 3,
-      children: [],
-    });
+    setRootNode(!!initCustomizedJson
+      ? JSON.parse(JSON.stringify(initCustomizedJson))
+      : {
+        propertyKey: '',
+        id: 'main',
+        propertyType: 4,
+        children: [],
+      });
   }, [initCustomizedJson]);
 
   useEffect(() => {
@@ -148,7 +151,29 @@ function CustomizeJson({
       mappingRows.map((row) => ({ label: row.propertyName, value: row.propertyName })),
     );
   }, [mappingRows]);
+
+  useEffect(() => {
+    if (!!propertyData) {
+      const { propertyType } = propertyData;
+      const tempFields = [...fields];
+      let keyField = tempFields.shift();
+      if (propertyType === 3) {
+        keyField = {
+          ...keyField,
+          fieldType: 'select',
+          selectOptions: mappingOptions,
+        };
+      } else {
+        const { label, propertyName } = keyField;
+        keyField = { label, propertyName };
+      }
+      tempFields.unshift(keyField);
+      setFields(tempFields);
+    }
+  }, [propertyData]);
+
   const handleClose = () => setParams(null);
+
   const handleConfirm = () => {
     if (params?.root) {
       const child = { ...propertyData, id: getUid() };
@@ -164,24 +189,20 @@ function CustomizeJson({
     handleClose();
   };
 
-  const handleFieldChange = (propertyName, datatype) => (e) => {
+  const handleFieldChange = (field) => (e) => {
+    const { propertyName, datatype, fieldType } = field;
     const temp = { ...propertyData };
-    if (propertyName === 'propertyType') {
-      temp.propertyValue = '';
-      const tempFields = [...fields];
-      let keyField = tempFields.shift();
-      if (Number(e.target.value) === 4) {
-        keyField = {
-          ...keyField,
-          fieldType: 'select',
-          selectOptions: mappingOptions,
-        };
-      } else {
-        const { label, propertyName } = keyField;
-        keyField = { label, propertyName };
-      }
-      tempFields.unshift(keyField);
-      setFields(tempFields);
+    switch (propertyName) {
+      case 'propertyType':
+        temp.propertyValue = '';
+        temp.propertyKey = '';
+        if (Number(e.target.value) === 2) temp.propertyValue = 'DATE_VALUE';
+        break;
+      case 'propertyKey':
+        if (fieldType === 'select') temp.propertyValue = `${e.target.value?.toUpperCase()}_VALUE`;
+        break;
+      default:
+        break;
     }
     if (datatype === 'number') {
       temp[propertyName] = Number(e.target.value);
@@ -256,7 +277,7 @@ function CustomizeJson({
           defaultCollapseIcon={<MinusSquare />}
           defaultExpandIcon={<PlusSquare />}
           defaultEndIcon={<CloseSquare />}
-          sx={{ maxWidth: '40%' }}
+          sx={{ maxWidth: '60%' }}
         >
           {renderTreeView(rootNode)}
         </TreeView>
@@ -267,7 +288,7 @@ function CustomizeJson({
             params && propertyData && fields.map((field) => (
               <Fragment key={field.propertyName}>
                 {renderFields({
-                  handleChange: handleFieldChange(field.propertyName, field.datatype),
+                  handleChange: handleFieldChange(field),
                   value: propertyData[field.propertyName],
                   style: { width: '100%' },
                   layout: { xs: 12 },

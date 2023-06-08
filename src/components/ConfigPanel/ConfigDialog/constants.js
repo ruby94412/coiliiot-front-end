@@ -293,11 +293,11 @@ export const customPropertyFields = [
     datatype: 'number',
     fieldType: 'select',
     selectOptions: [
-      { label: <FormattedMessage {...messages.array} />, value: 4 },
       { label: <FormattedMessage {...messages.string} />, value: 0 },
       { label: <FormattedMessage {...messages.number} />, value: 1 },
       { label: <FormattedMessage {...messages.date} />, value: 2 },
-      { label: <FormattedMessage {...messages.object} />, value: 3 },
+      { label: <FormattedMessage {...messages.object} />, value: 4 },
+      { label: <FormattedMessage {...messages.mappingProperty} />, value: 3 },
     ],
   },
 ];

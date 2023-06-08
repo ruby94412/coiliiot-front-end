@@ -243,6 +243,10 @@ export default defineMessages({
     id: `${scope}.array`,
     defaultMessage: 'Array',
   },
+  mappingProperty: {
+    id: `${scope}.mappingProperty`,
+    defaultMessage: 'Mapping Property',
+  },
   registerType: {
     id: `${scope}.registerType`,
     defaultMessage: 'Register Type',

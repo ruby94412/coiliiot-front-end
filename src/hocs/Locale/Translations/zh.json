@@ -157,6 +157,7 @@
   "coiliiot.app.configPanel.configDialog.constants.date": "时间",
   "coiliiot.app.configPanel.configDialog.constants.object": "对象",
   "coiliiot.app.configPanel.configDialog.constants.array": "数组",
+  "coiliiot.app.configPanel.configDialog.constants.mappingProperty": "自定义的映射属性",
   "coiliiot.app.configPanel.configDialog.constants.registerType": "注册类型",
   "coiliiot.app.configPanel.configDialog.constants.applyProductSecret": "一型一密",
   "coiliiot.app.configPanel.configDialog.constants.applyDeviceSecret": "一机一密",
