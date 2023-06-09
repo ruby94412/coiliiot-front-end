@@ -148,7 +148,7 @@ function CustomizeJson({
 
   useEffect(() => {
     setMappingOptions(
-      mappingRows.map((row) => ({ label: row.propertyName, value: row.propertyName })),
+      mappingRows.map((row) => ({ label: row.propertyName, value: `${row.propertyName}_VALUE` })),
     );
   }, [mappingRows]);
 
@@ -156,7 +156,7 @@ function CustomizeJson({
     if (!!propertyData) {
       const { propertyType } = propertyData;
       const tempFields = [...fields];
-      let keyField = tempFields.shift();
+      let keyField = tempFields.pop();
       if (propertyType === 3) {
         keyField = {
           ...keyField,
@@ -167,7 +167,7 @@ function CustomizeJson({
         const { label, propertyName } = keyField;
         keyField = { label, propertyName };
       }
-      tempFields.unshift(keyField);
+      tempFields.push(keyField);
       setFields(tempFields);
     }
   }, [propertyData]);

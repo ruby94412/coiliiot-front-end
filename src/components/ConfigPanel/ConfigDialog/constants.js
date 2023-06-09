@@ -280,14 +280,6 @@ export const dataMappingFields = [
 
 export const customPropertyFields = [
   {
-    label: <FormattedMessage {...messages.propertyKey} />,
-    propertyName: 'propertyKey',
-  },
-  {
-    label: <FormattedMessage {...messages.propertyValue} />,
-    propertyName: 'propertyValue',
-  },
-  {
     label: <FormattedMessage {...messages.propertyType} />,
     propertyName: 'propertyType',
     datatype: 'number',
@@ -299,6 +291,14 @@ export const customPropertyFields = [
       { label: <FormattedMessage {...messages.object} />, value: 4 },
       { label: <FormattedMessage {...messages.mappingProperty} />, value: 3 },
     ],
+  },
+  {
+    label: <FormattedMessage {...messages.propertyKey} />,
+    propertyName: 'propertyKey',
+  },
+  {
+    label: <FormattedMessage {...messages.propertyValue} />,
+    propertyName: 'propertyValue',
   },
 ];
 
